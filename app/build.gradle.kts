@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "dev.tulis.tulireader"
+    namespace = "dev.tulis.readbear"
     compileSdk {
         version = release(37)
     }
@@ -43,6 +43,7 @@ android {
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.compose.animation.core)
 //    implementation(libs.androidx.compose.animation.core)
     implementation(libs.androidx.compose.material3)

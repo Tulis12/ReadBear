@@ -1,0 +1,217 @@
+package dev.tulis.readbear.routes.menu
+
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
+import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
+import androidx.compose.material3.ripple
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import coil3.compose.AsyncImage
+import dev.tulis.readbear.db.bookmarks.Bookmark
+import kotlin.math.roundToInt
+
+@Composable
+fun BookLibrary(
+    viewModel: LibraryViewModel = hiltViewModel(),
+    sliderColumnValue: Int,
+    tooLongTextOption: TooLongTextOption,
+    alreadyReadOption: AlreadyReadOption,
+    padding: PaddingValues,
+    selectedItems: List<Long>,
+    onAddSelectedItem: (Long) -> Unit,
+    onRemoveSelectedItem: (Long) -> Unit,
+    selectionMode: Boolean,
+    onChangeSelectionMode: (Boolean) -> Unit,
+    onOpenBook: (Long) -> Unit
+) {
+    val books by viewModel.books.collectAsState()
+    val context = LocalContext.current
+
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(sliderColumnValue),
+        horizontalArrangement = Arrangement.spacedBy(5.dp),
+        verticalArrangement = Arrangement.spacedBy(15.dp),
+        modifier = Modifier
+            .padding(
+                padding
+            )
+            .fillMaxSize()
+    ) {
+        items(books.size) { image ->
+            val book = books[image]
+            var bookmark: Bookmark? by remember { mutableStateOf(null) }
+
+            LaunchedEffect(Unit) {
+                bookmark = viewModel.getBookmark(book.id)
+            }
+
+            val scale by animateFloatAsState(
+                targetValue = if (selectedItems.contains(book.id)) 0.88f else 1f,
+                animationSpec = tween(200),
+                label = "scale"
+            )
+
+            val alpha by animateFloatAsState(
+                targetValue = if (selectedItems.contains(book.id)) 0.35f else 0f,
+                animationSpec = tween(200),
+                label = "glass"
+            )
+
+            Box(
+                modifier = Modifier
+                    .background(Color.Gray.copy(alpha = alpha))
+            ) {
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .combinedClickable(
+                            onClick = {
+                                if(selectionMode) {
+                                    if(selectedItems.contains(book.id)) {
+                                        onRemoveSelectedItem(book.id)
+                                    } else {
+                                        onAddSelectedItem(book.id)
+                                    }
+
+                                    if(selectedItems.count() == 0) {
+                                        onChangeSelectionMode(false)
+                                    }
+
+                                    return@combinedClickable;
+                                }
+
+                                onOpenBook(book.id)
+                            },
+                            onLongClick = {
+                                if(selectionMode) return@combinedClickable
+
+                                onChangeSelectionMode(true)
+                                onAddSelectedItem(book.id)
+                            },
+                            interactionSource = remember { MutableInteractionSource() },
+                            indication = ripple()
+                        )
+                        .then(
+                            Modifier
+                                .scale(scale)
+                        )
+
+                ) {
+                    Box {
+                        AsyncImage(
+                            model = context.filesDir
+                                .resolve(book.path)
+                                .resolve(book.cover),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .aspectRatio(2f / 3f)
+                                .clip(RoundedCornerShape(10.dp))
+                                .fillMaxWidth(),
+                            contentScale = ContentScale.Crop
+                        )
+
+                        bookmark?.readAlready?.let {
+                            if(it > 0)
+                                Box(
+                                    modifier = Modifier
+                                        .align(Alignment.BottomEnd)
+                                        .padding(end = 5.dp, bottom = 5.dp)
+                                        .clip(RoundedCornerShape(15.dp))
+                                        .background(MaterialTheme.colorScheme.onPrimaryContainer)
+                                        .then(
+                                            if(it > 1 && alreadyReadOption == AlreadyReadOption.TIMES_AND_CHECKMARK) {
+                                                Modifier.padding(5.dp)
+                                            } else if(it > 1) {
+                                                Modifier.padding(3.dp)
+                                            } else {
+                                                Modifier
+                                            }
+                                        )
+
+                                ) {
+                                    Row {
+                                        if(it > 1 && alreadyReadOption == AlreadyReadOption.TIMES_AND_CHECKMARK) {
+                                            Text(
+                                                "${it}x",
+                                                color = MaterialTheme.colorScheme.onSecondary
+                                            )
+                                        }
+
+                                        Icon(
+                                            imageVector = Icons.Default.CheckCircle,
+                                            contentDescription = "",
+                                            tint = MaterialTheme.colorScheme.primaryContainer
+                                        )
+                                    }
+                                }
+                        }
+                    }
+
+                    Column {
+                        Text(
+                            book.title,
+                            maxLines = 1,
+                            modifier = if(tooLongTextOption == TooLongTextOption.BASIC_MARQUEE) {
+                                Modifier.basicMarquee()
+                            } else {
+                                Modifier
+                            },
+                            overflow = if (tooLongTextOption == TooLongTextOption.ELLIPSIS) {
+                                TextOverflow.Ellipsis
+                            } else {
+                                TextOverflow.Visible
+                            }
+                        )
+
+                        val bookmarkSave = bookmark ?: return@Column
+
+                        Text(
+                            "${((bookmarkSave.pageNumber / book.pages.toFloat()) * 100).roundToInt()}%",
+                            style = TextStyle(
+                                fontSize = 12.sp
+                            )
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
