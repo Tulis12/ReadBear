@@ -17,3 +17,6 @@ local.properties
 .idea/
 !.idea/codeStyles/
 !.idea/inspectionProfiles/
+release.jks
+release.jks.base64
+.sync-exclude.lst
