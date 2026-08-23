@@ -9,13 +9,28 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        create("release") {
+            storeFile = file("../release.jks")
+            storePassword = System.getenv("KEYSTORE_PASSWORD")
+            keyAlias = System.getenv("KEY_ALIAS")
+            keyPassword = System.getenv("KEY_PASSWORD")
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.getByName("release")
+        }
+    }
+
     namespace = "dev.tulis.readbear"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "dev.tulis.tulireader"
+        applicationId = "dev.tulis.readbear"
         minSdk = 24
         targetSdk = 37
         versionCode = 1

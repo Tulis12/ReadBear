@@ -27,6 +27,8 @@ jobs:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
         run: |
           echo "$KEYSTORE_BASE64" | base64 --decode > release.jks
+          printf 'length=%s\n' "${#KEYSTORE_BASE64}"
+          echo "$(sha1sum release.jks)"
 
       - name: Build APK
         env:
