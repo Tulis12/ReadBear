@@ -40,12 +40,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
+import dev.tulis.readbear.R
 import dev.tulis.readbear.routes.menu.LibraryViewModel
 import dev.tulis.readbear.utils.clickableWithRipple
 import kotlinx.coroutines.Dispatchers
@@ -129,7 +131,7 @@ fun EditBookDetails(
         topBar = {
             TopAppBar(
                 title = {
-                    Text("Edytuj")
+                    Text(stringResource(R.string.edit))
                 },
                 navigationIcon = {
                     IconButton(onClick = {
@@ -139,7 +141,7 @@ fun EditBookDetails(
                             onPopBack()
                         }
                     }) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Go back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.go_back))
                     }
                 },
                 actions = {
@@ -177,7 +179,7 @@ fun EditBookDetails(
 
                         onPopBack()
                     }) {
-                        Icon(Icons.Default.Save, contentDescription = "Save")
+                        Icon(Icons.Default.Save, contentDescription = stringResource(R.string.save))
                     }
                 }
             )
@@ -225,7 +227,7 @@ fun EditBookDetails(
                         disabledContentColor = Color.Gray
                     )
                 ) {
-                    Icon(Icons.Default.Upload, contentDescription = "Select File")
+                    Icon(Icons.Default.Upload, contentDescription = stringResource(R.string.select_file))
                 }
             }
 
@@ -236,7 +238,7 @@ fun EditBookDetails(
                     chosenTitle = it
                 },
                 label = {
-                    Text("Tytuł")
+                    Text(stringResource(R.string.title))
                 },
                 singleLine = true
             )
@@ -247,7 +249,7 @@ fun EditBookDetails(
                     changed = true
                 },
                 label = {
-                    Text("Autor")
+                    Text(stringResource(R.string.author))
                 },
                 singleLine = true
             )
@@ -267,10 +269,10 @@ fun GoBack(
                 onHideDialog()
             },
             title = {
-                Text("Odrzucić zmiany?")
+                Text(stringResource(R.string.discard_changes))
             },
             text = {
-                Text("Czy na pewno chcesz wrócić i odrzucić zmiany bez zapisywania?")
+                Text(stringResource(R.string.are_you_sure_you_want_to_discard_changes))
             },
             confirmButton = {
                 TextButton(
@@ -279,7 +281,7 @@ fun GoBack(
                         onHideDialog()
                     }
                 ) {
-                    Text("Odrzuć zmiany")
+                    Text(stringResource(R.string.discard_changes))
                 }
             },
             dismissButton = {
@@ -288,7 +290,7 @@ fun GoBack(
                         onHideDialog()
                     }
                 ) {
-                    Text("Anuluj")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         )

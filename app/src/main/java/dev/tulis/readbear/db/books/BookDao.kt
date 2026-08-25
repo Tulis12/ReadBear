@@ -6,8 +6,6 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import dev.tulis.readbear.db.relations.BookWithBookmark
-import dev.tulis.readbear.db.relations.BookWithPages
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -36,12 +34,12 @@ interface BookDao {
 
     @Query("DELETE FROM Book WHERE id = :id")
     suspend fun deleteById(id: Long)
-
-    @Transaction
-    @Query("SELECT * FROM Book WHERE id = :bookId")
-    suspend fun getBookWithPages(bookId: Long): BookWithPages
-
-    @Transaction
-    @Query("SELECT * FROM Book WHERE id = :bookId")
-    fun getBookWithBookmark(bookId: Long): Flow<BookWithBookmark>
+//
+//    @Transaction
+//    @Query("SELECT * FROM Book WHERE id = :bookId")
+//    suspend fun getBookWithPages(bookId: Long): BookWithPages
+//
+//    @Transaction
+//    @Query("SELECT * FROM Book WHERE id = :bookId")
+//    fun getBookWithBookmark(bookId: Long): Flow<BookWithBookmark>
 }

@@ -53,7 +53,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.ImageLoader
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
-import dev.tulis.readbear.db.pages.Page
+import dev.tulis.readbear.db.books.Book
+import dev.tulis.readbear.db.comics.pages.ComicPage
 import dev.tulis.readbear.utils.zip.ZipImage
 import dev.tulis.readbear.utils.zip.ZipImageFetcher
 import kotlinx.coroutines.coroutineScope
@@ -63,23 +64,17 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WebtoonReader(
-    bookId: Long,
+    comicId: Long,
     viewModel: WebtoonReaderViewModel = hiltViewModel(),
     returnToMenu: () -> Unit,
 ) {
-    var pages by remember { mutableStateOf<List<Page>>(emptyList()) }
-    val flowBookWithBookmark by viewModel
-        .getBookWithBookmark(bookId)
+    var panels by remember { mutableStateOf<List<ComicPage>>(emptyList()) }
+    val flowComicWithBookmark by viewModel
+        .getComicWithBookmark(comicId)
         .collectAsStateWithLifecycle(null)
 
     val view = LocalView.current
-
-
     var topBarVisible by remember { mutableStateOf(false) }
-
-    LaunchedEffect(Unit) {
-        pages = viewModel.getPages(bookId)
-    }
 
     DisposableEffect(topBarVisible) {
         val window = (view.context as Activity).window
@@ -99,9 +94,18 @@ fun WebtoonReader(
         }
     }
 
-    val bookWithBookmark = flowBookWithBookmark ?: return
-    var finished = false
+    val comicWithBookmark = flowComicWithBookmark ?: return
 
+    var suspendBook: Book? by remember { mutableStateOf(null) }
+
+    LaunchedEffect(Unit) {
+        panels = viewModel.getPanels(comicId)
+        suspendBook = viewModel.getBook(comicWithBookmark.comic.bookId)
+    }
+
+    val book = suspendBook ?: return
+
+    var finished by remember { mutableStateOf(false) }
     var focusedPanel: ZipImage? by remember { mutableStateOf(null) }
 
     Box {
@@ -111,8 +115,8 @@ fun WebtoonReader(
             finished = false
 
             listState.scrollToItem(
-                index = bookWithBookmark.bookmark.pageNumber,
-                scrollOffset = bookWithBookmark.bookmark.pageOffset
+                index = comicWithBookmark.bookmark.panelNumber,
+                scrollOffset = comicWithBookmark.bookmark.panelOffset
             )
         }
 
@@ -130,32 +134,39 @@ fun WebtoonReader(
 
                     if(finished) return@collect
 
-                    if(lastElement != null && lastElement.index == bookWithBookmark.book.pages - 1) {
+                    if(lastElement != null && lastElement.index == comicWithBookmark.comic.panels - 1) {
                         finished = true
 
-                        val bookmark = bookWithBookmark.bookmark
-                        bookmark.pageNumber = 0
-                        bookmark.pageOffset = 0
-                        bookmark.readAlready++
+                        val bookmark = comicWithBookmark.bookmark
+                        bookmark.panelNumber = 0
+                        bookmark.panelOffset = 0
+
                         viewModel.updateBookmark(bookmark)
+
+                        book.progress = 0
+                        book.readAlready++
+                        viewModel.updateBookProgress(book)
+                        println("updatuje ksiązkę")
 
                         return@collect
                     }
 
-                    val bookmark = bookWithBookmark.bookmark
+                    val bookmark = comicWithBookmark.bookmark
 
-                    if (bookmark.pageNumber >= index) {
-                        if(bookmark.pageNumber == index) {
-                            if(bookmark.pageOffset > offset) return@collect
+                    if (bookmark.panelNumber >= index) {
+                        if(bookmark.panelNumber == index) {
+                            if(bookmark.panelOffset > offset) return@collect
                         } else {
                             return@collect
                         }
                     }
 
-                    bookmark.pageNumber = index
-                    bookmark.pageOffset = offset
-
+                    bookmark.panelNumber = index
+                    bookmark.panelOffset = offset
                     viewModel.updateBookmark(bookmark)
+
+                    book.progress = index
+                    viewModel.updateBookProgress(book)
                 }
         }
 
@@ -166,7 +177,7 @@ fun WebtoonReader(
                 .fillMaxSize(),
             userScrollEnabled = focusedPanel == null
         ) {
-            items(pages) { page ->
+            items(panels) { page ->
                 val imageLoader = ImageLoader.Builder(LocalContext.current)
                     .components {
                         add(ZipImageFetcher.Factory())
@@ -192,8 +203,6 @@ fun WebtoonReader(
                         .combinedClickable(
                             onClick = {
                                 if(focusedPanel == null) topBarVisible = !topBarVisible
-
-                                println("click")
                             },
                             onLongClick = {
                                 if(focusedPanel == null) focusedPanel = currentPanel
@@ -228,7 +237,7 @@ fun WebtoonReader(
                         horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(bookWithBookmark.book.title)
+                        Text(book.title)
                     }
                 }
             )

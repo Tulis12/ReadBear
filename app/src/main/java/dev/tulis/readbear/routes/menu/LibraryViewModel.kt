@@ -8,12 +8,14 @@ import android.provider.OpenableColumns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.tulis.readbear.db.bookmarks.Bookmark
-import dev.tulis.readbear.db.bookmarks.BookmarkRepository
 import dev.tulis.readbear.db.books.Book
 import dev.tulis.readbear.db.books.BookRepository
-import dev.tulis.readbear.db.pages.Page
-import dev.tulis.readbear.db.pages.PageRepository
+import dev.tulis.readbear.db.comics.Comic
+import dev.tulis.readbear.db.comics.ComicDao
+import dev.tulis.readbear.db.comics.bookmarks.ComicBookmark
+import dev.tulis.readbear.db.comics.bookmarks.ComicBookmarkDao
+import dev.tulis.readbear.db.comics.pages.ComicPage
+import dev.tulis.readbear.db.comics.pages.ComicPageDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -23,6 +25,9 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
+import java.util.Locale
+import java.util.Locale.getDefault
+import java.util.UUID
 import java.util.zip.ZipFile
 import javax.inject.Inject
 import kotlin.sequences.forEach
@@ -30,8 +35,9 @@ import kotlin.sequences.forEach
 @HiltViewModel
 class LibraryViewModel @Inject constructor (
     private val bookRepository: BookRepository,
-    private val pageRepository: PageRepository,
-    private val bookmarkRepository: BookmarkRepository,
+    private val comicDao: ComicDao,
+    private val comicPageDao: ComicPageDao,
+    private val comicBookmarkDao: ComicBookmarkDao,
     private val filesDir: File
 ) : ViewModel() {
 
@@ -52,10 +58,6 @@ class LibraryViewModel @Inject constructor (
 
     suspend fun getBook(bookId: Long): Book {
         return bookRepository.getBook(bookId)
-    }
-
-    suspend fun getBookmark(bookId: Long): Bookmark? {
-        return bookmarkRepository.get(bookId)
     }
 
     fun getBookFlow(bookId: Long): Flow<Book?> {
@@ -82,12 +84,12 @@ class LibraryViewModel @Inject constructor (
         }
     }
 
-    suspend fun createBookmark(bookId: Long) {
-        val bookmark = Bookmark(bookId = bookId, pageNumber = 0, pageOffset = 0, readAlready = 0)
-        bookmarkRepository.add(bookmark)
+    suspend fun createComicBookmark(comicId: Long) {
+        val bookmark = ComicBookmark(comicId = comicId)
+        comicBookmarkDao.insert(bookmark)
     }
 
-    suspend fun createIndex(
+    suspend fun createComicIndex(
         book: Book
     ) = withContext(Dispatchers.IO) {
         val files = mutableListOf<String>()
@@ -108,7 +110,9 @@ class LibraryViewModel @Inject constructor (
                 collator.compare(a, b)
             }
 
-            var i = 0L
+            var i = 0
+            val comic = Comic(bookId = book.id)
+            val comicId = comicDao.insert(comic)
 
             for(file in files) {
                 val extension = file.substringAfterLast('.', "")
@@ -130,10 +134,10 @@ class LibraryViewModel @Inject constructor (
                 val width = options.outWidth
                 val height = options.outHeight
 
-                pageRepository.addPage(
-                    Page(
-                        bookId = book.id,
-                        pageNumber = i,
+                comicPageDao.insert(
+                    ComicPage(
+                        comicId = comicId,
+                        panelNumber = i,
                         path = file,
                         width = width,
                         height = height
@@ -141,9 +145,16 @@ class LibraryViewModel @Inject constructor (
                 )
             }
 
+            comic.id = comicId
+            comic.panels = i
+            println("panels: " + i)
+            println("updated: " + comicDao.update(comic))
+            println(comic)
+
             val coverFileName = files.first()
             val coverExtension = coverFileName.substringAfterLast('.', "")
-            val coverFile = bookDir.resolve("cover.${coverExtension}")
+            val cover = "cover_${UUID.randomUUID()}.${coverExtension}"
+            val coverFile = bookDir.resolve(cover)
 
             val isImage = imageExtensions.any {
                 coverExtension.equals(it, ignoreCase = true)
@@ -159,10 +170,10 @@ class LibraryViewModel @Inject constructor (
                 }
             }
 
-            createBookmark(book.id)
+            createComicBookmark(book.id)
 
-            book.cover = "cover.${coverExtension}"
-            book.pages = i.toInt()
+            book.cover = cover
+            book.totalProgress = i
             updateBook(book)
         }
     }
@@ -189,12 +200,24 @@ class LibraryViewModel @Inject constructor (
         context: Context,
         uri: Uri,
         bookDir: File,
-        onFinish: (String) -> Unit,
+        onFinishCbz: (String) -> Unit,
+        onFinishPdf: (String) -> Unit,
+        onFinishEpub: (String) -> Unit,
         onThrow: (Throwable?) -> Unit
     ) {
+        val supportedFormats = arrayOf("cbz", "epub", "pdf")
+
         viewModelScope.launch {
             withContext(Dispatchers.IO) {
-                val target = File(bookDir, "book.cbz")
+                val filename = getFileName(context, uri)
+                val extension = filename.substringAfterLast('.', "").lowercase(getDefault())
+
+                if(!supportedFormats.contains(extension)) {
+                    onThrow(UnsupportedFormatException())
+                    return@withContext
+                }
+
+                val target = File(bookDir, "book.${extension}")
 
                 context.contentResolver.openInputStream(uri)?.use { input ->
                     FileOutputStream(target).use { output ->
@@ -210,10 +233,16 @@ class LibraryViewModel @Inject constructor (
                     }
                 }
 
-                onFinish(
-                    getFileName(context, uri)
-                )
+                when(extension) {
+                    "cbz" -> {
+                        onFinishCbz(filename)
+                    }
+                }
             }
         }
     }
 }
+
+class UnsupportedFormatException(
+    message: String = "Unsupported file format"
+) : Exception(message)

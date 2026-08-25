@@ -44,7 +44,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
-import dev.tulis.readbear.db.bookmarks.Bookmark
 import kotlin.math.roundToInt
 
 @Composable
@@ -76,11 +75,6 @@ fun BookLibrary(
     ) {
         items(books.size) { image ->
             val book = books[image]
-            var bookmark: Bookmark? by remember { mutableStateOf(null) }
-
-            LaunchedEffect(Unit) {
-                bookmark = viewModel.getBookmark(book.id)
-            }
 
             val scale by animateFloatAsState(
                 targetValue = if (selectedItems.contains(book.id)) 0.88f else 1f,
@@ -148,41 +142,39 @@ fun BookLibrary(
                             contentScale = ContentScale.Crop
                         )
 
-                        bookmark?.readAlready?.let {
-                            if(it > 0)
-                                Box(
-                                    modifier = Modifier
-                                        .align(Alignment.BottomEnd)
-                                        .padding(end = 5.dp, bottom = 5.dp)
-                                        .clip(RoundedCornerShape(15.dp))
-                                        .background(MaterialTheme.colorScheme.onPrimaryContainer)
-                                        .then(
-                                            if(it > 1 && alreadyReadOption == AlreadyReadOption.TIMES_AND_CHECKMARK) {
-                                                Modifier.padding(5.dp)
-                                            } else if(it > 1) {
-                                                Modifier.padding(3.dp)
-                                            } else {
-                                                Modifier
-                                            }
-                                        )
-
-                                ) {
-                                    Row {
-                                        if(it > 1 && alreadyReadOption == AlreadyReadOption.TIMES_AND_CHECKMARK) {
-                                            Text(
-                                                "${it}x",
-                                                color = MaterialTheme.colorScheme.onSecondary
-                                            )
+                        if(book.readAlready > 0)
+                            Box(
+                                modifier = Modifier
+                                    .align(Alignment.BottomEnd)
+                                    .padding(end = 5.dp, bottom = 5.dp)
+                                    .clip(RoundedCornerShape(15.dp))
+                                    .background(MaterialTheme.colorScheme.onPrimaryContainer)
+                                    .then(
+                                        if(book.readAlready > 1 && alreadyReadOption == AlreadyReadOption.TIMES_AND_CHECKMARK) {
+                                            Modifier.padding(5.dp)
+                                        } else if(book.readAlready > 1) {
+                                            Modifier.padding(3.dp)
+                                        } else {
+                                            Modifier
                                         }
+                                    )
 
-                                        Icon(
-                                            imageVector = Icons.Default.CheckCircle,
-                                            contentDescription = "",
-                                            tint = MaterialTheme.colorScheme.primaryContainer
+                            ) {
+                                Row {
+                                    if(book.readAlready > 1 && alreadyReadOption == AlreadyReadOption.TIMES_AND_CHECKMARK) {
+                                        Text(
+                                            "${book.readAlready}x",
+                                            color = MaterialTheme.colorScheme.onSecondary
                                         )
                                     }
+
+                                    Icon(
+                                        imageVector = Icons.Default.CheckCircle,
+                                        contentDescription = "",
+                                        tint = MaterialTheme.colorScheme.primaryContainer
+                                    )
                                 }
-                        }
+                            }
                     }
 
                     Column {
@@ -201,14 +193,14 @@ fun BookLibrary(
                             }
                         )
 
-                        val bookmarkSave = bookmark ?: return@Column
-
-                        Text(
-                            "${((bookmarkSave.pageNumber / book.pages.toFloat()) * 100).roundToInt()}%",
-                            style = TextStyle(
-                                fontSize = 12.sp
+                        if(book.totalProgress != 0) {
+                            Text(
+                                "${((book.progress / book.totalProgress.toFloat()) * 100).roundToInt()}%",
+                                style = TextStyle(
+                                    fontSize = 12.sp
+                                )
                             )
-                        )
+                        }
                     }
                 }
             }

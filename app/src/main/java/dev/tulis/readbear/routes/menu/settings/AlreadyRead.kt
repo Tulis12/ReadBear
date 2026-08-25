@@ -1,6 +1,8 @@
 package dev.tulis.readbear.routes.menu.settings
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,9 +27,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import dev.tulis.readbear.R
 import dev.tulis.readbear.routes.menu.AlreadyReadOption
+import dev.tulis.readbear.utils.sampleImages
 
 @Composable
 fun AlreadyRead(
@@ -40,7 +45,7 @@ fun AlreadyRead(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
-        Text("Gdy przeczytałeś już książkę wyświetl:")
+        Text(stringResource(R.string.when_you_read_the_book_already))
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),
@@ -111,10 +116,20 @@ fun AlreadyReadOptionRadio(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
+            .clickable (
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null
+            ) {
+                onChangeAlreadyReadOption(alreadyReadOption)
+            }
     ) {
         Box {
+            val model = remember {
+                sampleImages.random()
+            }
+
             AsyncImage(
-                model = "https://picsum.photos/200/300",
+                model = model,
                 contentDescription = null,
                 modifier = Modifier
                     .width(75.dp)

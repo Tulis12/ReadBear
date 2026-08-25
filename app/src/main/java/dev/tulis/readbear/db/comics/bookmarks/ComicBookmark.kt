@@ -1,28 +1,27 @@
-package dev.tulis.readbear.db.pages
+package dev.tulis.readbear.db.comics.bookmarks
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import dev.tulis.readbear.db.books.Book
+import dev.tulis.readbear.db.comics.Comic
 
 @Entity(
     foreignKeys = [
         ForeignKey(
-            entity = Book::class,
+            entity = Comic::class,
             parentColumns = ["id"],
-            childColumns = ["bookId"],
+            childColumns = ["comicId"],
             onDelete = ForeignKey.CASCADE
         )
     ],
-    indices = [Index("bookId")]
+    indices = [Index("comicId")]
 )
-data class Page(
+data class ComicBookmark(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val bookId: Long,
-    val pageNumber: Long,
-    val path: String,
-    val height: Int,
-    val width: Int
+    val comicId: Long,
+    var panelNumber: Int = 0,
+    var panelOffset: Int = 0,
 )

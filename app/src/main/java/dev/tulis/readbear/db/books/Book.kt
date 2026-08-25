@@ -9,7 +9,21 @@ data class Book(
     val id: Long = 0,
 
     var title: String,
+    var summary: String? = null,
+    var author: String? = null,
+    var published: String? = null,
+    var web: String? = null,
     var path: String,
     var cover: String = "",
-    var pages: Int = 0
+    var type: BookType,
+    var readingTime: Long = 0,
+    var progress: Int = 0,
+    var totalProgress: Int = 0,
+    var readAlready: Int = 0
 )
+
+enum class BookType {
+    Comic,
+    Pdf,
+    Epub
+}
