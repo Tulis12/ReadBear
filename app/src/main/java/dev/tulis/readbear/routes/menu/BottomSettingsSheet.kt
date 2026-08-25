@@ -25,8 +25,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import dev.tulis.readbear.R
 import dev.tulis.readbear.routes.menu.settings.AlreadyRead
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,9 +56,7 @@ fun BottomSettingsSheet(
         var selectedTab by remember { mutableIntStateOf(0) }
 
         val tabs = listOf(
-            "Ogólne",
-            "Wygląd",
-            "Konta"
+            stringResource(R.string.library_settings)
         )
 
         Column {
@@ -98,14 +98,9 @@ fun BottomSettingsSheet(
                 },
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             ) {
-                Text("Zapisz")
+                Text(stringResource(R.string.save))
             }
         }
-    }
-
-    LaunchedEffect(Unit) {
-//        sheetState.show()
-//        sheetState.expand()
     }
 }
 
@@ -130,7 +125,7 @@ fun LibrarySettings(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)
         ) {
-            Text("Liczba kolumn:")
+            Text(stringResource(R.string.column_count))
 
             Slider(
                 value = sliderColumnValue.toFloat(),
@@ -143,7 +138,7 @@ fun LibrarySettings(
             )
         }
 
-        val longText = "To jest bardzo długi tekst, który by się normalnie nie zmieścił"
+        val longText = stringResource(R.string.this_is_a_long_text)
 
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally),

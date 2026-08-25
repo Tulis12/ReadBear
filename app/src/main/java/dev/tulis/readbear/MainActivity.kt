@@ -6,7 +6,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
 import com.example.compose.ThemeType
-import com.example.compose.TuliTheme
+import com.example.compose.ReadBearTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,10 +19,10 @@ class MainActivity : ComponentActivity() {
             val navController = rememberNavController()
             enableEdgeToEdge()
 
-            TuliTheme(
+            ReadBearTheme(
                 themeType = ThemeType.SYSTEM
             ) {
-                App(navController)
+                App(navController = navController)
             }
         }
     }
