@@ -1,6 +1,7 @@
 package dev.tulis.readbear.routes.menu
 
 import android.system.ErrnoException
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
@@ -25,12 +26,22 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material.icons.filled.Deselect
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.SelectAll
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.BlendMode
 
 //import androidx.compose.animation.animateFloatAsState
 
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.ImageShader
+import androidx.compose.ui.graphics.ShaderBrush
+import androidx.compose.ui.graphics.TileMode
+import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.stringResource
+import dev.tulis.readbear.R
 import dev.tulis.readbear.db.Settings
 import dev.tulis.readbear.db.Settings.dataStore
 import dev.tulis.readbear.routes.menu.actions.DeleteOption
@@ -43,7 +54,8 @@ import kotlinx.coroutines.android.awaitFrame
 fun Menu(
     viewModel: LibraryViewModel = hiltViewModel(),
     onOpenBook: (Long) -> Unit,
-    onEditBook: (Long) -> Unit
+    onEditBook: (Long) -> Unit,
+    onBookDetails: (Long) -> Unit
 ) {
     val context = LocalContext.current;
     val scope = rememberCoroutineScope()
@@ -89,9 +101,13 @@ fun Menu(
                         ) {
                             Icon(
                                 Icons.Default.Settings,
-                                contentDescription = "Settings"
+                                contentDescription = stringResource(R.string.settings)
                             )
                         }
+
+                        val noSpaceMessage = stringResource(R.string.error_no_space_left)
+                        val copyFailedMessage = stringResource(R.string.error_copy_failed)
+                        val unsupportedFormatMessage = stringResource(R.string.error_unsupported_format)
 
                         ImportOption(
                             viewModel,
@@ -99,14 +115,21 @@ fun Menu(
                                 importing = it
                             },
                             onThrow = { throwable ->
-
-                                val message = if (throwable is ErrnoException) {
-                                    "Zabrakło miejsca na urządzeniu!"
-                                } else {
-                                    "Nie można było skopiować pliku!"
-                                }
-
                                 scope.launch {
+                                    val message = when (throwable) {
+                                        is ErrnoException -> {
+                                            noSpaceMessage
+                                        }
+
+                                        is UnsupportedFormatException -> {
+                                            unsupportedFormatMessage
+                                        }
+
+                                        else -> {
+                                            copyFailedMessage
+                                        }
+                                    }
+
                                     snackbarHostState.showSnackbar(
                                         message = message
                                     )
@@ -136,12 +159,12 @@ fun Menu(
                             })) {
                             Icon(
                                 Icons.Default.Deselect,
-                                contentDescription = "Deselect"
+                                contentDescription = stringResource(R.string.deselect)
                             )
                         } else {
                             Icon(
                                 Icons.Default.SelectAll,
-                                contentDescription = "Select all"
+                                contentDescription = stringResource(R.string.select_all)
                             )
                         }
                     }
@@ -157,7 +180,15 @@ fun Menu(
                                 onEditBook(selectedItems[0])
                             }
                         ) {
-                            Icon(Icons.Default.Edit, contentDescription = "Edit")
+                            Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.edit))
+                        }
+
+                        IconButton(
+                            onClick = {
+                                onBookDetails(selectedItems[0])
+                            }
+                        ) {
+                            Icon(Icons.Default.Info, contentDescription = stringResource(R.string.info))
                         }
                     }
                 }
@@ -220,6 +251,27 @@ fun Menu(
         )
 
         Box {
+            val image = ImageBitmap.imageResource(R.drawable.readbear_bg)
+            val color = MaterialTheme.colorScheme.surfaceVariant
+
+            Canvas(
+                modifier = Modifier.fillMaxSize()
+            ) {
+                drawRect(
+                    brush = ShaderBrush(
+                        ImageShader(
+                            image,
+                            TileMode.Repeated,
+                            TileMode.Repeated
+                        )
+                    ),
+                    colorFilter = ColorFilter.tint(
+                        color,
+                        BlendMode.SrcIn
+                    )
+                )
+            }
+
             BookLibrary(
                 sliderColumnValue = sliderColumnValue,
                 tooLongTextOption = longTextOptionValue,
@@ -254,7 +306,9 @@ fun Menu(
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     CircularProgressIndicator()
-                    Text("Importing...")
+                    Text(
+                        stringResource(R.string.importing)
+                    )
                 }
             }
         }

@@ -13,6 +13,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.stringResource
+import dev.tulis.readbear.R
 import dev.tulis.readbear.routes.menu.LibraryViewModel
 import kotlinx.coroutines.launch
 
@@ -32,7 +34,7 @@ fun DeleteOption(
     ) {
         Icon(
             Icons.Default.Delete,
-            contentDescription = "Delete"
+            contentDescription = stringResource(R.string.delete)
         )
     }
 
@@ -42,12 +44,12 @@ fun DeleteOption(
                 showDialog = false
             },
             title = {
-                Text("Potwierdzenie")
+                Text(stringResource(R.string.confirm))
             },
             text = {
                 if(selectedItems.count() == 1)
-                    Text("Czy na pewno chcesz usunąć ten element?")
-                else Text("Czy na pewno chcesz usunąć ${selectedItems.count()} elementów?")
+                    Text(stringResource(R.string.are_you_sure_you_want_to_delete_this_element))
+                else Text(stringResource(R.string.are_you_sure_you_want_to_delete_x_elements, selectedItems.count()))
             },
             confirmButton = {
                 TextButton(
@@ -63,7 +65,7 @@ fun DeleteOption(
                         showDialog = false
                     }
                 ) {
-                    Text("Usuń")
+                    Text(stringResource(R.string.delete))
                 }
             },
             dismissButton = {
@@ -72,7 +74,7 @@ fun DeleteOption(
                         showDialog = false
                     }
                 ) {
-                    Text("Anuluj")
+                    Text(stringResource(R.string.cancel))
                 }
             }
         )

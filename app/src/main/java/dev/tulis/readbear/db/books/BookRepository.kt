@@ -1,7 +1,5 @@
 package dev.tulis.readbear.db.books
 
-import dev.tulis.readbear.db.relations.BookWithBookmark
-import dev.tulis.readbear.db.relations.BookWithPages
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import java.io.File
@@ -25,13 +23,13 @@ class BookRepository @Inject constructor(
         return dao.updateCover(id, cover)
     }
 
-    suspend fun getBookWithPages(bookId: Long): BookWithPages {
-        return dao.getBookWithPages(bookId)
-    }
+//    suspend fun getBookWithPages(bookId: Long): BookWithPages {
+//        return dao.getBookWithPages(bookId)
+//    }
 
-    fun getBookWithBookmark(bookId: Long): Flow<BookWithBookmark> {
-        return dao.getBookWithBookmark(bookId)
-    }
+//    fun getBookWithBookmark(bookId: Long): Flow<BookWithBookmark> {
+//        return dao.getBookWithBookmark(bookId)
+//    }
 
     suspend fun getBook(bookId: Long): Book {
         return dao.get(bookId)

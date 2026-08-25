@@ -7,9 +7,10 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.tulis.readbear.db.bookmarks.BookmarkDao
 import dev.tulis.readbear.db.books.BookDao
-import dev.tulis.readbear.db.pages.PageDao
+import dev.tulis.readbear.db.comics.ComicDao
+import dev.tulis.readbear.db.comics.bookmarks.ComicBookmarkDao
+import dev.tulis.readbear.db.comics.pages.ComicPageDao
 import jakarta.inject.Singleton
 import java.io.File
 
@@ -25,7 +26,7 @@ object DatabaseModule {
         return Room.databaseBuilder(
             context,
             AppDatabase::class.java,
-            "books.db"
+            "reader.db"
         ).build()
     }
 
@@ -45,16 +46,23 @@ object DatabaseModule {
     }
 
     @Provides
-    fun providePageDao(
+    fun provideComicPageDao(
         database: AppDatabase
-    ): PageDao {
-        return database.pageDao()
+    ): ComicPageDao {
+        return database.comicPageDao()
+    }
+
+    @Provides
+    fun provideComicDao(
+        database: AppDatabase
+    ): ComicDao {
+        return database.comicDao()
     }
 
     @Provides
     fun provideBookmarkDao(
         database: AppDatabase
-    ): BookmarkDao {
-        return database.bookmarkDao()
+    ): ComicBookmarkDao {
+        return database.comicBookmarkDao()
     }
 }

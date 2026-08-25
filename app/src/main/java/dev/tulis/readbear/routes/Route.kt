@@ -11,7 +11,12 @@ sealed interface Route {
     data object Settings : Route
 
     @Serializable
-    data class Reader(
+    data class ComicReader(
+        val comicId: Long
+    ) : Route
+
+    @Serializable
+    data class BookDetails(
         val bookId: Long
     ) : Route
 

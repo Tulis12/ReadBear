@@ -16,7 +16,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import dev.tulis.readbear.R
 import dev.tulis.readbear.db.books.Book
+import dev.tulis.readbear.db.books.BookType
 import dev.tulis.readbear.routes.menu.LibraryViewModel
 import kotlinx.coroutines.launch
 import java.util.UUID
@@ -38,7 +41,7 @@ fun ImportOption(
     ) {
         Icon(
             Icons.Default.Add,
-            contentDescription = "Add"
+            contentDescription = stringResource(R.string.import_book)
         )
     }
 
@@ -58,7 +61,7 @@ fun ImportOption(
                 context = context,
                 bookDir = bookDir,
                 uri = it,
-                onFinish = {
+                onFinishCbz = {
                     originalName ->
                     onChangeImporting(false)
 
@@ -66,12 +69,19 @@ fun ImportOption(
                         val bookId = viewModel.addBook(
                             Book(
                                 title = originalName.substringBeforeLast("."),
-                                path = bookUuid.toString()
+                                path = bookUuid.toString(),
+                                type = BookType.Comic
                             )
                         )
 
-                        viewModel.createIndex(viewModel.getBook(bookId))
+                        viewModel.createComicIndex(viewModel.getBook(bookId))
                     }
+                },
+                onFinishPdf = {
+
+                },
+                onFinishEpub = {
+
                 },
                 onThrow = {
                     throwable ->
@@ -88,16 +98,21 @@ fun ImportOption(
         onDismissRequest = { expanded = false }
     ) {
         DropdownMenuItem(
-            text = { Text("Dodaj z pliku lokalnego...") },
+            text = {
+                Text(stringResource(R.string.add_local_resource))
+           },
             onClick = {
                 expanded = false
-                launcher.launch(arrayOf("*/*"))
+                launcher.launch(
+                    arrayOf(
+                        "application/pdf",
+                        "application/epub+zip",
+                        "application/zip",
+                        "application/vnd.comicbook+zip",
+                        "*/*"
+                    )
+                )
             }
-        )
-
-        DropdownMenuItem(
-            text = { Text("Edytuj") },
-            onClick = { expanded = false }
         )
     }
 }
