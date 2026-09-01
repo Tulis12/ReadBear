@@ -1,4 +1,4 @@
-package dev.tulis.readbear.routes.reader
+package dev.tulis.readbear.routes.reader.comic
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
@@ -146,8 +146,6 @@ fun WebtoonReader(
                         book.progress = 0
                         book.readAlready++
                         viewModel.updateBookProgress(book)
-                        println("updatuje ksiązkę")
-
                         return@collect
                     }
 

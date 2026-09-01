@@ -11,6 +11,8 @@ import dev.tulis.readbear.db.books.BookDao
 import dev.tulis.readbear.db.comics.ComicDao
 import dev.tulis.readbear.db.comics.bookmarks.ComicBookmarkDao
 import dev.tulis.readbear.db.comics.pages.ComicPageDao
+import dev.tulis.readbear.db.pdfs.PdfDao
+import dev.tulis.readbear.db.pdfs.bookmarks.PdfBookmarkDao
 import jakarta.inject.Singleton
 import java.io.File
 
@@ -64,5 +66,19 @@ object DatabaseModule {
         database: AppDatabase
     ): ComicBookmarkDao {
         return database.comicBookmarkDao()
+    }
+
+    @Provides
+    fun providePdfDao(
+        database: AppDatabase
+    ): PdfDao {
+        return database.pdfDao()
+    }
+
+    @Provides
+    fun providePdfBookmarkDao(
+        database: AppDatabase
+    ): PdfBookmarkDao {
+        return database.pdfBookmarkDao()
     }
 }
