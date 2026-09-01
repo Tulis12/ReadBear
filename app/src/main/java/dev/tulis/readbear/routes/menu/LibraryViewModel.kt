@@ -1,9 +1,14 @@
 package dev.tulis.readbear.routes.menu
 
 import android.content.Context
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.pdf.PdfDocument
+import android.graphics.pdf.PdfRenderer
 import android.icu.text.Collator
 import android.net.Uri
+import android.os.ParcelFileDescriptor
 import android.provider.OpenableColumns
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -16,6 +21,10 @@ import dev.tulis.readbear.db.comics.bookmarks.ComicBookmark
 import dev.tulis.readbear.db.comics.bookmarks.ComicBookmarkDao
 import dev.tulis.readbear.db.comics.pages.ComicPage
 import dev.tulis.readbear.db.comics.pages.ComicPageDao
+import dev.tulis.readbear.db.pdfs.Pdf
+import dev.tulis.readbear.db.pdfs.PdfDao
+import dev.tulis.readbear.db.pdfs.bookmarks.PdfBookmark
+import dev.tulis.readbear.db.pdfs.bookmarks.PdfBookmarkDao
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -31,6 +40,7 @@ import java.util.UUID
 import java.util.zip.ZipFile
 import javax.inject.Inject
 import kotlin.sequences.forEach
+import androidx.core.graphics.createBitmap
 
 @HiltViewModel
 class LibraryViewModel @Inject constructor (
@@ -38,6 +48,8 @@ class LibraryViewModel @Inject constructor (
     private val comicDao: ComicDao,
     private val comicPageDao: ComicPageDao,
     private val comicBookmarkDao: ComicBookmarkDao,
+    private val pdfDao: PdfDao,
+    private val pdfBookmarkDao: PdfBookmarkDao,
     private val filesDir: File
 ) : ViewModel() {
 
@@ -87,6 +99,83 @@ class LibraryViewModel @Inject constructor (
     suspend fun createComicBookmark(comicId: Long) {
         val bookmark = ComicBookmark(comicId = comicId)
         comicBookmarkDao.insert(bookmark)
+    }
+
+    suspend fun createPdfBookmark(pdfId: Long) {
+        val bookmark = PdfBookmark(pdfId = pdfId)
+        pdfBookmarkDao.insert(bookmark)
+    }
+
+
+    suspend fun createPdfIndex(
+        book: Book
+    ) = withContext(Dispatchers.IO) {
+        val bookDir = filesDir.resolve(book.path)
+
+        val pdf = Pdf(bookId = book.id)
+        pdf.id = pdfDao.insert(pdf)
+
+        val cover = "cover_${UUID.randomUUID()}.png"
+
+        val fileDescriptor = ParcelFileDescriptor.open(
+            bookDir.resolve("book.pdf"),
+            ParcelFileDescriptor.MODE_READ_ONLY
+        )
+
+        val renderer = PdfRenderer(fileDescriptor)
+
+        val page = renderer.openPage(0)
+        val bitmap = createBitmap(page.width * 2, page.height * 2)
+
+        page.render(
+            bitmap,
+            null,
+            null,
+            PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY
+        )
+
+        FileOutputStream(bookDir.resolve(cover)).use { out ->
+            bitmap.compress(
+                Bitmap.CompressFormat.JPEG,
+                95,
+                out
+            )
+        }
+
+        page.close()
+        renderer.close()
+        fileDescriptor.close()
+
+        val doc = io.github.yuroyami.kitepdf.PdfDocument.open(bookDir.resolve("book.pdf").readBytes())
+        val docInfo = doc.info
+
+        docInfo.title?.let {
+            if(it.isEmpty()) return@let
+            book.title = it
+        }
+
+        docInfo.author?.let {
+            if(it.isEmpty()) return@let
+            book.author = it
+        }
+
+        docInfo.subject?.let {
+            if(it.isEmpty()) return@let
+            book.summary = it
+        }
+
+        docInfo.keywords?.let {
+            if(it.isEmpty()) return@let
+            pdf.keywords = it
+        }
+
+//        docInfo.creationDate?. TODO() date
+
+        book.cover = cover
+        book.totalProgress = doc.pages.count()
+        updateBook(book)
+
+        createPdfBookmark(pdf.id)
     }
 
     suspend fun createComicIndex(
@@ -147,9 +236,7 @@ class LibraryViewModel @Inject constructor (
 
             comic.id = comicId
             comic.panels = i
-            println("panels: " + i)
-            println("updated: " + comicDao.update(comic))
-            println(comic)
+            comicDao.update(comic)
 
             val coverFileName = files.first()
             val coverExtension = coverFileName.substringAfterLast('.', "")
@@ -170,7 +257,7 @@ class LibraryViewModel @Inject constructor (
                 }
             }
 
-            createComicBookmark(book.id)
+            createComicBookmark(comic.id)
 
             book.cover = cover
             book.totalProgress = i
@@ -236,6 +323,10 @@ class LibraryViewModel @Inject constructor (
                 when(extension) {
                     "cbz" -> {
                         onFinishCbz(filename)
+                    }
+
+                    "pdf" -> {
+                        onFinishPdf(filename)
                     }
                 }
             }

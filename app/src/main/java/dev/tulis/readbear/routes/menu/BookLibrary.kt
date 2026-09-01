@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
+import dev.tulis.readbear.utils.LongText
 import kotlin.math.roundToInt
 
 @Composable
@@ -178,20 +179,7 @@ fun BookLibrary(
                     }
 
                     Column {
-                        Text(
-                            book.title,
-                            maxLines = 1,
-                            modifier = if(tooLongTextOption == TooLongTextOption.BASIC_MARQUEE) {
-                                Modifier.basicMarquee()
-                            } else {
-                                Modifier
-                            },
-                            overflow = if (tooLongTextOption == TooLongTextOption.ELLIPSIS) {
-                                TextOverflow.Ellipsis
-                            } else {
-                                TextOverflow.Visible
-                            }
-                        )
+                        LongText(book.title)
 
                         if(book.totalProgress != 0) {
                             Text(
