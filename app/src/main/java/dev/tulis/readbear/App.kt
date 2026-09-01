@@ -1,9 +1,7 @@
 package dev.tulis.readbear
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -14,7 +12,8 @@ import dev.tulis.readbear.routes.menu.Menu
 import dev.tulis.readbear.routes.Route
 import dev.tulis.readbear.routes.edit.EditBookDetails
 import dev.tulis.readbear.routes.info.BookDetails
-import dev.tulis.readbear.routes.reader.WebtoonReader
+import dev.tulis.readbear.routes.reader.comic.WebtoonReader
+import dev.tulis.readbear.routes.reader.pdf.PdfReader
 import kotlinx.coroutines.launch
 
 @Composable
@@ -42,7 +41,16 @@ fun App(
                                 ))
                             }
 
-                            else -> TODO()
+                            BookType.Pdf -> {
+                                navController.navigate(Route.PdfReader(
+                                    viewModel.getPdfByBookId(it).id
+                                ))
+                            }
+
+                            else -> {
+                                println(book.type)
+                                TODO()
+                            }
                         }
                     }
                 },
@@ -53,6 +61,16 @@ fun App(
                     navController.navigate(Route.BookDetails(it))
                 }
             )
+        }
+
+        composable<Route.PdfReader> { entry ->
+            val args = entry.toRoute<Route.PdfReader>()
+
+            PdfReader(
+                pdfId = args.pdfId
+            ) {
+                navController.popBackStack()
+            }
         }
 
         composable<Route.ComicReader> { entry ->

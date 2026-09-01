@@ -1,4 +1,4 @@
-package dev.tulis.readbear.routes.reader
+package dev.tulis.readbear.routes.reader.pdf
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,7 +9,11 @@ import dev.tulis.readbear.db.comics.ComicDao
 import dev.tulis.readbear.db.comics.bookmarks.ComicBookmark
 import dev.tulis.readbear.db.comics.bookmarks.ComicBookmarkDao
 import dev.tulis.readbear.db.comics.pages.ComicPage
+import dev.tulis.readbear.db.pdfs.PdfDao
+import dev.tulis.readbear.db.pdfs.bookmarks.PdfBookmark
+import dev.tulis.readbear.db.pdfs.bookmarks.PdfBookmarkDao
 import dev.tulis.readbear.db.relations.ComicWithBookmark
+import dev.tulis.readbear.db.relations.PdfWithBookmark
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
@@ -19,22 +23,15 @@ import java.util.zip.ZipFile
 import javax.inject.Inject
 
 @HiltViewModel
-class WebtoonReaderViewModel @Inject constructor (
-    private val comicDao: ComicDao,
-    private val comicBookmarkDao: ComicBookmarkDao,
+class PdfReaderViewModel @Inject constructor (
+    private val pdfDao: PdfDao,
+    private val pdfBookmarkDao: PdfBookmarkDao,
     private val bookRepository: BookRepository,
     private val filesDir: File
 ) : ViewModel() {
-    var zipFile: ZipFile? = null
-
-    override fun onCleared() {
-        super.onCleared()
-        zipFile?.close()
-    }
-
-    fun updateBookmark(bookmark: ComicBookmark) {
+    fun updateBookmark(bookmark: PdfBookmark) {
         viewModelScope.launch {
-            comicBookmarkDao.update(bookmark)
+            pdfBookmarkDao.update(bookmark)
         }
     }
 
@@ -48,23 +45,7 @@ class WebtoonReaderViewModel @Inject constructor (
         return bookRepository.getBook(bookId)
     }
 
-    fun getComicWithBookmark(comicId: Long): Flow<ComicWithBookmark> {
-        return comicDao.getComicWithBookmark(comicId)
-    }
-
-    suspend fun getPanels(comicId: Long): List<ComicPage> {
-        val comicWithPages = comicDao.getComicWithPages(comicId)
-        val book = bookRepository.getBook(comicWithPages.comic.bookId)
-
-        // This is important, don't remove it future me!
-        zipFile = withContext(Dispatchers.IO) {
-            ZipFile(
-                filesDir
-                    .resolve(book.path)
-                    .resolve("book.cbz")
-            )
-        }
-
-        return comicWithPages.panels
+    fun getPdfWithBookmark(pdfId: Long): Flow<PdfWithBookmark> {
+        return pdfDao.getPdfWithBookmark(pdfId)
     }
 }

@@ -108,4 +108,10 @@ dependencies {
     ksp("com.google.dagger:hilt-android-compiler:2.59.2")
 
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+    implementation("io.github.yuroyami:kitepdf:0.7.0")
+    implementation("io.github.yuroyami:kitepdf-compose-viewer:0.7.0")
+
+    implementation("com.tom-roush:pdfbox-android:2.0.27.0")
+
 }
