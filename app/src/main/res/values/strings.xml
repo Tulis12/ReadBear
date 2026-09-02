@@ -34,9 +34,23 @@
     <string name="progress_enabled">reading progress</string>
     <string name="time_clock_enabled">reading time</string>
     <string name="show">Show:</string>
-    <string name="pdf">PDF</string>
+    <string name="pdf" translatable="false">PDF</string>
     <string name="side_by_side">Side by side</string>
     <string name="reading_layout">Reading layout</string>
     <string name="scrollable">Scrollable</string>
     <string name="flipping">Flipping</string>
+    <string name="unknown">Unknown</string>
+    <string name="stats_read_time">Read %1$d times</string>
+    <string name="pages">Pages</string>
+    <string name="panels">Panels</string>
+    <string name="chapters">Chapters</string>
+    <string name="reading_progress">Progress</string>
+    <string name="reading_time">Time</string>
+    <string name="keywords">Keywords</string>
+    <string name="series">Series</string>
+    <string name="series_status">Series status</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="is_manga">Manga?</string>
+    <string name="book_type">Book type</string>
 </resources>
