@@ -41,8 +41,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import dev.tulis.readbear.db.Settings
 import dev.tulis.readbear.utils.LongText
-import kotlin.math.ceil
-import kotlin.math.roundToInt
+import dev.tulis.readbear.utils.readingProgress
+import dev.tulis.readbear.utils.readingTime
 
 @Composable
 fun BookLibrary(
@@ -177,24 +177,12 @@ fun BookLibrary(
                         LongText(book.title)
 
                         if(book.totalProgress != 0) {
-                            var text = "${((book.progress / book.totalProgress.toFloat()) * 100).roundToInt()}%"
-                            if(book.progress == 0 && book.readAlready > 0) {
-                                text = "100%"
-                            }
-
-                            val readingTimeS = book.readingTime / 1000f
-                            println(readingTimeS)
-                            println(book.readingTime)
-
-                            val h = (readingTimeS / 3600).toInt()
-                            val m = ceil((readingTimeS - h * 3600) / 60).toInt()
-
                             Row(
                                 horizontalArrangement = Arrangement.spacedBy(5.dp)
                             ) {
                                 if(settings.progressEnabled) {
                                     Text(
-                                        text,
+                                        readingProgress(book),
                                         style = TextStyle(
                                             fontSize = 12.sp
                                         )
@@ -203,7 +191,7 @@ fun BookLibrary(
 
                                 if(settings.timeClockEnabled) {
                                     Text(
-                                        "${h}h ${m}m",
+                                        readingTime(book.readingTime),
                                         style = TextStyle(
                                             fontSize = 12.sp
                                         )
