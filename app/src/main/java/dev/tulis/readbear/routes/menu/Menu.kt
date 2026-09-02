@@ -83,7 +83,7 @@ fun Menu(
             TopAppBar (
                 title = {
                     Row {
-                        Text("Tutaj coś musi być ale nwm co")
+                        Text(stringResource(R.string.base_app_name))
                     }
                 },
                 actions = {
