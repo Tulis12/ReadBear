@@ -67,9 +67,8 @@ fun Menu(
     }
 
     var selectionMode by remember { mutableStateOf(false) }
-    val columnCount by Settings.getColumns(context).collectAsState(null)
-    val longTextOption by Settings.getTooLongTextOption(context).collectAsState(null)
-    val alreadyReadOption by Settings.getAlreadyReadOption(context).collectAsState(null)
+    val settingsFlow by Settings.getSettings(context).collectAsState(null)
+    val settings = settingsFlow ?: return
 
     var importing by remember { mutableStateOf(false) }
 
@@ -94,6 +93,10 @@ fun Menu(
                                 showSheet = true
 
                                 scope.launch {
+                                    awaitFrame()
+                                    awaitFrame()
+                                    awaitFrame()
+                                    awaitFrame()
                                     awaitFrame()
                                     sheetState.show()
                                 }
@@ -200,39 +203,9 @@ fun Menu(
             SnackbarHost(snackbarHostState)
         }
     ) { suggestedPadding ->
-        val columnCountSaved = columnCount ?: return@Scaffold
-        var sliderColumnValue by remember { mutableIntStateOf(columnCountSaved) }
-
-        val longTextOptionSaved = longTextOption ?: return@Scaffold
-        var longTextOptionValue by remember { mutableStateOf(longTextOptionSaved) }
-
-        val alreadyReadOptionSaved = alreadyReadOption ?: return@Scaffold
-        var alreadyReadOptionValue by remember { mutableStateOf(alreadyReadOptionSaved) }
-
         if(showSheet) {
             BottomSettingsSheet(
                 sheetState = sheetState,
-                columnCount = columnCountSaved,
-                onChangeColumnCount = { value ->
-                    sliderColumnValue = value
-                },
-                tooLongTextOption = longTextOptionSaved,
-                onChangeTooLongTextOption = { value ->
-                    longTextOptionValue = value
-                },
-                alreadyReadOption = alreadyReadOptionSaved,
-                onChangeAlreadyReadOption = { value ->
-                    alreadyReadOptionValue = value
-                },
-                onSaveRequest = {
-                    scope.launch {
-                        context.dataStore.edit { settings ->
-                            settings[Settings.SettingsKeys.COLUMNS] = sliderColumnValue
-                            settings[Settings.SettingsKeys.LONG_TEXT_OPTION] = longTextOptionValue.name
-                            settings[Settings.SettingsKeys.ALREADY_READ_OPTION] = alreadyReadOptionValue.name
-                        }
-                    }
-                },
                 onHide = {
                     scope.launch {
                         sheetState.hide()
@@ -241,7 +214,6 @@ fun Menu(
                 }
             )
         }
-
 
         val padding = PaddingValues(
             top = suggestedPadding.calculateTopPadding() + 3.dp,
@@ -273,9 +245,7 @@ fun Menu(
             }
 
             BookLibrary(
-                sliderColumnValue = sliderColumnValue,
-                tooLongTextOption = longTextOptionValue,
-                alreadyReadOption = alreadyReadOptionValue,
+                settings = settings,
                 padding = padding,
                 selectedItems = selectedItems,
                 onAddSelectedItem = {
@@ -292,24 +262,24 @@ fun Menu(
                     onOpenBook(it)
                 }
             )
+        }
+    }
 
-            if(importing) {
-                Box(
-                    Modifier
-                        .fillMaxSize()
-                        .background(Color.Black.copy(alpha = 0.5f))
-                )
+    if(importing) {
+        Box {
+            Box(
+                Modifier
+                    .fillMaxSize()
+                    .background(Color.Black.copy(alpha = 0.5f))
+            )
 
-                Column(
-                    modifier = Modifier.align(Alignment.Center),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    CircularProgressIndicator()
-                    Text(
-                        stringResource(R.string.importing)
-                    )
-                }
+            Column(
+                modifier = Modifier.align(Alignment.Center),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                CircularProgressIndicator()
+                Text(stringResource(R.string.importing), color = Color.White)
             }
         }
     }

@@ -3,7 +3,6 @@ package dev.tulis.readbear.routes.menu
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
-import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -25,12 +24,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -39,20 +35,19 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
+import dev.tulis.readbear.db.Settings
 import dev.tulis.readbear.utils.LongText
+import kotlin.math.ceil
 import kotlin.math.roundToInt
 
 @Composable
 fun BookLibrary(
     viewModel: LibraryViewModel = hiltViewModel(),
-    sliderColumnValue: Int,
-    tooLongTextOption: TooLongTextOption,
-    alreadyReadOption: AlreadyReadOption,
+    settings: Settings.SettingsState,
     padding: PaddingValues,
     selectedItems: List<Long>,
     onAddSelectedItem: (Long) -> Unit,
@@ -65,7 +60,7 @@ fun BookLibrary(
     val context = LocalContext.current
 
     LazyVerticalGrid(
-        columns = GridCells.Fixed(sliderColumnValue),
+        columns = GridCells.Fixed(settings.columnCount),
         horizontalArrangement = Arrangement.spacedBy(5.dp),
         verticalArrangement = Arrangement.spacedBy(15.dp),
         modifier = Modifier
@@ -151,7 +146,7 @@ fun BookLibrary(
                                     .clip(RoundedCornerShape(15.dp))
                                     .background(MaterialTheme.colorScheme.onPrimaryContainer)
                                     .then(
-                                        if(book.readAlready > 1 && alreadyReadOption == AlreadyReadOption.TIMES_AND_CHECKMARK) {
+                                        if(book.readAlready > 1 && settings.alreadyReadOption == AlreadyReadOption.TIMES_AND_CHECKMARK) {
                                             Modifier.padding(5.dp)
                                         } else if(book.readAlready > 1) {
                                             Modifier.padding(3.dp)
@@ -162,7 +157,7 @@ fun BookLibrary(
 
                             ) {
                                 Row {
-                                    if(book.readAlready > 1 && alreadyReadOption == AlreadyReadOption.TIMES_AND_CHECKMARK) {
+                                    if(book.readAlready > 1 && settings.alreadyReadOption == AlreadyReadOption.TIMES_AND_CHECKMARK) {
                                         Text(
                                             "${book.readAlready}x",
                                             color = MaterialTheme.colorScheme.onSecondary
@@ -182,12 +177,39 @@ fun BookLibrary(
                         LongText(book.title)
 
                         if(book.totalProgress != 0) {
-                            Text(
-                                "${((book.progress / book.totalProgress.toFloat()) * 100).roundToInt()}%",
-                                style = TextStyle(
-                                    fontSize = 12.sp
-                                )
-                            )
+                            var text = "${((book.progress / book.totalProgress.toFloat()) * 100).roundToInt()}%"
+                            if(book.progress == 0 && book.readAlready > 0) {
+                                text = "100%"
+                            }
+
+                            val readingTimeS = book.readingTime / 1000f
+                            println(readingTimeS)
+                            println(book.readingTime)
+
+                            val h = (readingTimeS / 3600).toInt()
+                            val m = ceil((readingTimeS - h * 3600) / 60).toInt()
+
+                            Row(
+                                horizontalArrangement = Arrangement.spacedBy(5.dp)
+                            ) {
+                                if(settings.progressEnabled) {
+                                    Text(
+                                        text,
+                                        style = TextStyle(
+                                            fontSize = 12.sp
+                                        )
+                                    )
+                                }
+
+                                if(settings.timeClockEnabled) {
+                                    Text(
+                                        "${h}h ${m}m",
+                                        style = TextStyle(
+                                            fontSize = 12.sp
+                                        )
+                                    )
+                                }
+                            }
                         }
                     }
                 }
