@@ -24,5 +24,6 @@ data class Comic(
     var bookId: Long,
     var panels: Int = 0,
     var series: String? = null,
-    var seriesStatus: String? = null
+    var seriesStatus: String? = null,
+    var manga: Boolean? = null
 )

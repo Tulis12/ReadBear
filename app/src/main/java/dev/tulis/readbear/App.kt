@@ -86,7 +86,7 @@ fun App(
         composable<Route.BookDetails> { entry ->
             val args = entry.toRoute<Route.BookDetails>()
 
-            BookDetails(args.bookId) {
+            BookDetails(bookId = args.bookId) {
                 navController.popBackStack()
             }
         }
