@@ -31,4 +31,12 @@
     <string name="info">Info</string>
     <string name="error_unsupported_format">Unsupported format!</string>
     <string name="translation_author">Tulis</string>
+    <string name="progress_enabled">reading progress</string>
+    <string name="time_clock_enabled">reading time</string>
+    <string name="show">Show:</string>
+    <string name="pdf">PDF</string>
+    <string name="side_by_side">Side by side</string>
+    <string name="reading_layout">Reading layout</string>
+    <string name="scrollable">Scrollable</string>
+    <string name="flipping">Flipping</string>
 </resources>

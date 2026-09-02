@@ -15,8 +15,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -34,30 +36,42 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.tulis.readbear.R
+import dev.tulis.readbear.db.Settings
 import dev.tulis.readbear.db.books.Book
+import dev.tulis.readbear.routes.menu.PdfReadingLayout
 import dev.tulis.readbear.utils.LongText
 import io.github.yuroyami.kitepdf.PdfDocument
+import io.github.yuroyami.kitepdf.compose.KiteDocLayout
 import io.github.yuroyami.kitepdf.compose.KiteDocView
 import io.github.yuroyami.kitepdf.compose.rememberKiteDocViewState
 import io.github.yuroyami.kitepdf.core.KiteBookmark
 import io.github.yuroyami.kitepdf.core.KiteLocation
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlin.math.ceil
 import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PdfReader(
-    pdfId: Long,
     viewModel: PdfReaderViewModel = hiltViewModel(),
+    pdfId: Long,
     returnToMenu: () -> Unit,
 ) {
+    val context = LocalContext.current
+    val settingsFlow by Settings.getSettings(context).collectAsState(null)
+    val settings = settingsFlow ?: return
+
     val flowComicWithBookmark by viewModel
         .getPdfWithBookmark(pdfId)
         .collectAsStateWithLifecycle(null)
 
     val view = LocalView.current
     var topBarVisible by remember { mutableStateOf(false) }
+
+    var lastReadingTime by remember {
+        mutableLongStateOf(System.currentTimeMillis())
+    }
 
     DisposableEffect(topBarVisible) {
         val window = (view.context as Activity).window
@@ -82,6 +96,7 @@ fun PdfReader(
 
     LaunchedEffect(Unit) {
         suspendBook = viewModel.getBook(pdfWithBookmark.pdf.bookId)
+        lastReadingTime = System.currentTimeMillis()
     }
 
     val book = suspendBook ?: return
@@ -96,6 +111,11 @@ fun PdfReader(
         KiteDocView(
             state = bookState,
             modifier = Modifier.fillMaxSize(),
+            layout = when(settings.pdfReadingLayout) {
+                PdfReadingLayout.CONTINUOUS -> KiteDocLayout.Continuous()
+                PdfReadingLayout.SPREAD -> KiteDocLayout.Spread()
+                PdfReadingLayout.PAGED -> KiteDocLayout.Paged()
+            },
             onTap = {
                 topBarVisible = !topBarVisible
             },
@@ -116,6 +136,14 @@ fun PdfReader(
             snapshotFlow { bookState.currentPage }
                 .distinctUntilChanged()
                 .collect { page ->
+                    val currentTime = System.currentTimeMillis()
+
+                    if(currentTime - lastReadingTime > 600 * 1000) lastReadingTime = System.currentTimeMillis()
+                    book.readingTime += currentTime - lastReadingTime
+                    viewModel.updateBookProgress(book)
+
+                    lastReadingTime = currentTime
+
                     if(finished) return@collect
 
                     if(page > lastPage) {
@@ -128,7 +156,7 @@ fun PdfReader(
                         lastPage = page
                     }
 
-                    if(page == book.totalProgress - 1) {
+                    if(page >= book.totalProgress - 3) {
                         finished = true
 
                         pdfWithBookmark.bookmark.page = 0
