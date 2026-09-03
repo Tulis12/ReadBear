@@ -250,4 +250,6 @@ dependencies {
 
     implementation("com.tom-roush:pdfbox-android:2.0.27.0")
 
+    implementation("dev.nucleusframework:pdfium:154.0.8021.0b")
+
 }
