@@ -36,6 +36,8 @@ jobs:
           KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
           KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          WEBLATE_URL: ${{ secrets.WEBLATE_URL }}
+          WEBLATE_TOKEN: ${{ secrets.WEBLATE_TOKEN }}
         run: ./gradlew assembleRelease
 
       - name: Upload APK to Release
