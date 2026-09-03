@@ -55,11 +55,14 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import dev.tulis.readbear.db.books.Book
 import dev.tulis.readbear.db.comics.pages.ComicPage
+import dev.tulis.readbear.routes.reader.pdf.logMemory
 import dev.tulis.readbear.utils.zip.ZipImage
 import dev.tulis.readbear.utils.zip.ZipImageFetcher
 import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -167,7 +170,6 @@ fun WebtoonReader(
                     viewModel.updateBookProgress(book)
                 }
         }
-
 
         LazyColumn(
             state = listState,
