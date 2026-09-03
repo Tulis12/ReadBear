@@ -1,3 +1,9 @@
+import groovy.json.JsonSlurper
+import java.net.HttpURLConnection
+import java.net.URI
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -8,7 +14,121 @@ plugins {
     id("com.google.dagger.hilt.android")
 }
 
+tasks.named("preBuild") {
+    dependsOn("createTranslationCredits")
+}
+
+val translationCredits = layout.buildDirectory.dir("generated/translationCredits/res/raw")
+val envToken = System.getenv("WEBLATE_TOKEN")
+    ?: providers.gradleProperty("WEBLATE_TOKEN").orNull
+    ?: error("WEBLATE_TOKEN is not set")
+
+val envWeblateUrl = System.getenv("WEBLATE_URL")
+    ?: providers.gradleProperty("WEBLATE_URL").orNull
+    ?: error("WEBLATE_URL is not set")
+
+
+abstract class GenerateAuthorCredits : DefaultTask() {
+    @get:OutputDirectory
+    abstract val outputDir: DirectoryProperty
+
+    @get:Input
+    abstract val weblateUrl: Property<String>
+
+    @get:Input
+    abstract val weblateToken: Property<String>
+}
+
+tasks.register<GenerateAuthorCredits>("createTranslationCredits") {
+    outputDir.set(translationCredits)
+    weblateToken.set(envToken)
+    weblateUrl.set(envWeblateUrl)
+
+    doLast {
+        println("Generating translation credits")
+
+        val today = LocalDate.now()
+            .atTime(23, 59, 59)
+            .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"))
+
+        fun get(url: String): String {
+            val connection = URI(url).toURL().openConnection() as HttpURLConnection
+            connection.requestMethod = "GET"
+
+            connection.setRequestProperty("Authorization", "Token ${weblateToken.get()}")
+
+            return connection.inputStream.bufferedReader().use { it.readText() }
+        }
+
+        fun post(url: String, json: String): String {
+            val connection = URI(url).toURL().openConnection() as HttpURLConnection
+
+            connection.requestMethod = "POST"
+            connection.doOutput = true
+            connection.setRequestProperty("Content-Type", "application/json")
+            connection.setRequestProperty("Authorization", "Token ${weblateToken.get()}")
+
+            connection.outputStream.use {
+                it.write(json.toByteArray(Charsets.UTF_8))
+            }
+
+            return connection.inputStream.bufferedReader().use { it.readText() }
+        }
+
+        val requestReport = post("${weblateUrl.get()}/api/reports/", """
+            {
+                "kind": "credits",
+                "project": "readbear",
+                "start": "1970-01-01 00:00:00",
+                "end": "$today"
+            }
+        """.trimIndent())
+
+        var parsed = JsonSlurper().parseText(requestReport) as Map<*, *>
+        val taskUrl = parsed["task_url"] as String
+        var completed = false
+        var response = ""
+
+        while(!completed) {
+            response = get("${weblateUrl.get()}${taskUrl}")
+            parsed = JsonSlurper().parseText(response) as Map<*, *>
+            completed = parsed["completed"] as Boolean
+        }
+
+        parsed = parsed["result"] as Map<*, *>
+        response = get("${weblateUrl.get()}${parsed["url"]}json/")
+
+        val withoutEmail = response.replace(
+            Regex(""""email"\s*:\s*"[^"]*",?\s*"""),
+            ""
+        )
+
+        val withoutFullName = withoutEmail.replace(
+            Regex(""""full_name"\s*:\s*"[^"]*",?\s*"""),
+            ""
+        )
+
+        val cleaned = withoutFullName.replace(Regex(""",\s*}"""), "}")
+            .replace(Regex(""",\s*]"""), "]")
+
+
+        val dir = outputDir
+            .get()
+            .asFile
+
+        dir.mkdirs()
+
+        File(dir, "translation_credits.json").writeText(
+            cleaned.trimIndent()
+        )
+    }
+}
+
 android {
+    buildFeatures {
+        buildConfig = true
+    }
+
     signingConfigs {
         create("release") {
             storeFile = file("../release.jks")
@@ -24,6 +144,22 @@ android {
         }
     }
 
+    sourceSets {
+        getByName("main") {
+            resources {
+                res {
+                    directories.add(
+                        layout.buildDirectory
+                            .dir("generated/translationCredits/res")
+                            .get()
+                            .asFile
+                            .absolutePath
+                    )
+                }
+            }
+        }
+    }
+
     namespace = "dev.tulis.readbear"
     compileSdk {
         version = release(37)
@@ -34,7 +170,7 @@ android {
         minSdk = 24
         targetSdk = 37
         versionCode = 1
-        versionName = "1.0"
+        versionName = "v0.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
