@@ -332,7 +332,7 @@ fun AppInfo() {
             modifier = Modifier.padding(5.dp)
         ) {
             AsyncImage(
-                model = R.drawable.readbear_bg,
+                model = R.mipmap.ic_launcher,
                 contentDescription = null,
                 modifier = Modifier.fillMaxWidth(0.3f)
             )
