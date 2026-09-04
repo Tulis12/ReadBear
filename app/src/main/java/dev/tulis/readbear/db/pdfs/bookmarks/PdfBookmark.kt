@@ -22,5 +22,6 @@ data class PdfBookmark(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
     val pdfId: Long,
-    var page: Int = 0
+    var page: Int = 0,
+    var pageOffset: Int = 0
 )
