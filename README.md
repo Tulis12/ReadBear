@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="app/src/main/res/drawable/readbear_bg.png" width="300">
+  <img src="pages/assets/readbear_logo.png" width="300">
 </p>
 
 
