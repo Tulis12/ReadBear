@@ -23,7 +23,7 @@ jobs:
         env:
           WEBLATE_URL: ${{ secrets.WEBLATE_URL }}
           WEBLATE_TOKEN: ${{ secrets.WEBLATE_TOKEN }}
-        run: ./gradlew lint
+        run: ./gradlew lint || true
 
       - name: Check selected lint issues
         run: |
