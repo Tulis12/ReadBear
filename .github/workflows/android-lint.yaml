@@ -3,10 +3,12 @@ name: Android Lint
 on:
   push:
   pull_request:
+  workflow_dispatch:
 
 jobs:
   lint:
     runs-on: ubuntu-latest
+    environment: "Build artifact"
 
     steps:
       - uses: actions/checkout@v4
