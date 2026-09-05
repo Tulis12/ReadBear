@@ -19,6 +19,9 @@ jobs:
           java-version: 17
 
       - name: Run lint
+        env:
+          WEBLATE_URL: ${{ secrets.WEBLATE_URL }}
+          WEBLATE_TOKEN: ${{ secrets.WEBLATE_TOKEN }}
         run: ./gradlew lint
 
       - name: Check selected lint issues
