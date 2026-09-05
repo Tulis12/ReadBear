@@ -105,7 +105,7 @@ fun BookLibrary(
                                         onChangeSelectionMode(false)
                                     }
 
-                                    return@combinedClickable;
+                                    return@combinedClickable
                                 }
 
                                 onOpenBook(book.id)

@@ -5,8 +5,7 @@ REPORT = "app/build/reports/lint-results-debug.xml"
 
 # This checks will cause the actions to fail
 ALLOWED = {
-    "PluralsCandidate",
-    "IconLocation"
+    "PluralsCandidate"
 }
 
 root = ET.parse(REPORT).getroot()

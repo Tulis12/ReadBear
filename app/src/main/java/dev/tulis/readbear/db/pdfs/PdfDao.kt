@@ -6,8 +6,6 @@ import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
-import dev.tulis.readbear.db.relations.ComicWithBookmark
-import dev.tulis.readbear.db.relations.ComicWithPages
 import dev.tulis.readbear.db.relations.PdfWithBookmark
 import kotlinx.coroutines.flow.Flow
 
