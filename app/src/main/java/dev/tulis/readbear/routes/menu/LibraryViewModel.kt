@@ -3,13 +3,12 @@ package dev.tulis.readbear.routes.menu
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.Color
-import android.graphics.pdf.PdfDocument
 import android.graphics.pdf.PdfRenderer
 import android.icu.text.Collator
 import android.net.Uri
 import android.os.ParcelFileDescriptor
 import android.provider.OpenableColumns
+import androidx.core.graphics.createBitmap
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,13 +33,10 @@ import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
-import java.util.Locale
 import java.util.Locale.getDefault
 import java.util.UUID
 import java.util.zip.ZipFile
 import javax.inject.Inject
-import kotlin.sequences.forEach
-import androidx.core.graphics.createBitmap
 
 @HiltViewModel
 class LibraryViewModel @Inject constructor (

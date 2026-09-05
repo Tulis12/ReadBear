@@ -30,7 +30,7 @@ fun DeleteOption(
 
     IconButton(
         onClick = {
-            showDialog = true;
+            showDialog = true
         }
     ) {
         Icon(
