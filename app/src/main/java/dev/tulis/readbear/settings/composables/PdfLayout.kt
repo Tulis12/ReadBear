@@ -1,4 +1,4 @@
-package dev.tulis.readbear.routes.menu.settings
+package dev.tulis.readbear.settings.composables
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,13 +24,15 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import dev.tulis.readbear.R
-import dev.tulis.readbear.routes.menu.PdfReadingLayout
+import dev.tulis.readbear.settings.PdfReadingLayout
+import dev.tulis.readbear.settings.PdfSettingsContext
 import dev.tulis.readbear.utils.sampleImages
 
 @Composable
 fun PdfLayout(
     pdfReadingLayout: PdfReadingLayout,
-    onChangePdfReadingLayout: (PdfReadingLayout) -> Unit
+    onChangePdfReadingLayout: (PdfReadingLayout) -> Unit,
+    disabled: Boolean = false
 ) {
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -74,7 +76,8 @@ fun PdfLayout(
                     selected = pdfReadingLayout == PdfReadingLayout.CONTINUOUS,
                     onClick = {
                         onChangePdfReadingLayout(PdfReadingLayout.CONTINUOUS)
-                    }
+                    },
+                    enabled = !disabled
                 )
             }
 
@@ -135,7 +138,8 @@ fun PdfLayout(
                     selected = pdfReadingLayout == PdfReadingLayout.SPREAD,
                     onClick = {
                         onChangePdfReadingLayout(PdfReadingLayout.SPREAD)
-                    }
+                    },
+                    enabled = !disabled
                 )
             }
 
@@ -172,7 +176,8 @@ fun PdfLayout(
                     selected = pdfReadingLayout == PdfReadingLayout.PAGED,
                     onClick = {
                         onChangePdfReadingLayout(PdfReadingLayout.PAGED)
-                    }
+                    },
+                    enabled = !disabled
                 )
             }
         }

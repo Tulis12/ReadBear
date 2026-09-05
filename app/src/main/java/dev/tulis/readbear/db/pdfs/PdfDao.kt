@@ -23,6 +23,9 @@ interface PdfDao {
     @Query("SELECT * FROM Pdf WHERE id = :id")
     suspend fun get(id: Long): Pdf
 
+    @Query("SELECT * FROM Pdf WHERE id = :id")
+    fun getFlow(id: Long): Flow<Pdf>
+
     @Query("DELETE FROM Pdf WHERE id = :id")
     suspend fun deleteById(id: Long)
 
