@@ -88,6 +88,16 @@ fun PdfReader(
         mutableLongStateOf(System.currentTimeMillis())
     }
 
+    val bumpTime: (Book) -> Unit = { book ->
+        val currentTime = System.currentTimeMillis()
+
+        if(currentTime - lastReadingTime > 600 * 1000) lastReadingTime = System.currentTimeMillis()
+        book.readingTime += currentTime - lastReadingTime
+        viewModel.updateBookProgress(book)
+
+        lastReadingTime = currentTime
+    }
+
     var showSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
@@ -238,8 +248,9 @@ fun PdfReader(
                     .distinctUntilChanged()
                     .collect { settledPage ->
                         topBarVisible = false
-
                         if(finished) return@collect
+
+                        bumpTime(book)
 
                         if(settledPage == book.totalProgress - 1) {
                             finished = true
@@ -292,6 +303,8 @@ fun PdfReader(
                         topBarVisible = false
 
                         if(finished) return@collect
+
+                        bumpTime(book)
 
                         if(lastElement != null && lastElement == book.totalProgress - 1) {
                             finished = true

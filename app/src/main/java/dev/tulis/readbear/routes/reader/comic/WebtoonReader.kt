@@ -39,6 +39,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -118,6 +119,20 @@ fun WebtoonReader(
     var finished by remember { mutableStateOf(false) }
     var focusedPanel: ZipImage? by remember { mutableStateOf(null) }
 
+    var lastReadingTime by remember {
+        mutableLongStateOf(System.currentTimeMillis())
+    }
+
+    val bumpTime: (Book) -> Unit = { book ->
+        val currentTime = System.currentTimeMillis()
+
+        if(currentTime - lastReadingTime > 600 * 1000) lastReadingTime = System.currentTimeMillis()
+        book.readingTime += currentTime - lastReadingTime
+        viewModel.updateBookProgress(book)
+
+        lastReadingTime = currentTime
+    }
+
     Box {
         val listState = rememberLazyListState()
 
@@ -143,6 +158,7 @@ fun WebtoonReader(
                     topBarVisible = false
 
                     if(finished) return@collect
+                    bumpTime(book)
 
                     if(lastElement != null && lastElement.index == comicWithBookmark.comic.panels - 1) {
                         finished = true
