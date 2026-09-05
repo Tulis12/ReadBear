@@ -36,8 +36,9 @@ import dev.tulis.readbear.utils.sampleImages
 
 @Composable
 fun AlreadyRead(
+    models: Models,
     alreadyReadOption: AlreadyReadOption,
-    onChangeAlreadyReadOption: (AlreadyReadOption) -> Unit
+    onChangeAlreadyReadOption: (AlreadyReadOption) -> Unit,
 ) {
     var alreadyReadOptionValue by remember { mutableStateOf(alreadyReadOption) }
 
@@ -63,7 +64,8 @@ fun AlreadyRead(
                 onChangeAlreadyReadOption = {
                     onChangeAlreadyReadOption(it)
                     alreadyReadOptionValue = it
-                }
+                },
+                model = models.model1
             ) {
                 Row {
                     Text(
@@ -90,7 +92,8 @@ fun AlreadyRead(
                 onChangeAlreadyReadOption = {
                     alreadyReadOptionValue = it
                     onChangeAlreadyReadOption(it)
-                }
+                },
+                model = models.model2
             ) {
                 Row {
                     Icon(
@@ -111,7 +114,8 @@ fun AlreadyReadOptionRadio(
     alreadyReadOption: AlreadyReadOption,
     alreadyReadOptionValue: AlreadyReadOption,
     onChangeAlreadyReadOption: (AlreadyReadOption) -> Unit,
-    checkmark: @Composable () -> Unit
+    model: Int,
+    checkmark: @Composable () -> Unit,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -124,10 +128,6 @@ fun AlreadyReadOptionRadio(
             }
     ) {
         Box {
-            val model = remember {
-                sampleImages.random()
-            }
-
             AsyncImage(
                 model = model,
                 contentDescription = null,
