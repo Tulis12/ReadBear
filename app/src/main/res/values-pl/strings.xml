@@ -15,7 +15,6 @@
     <string name="delete">Usuń</string>
     <string name="confirm">Potwierdź</string>
     <string name="are_you_sure_you_want_to_delete_this_element">Jesteś pewien, że chcesz to usunąć?</string>
-    <string name="are_you_sure_you_want_to_delete_x_elements">Jesteś pewien, że chcesz usunąć %1$d elementów?</string>
     <string name="cancel">Anuluj</string>
     <string name="go_back">Wróć</string>
     <string name="save">Zapisz</string>
@@ -33,7 +32,6 @@
     <string name="show">Pokaż:</string>
     <string name="reading_layout">Układ czytania</string>
     <string name="unknown">Nieznany</string>
-    <string name="stats_read_time">Przeczytano %1$d razy</string>
     <string name="pages">Strony</string>
     <string name="chapters">Rozdziały</string>
     <string name="reading_progress">Postęp</string>
