@@ -22,5 +22,6 @@ data class Pdf(
     var id: Long = 0,
     var keywords: String? = null,
 
-    var bookId: Long
+    var bookId: Long,
+    var splitPages: Boolean = false
 )

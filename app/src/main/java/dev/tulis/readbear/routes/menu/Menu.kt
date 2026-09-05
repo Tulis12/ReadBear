@@ -52,6 +52,7 @@ import dev.tulis.readbear.R
 import dev.tulis.readbear.db.Settings
 import dev.tulis.readbear.routes.menu.actions.DeleteOption
 import dev.tulis.readbear.routes.menu.actions.ImportOption
+import dev.tulis.readbear.settings.BottomSettingsSheet
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
 

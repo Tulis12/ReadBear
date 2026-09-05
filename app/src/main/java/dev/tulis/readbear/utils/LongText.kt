@@ -20,7 +20,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import dev.tulis.readbear.db.Settings
-import dev.tulis.readbear.routes.menu.TooLongTextOption
+import dev.tulis.readbear.settings.TooLongTextOption
 
 @Composable
 fun LongText(
