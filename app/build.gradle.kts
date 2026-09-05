@@ -194,6 +194,7 @@ android {
 dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.compose.animation.core)
 //    implementation(libs.androidx.compose.animation.core)
@@ -248,8 +249,7 @@ dependencies {
     implementation("io.github.yuroyami:kitepdf:0.7.0")
     implementation("io.github.yuroyami:kitepdf-compose-viewer:0.7.0")
 
-    implementation("com.tom-roush:pdfbox-android:2.0.27.0")
-
+    implementation("androidx.appcompat:appcompat-resources:1.8.0")
     implementation("dev.nucleusframework:pdfium:154.0.8021.0b")
 
 }
