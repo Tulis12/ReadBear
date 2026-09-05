@@ -36,11 +36,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.text.toLowerCase
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -53,10 +53,6 @@ import dev.tulis.readbear.db.comics.Comic
 import dev.tulis.readbear.db.pdfs.Pdf
 import dev.tulis.readbear.utils.readingProgress
 import dev.tulis.readbear.utils.readingTime
-import java.util.Locale
-import java.util.Locale.getDefault
-import androidx.compose.ui.platform.LocalLocale
-import androidx.compose.ui.text.capitalize
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

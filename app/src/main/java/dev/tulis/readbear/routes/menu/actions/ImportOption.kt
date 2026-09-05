@@ -36,7 +36,7 @@ fun ImportOption(
 
     IconButton(
         onClick = {
-            expanded = true;
+            expanded = true
         }
     ) {
         Icon(

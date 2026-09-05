@@ -164,11 +164,6 @@ fun EditBookDetails(
                                 cover.delete()
 
                                 oldCover.delete()
-
-                                if(viewModel.updateBookCover(book.id, coverFilename) != 1) {
-                                    println("Nie jest równe 1 przy zmianie covera!")
-                                    TODO()
-                                }
                             }
                         }
 
