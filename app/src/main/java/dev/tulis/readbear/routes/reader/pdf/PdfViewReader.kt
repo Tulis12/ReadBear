@@ -57,8 +57,9 @@ import dev.nucleusframework.pdfium.rememberPdfReaderState
 import dev.tulis.readbear.R
 import dev.tulis.readbear.db.Settings
 import dev.tulis.readbear.db.books.Book
-import dev.tulis.readbear.routes.menu.BottomSettingsSheet
-import dev.tulis.readbear.routes.menu.PdfReadingLayout
+import dev.tulis.readbear.settings.BottomSettingsSheet
+import dev.tulis.readbear.settings.PdfReadingLayout
+import dev.tulis.readbear.settings.PdfSettingsContext
 import dev.tulis.readbear.utils.LongText
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -136,10 +137,16 @@ fun PdfReader(
         }
 
         var count = reader.pageCount
+        val splitPages = pdfWithBookmark.pdf.splitPages
+        val readingLayout = if(splitPages) {
+            PdfReadingLayout.PAGED
+        } else {
+            settings.pdfReadingLayout
+        }
 
-        if (settings.pdfReadingLayout == PdfReadingLayout.PAGED || settings.pdfReadingLayout == PdfReadingLayout.SPREAD) {
-            if(settings.pdfReadingLayout == PdfReadingLayout.SPREAD) count = ceil(count / 2f).toInt()
-            if(settings.pdfReadingLayout == PdfReadingLayout.PAGED) count *= 2
+        if (readingLayout == PdfReadingLayout.PAGED || readingLayout == PdfReadingLayout.SPREAD) {
+            if(readingLayout == PdfReadingLayout.SPREAD) count = ceil(count / 2f).toInt()
+            if(splitPages) count *= 2
             val pagerState = rememberPagerState(
                 initialPage = pdfWithBookmark.bookmark.page,
                 pageCount = { count }
@@ -149,55 +156,61 @@ fun PdfReader(
                 state = pagerState,
                 modifier = Modifier.fillMaxSize()
             ) { page ->
-                when(settings.pdfReadingLayout) {
+                when(readingLayout) {
                     PdfReadingLayout.PAGED -> {
 
-                        if(page % 2 == 0) {
-                            Box(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .clipToBounds()
-                            ) {
-                                PdfPage(
-                                    state = reader,
-                                    pageIndex = page / 2,
+                        if(splitPages) {
+                            if(page % 2 == 0) {
+                                Box(
                                     modifier = Modifier
                                         .fillMaxWidth()
-                                        .fillMaxHeight()
-                                        .graphicsLayer {
-                                            scaleX = 2f
-                                            transformOrigin = TransformOrigin(0f, 0.5f)
-                                        }
-                                        .graphicsLayer {
-                                            scaleY = 2f
-                                            transformOrigin = TransformOrigin(0f, 0.5f)
-                                        }
-                                )
+                                        .clipToBounds()
+                                ) {
+                                    PdfPage(
+                                        state = reader,
+                                        pageIndex = page / 2,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .fillMaxHeight()
+                                            .graphicsLayer {
+                                                scaleX = 2f
+                                                transformOrigin = TransformOrigin(0f, 0.5f)
+                                            }
+                                            .graphicsLayer {
+                                                scaleY = 2f
+                                                transformOrigin = TransformOrigin(0f, 0.5f)
+                                            }
+                                    )
+                                }
+                            } else {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .clipToBounds()
+                                ) {
+                                    PdfPage(
+                                        state = reader,
+                                        pageIndex = page / 2,
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .fillMaxHeight()
+                                            .graphicsLayer {
+                                                scaleX = 2f
+                                                scaleY = 2f
+                                                transformOrigin = TransformOrigin(0.5f, 0.5f)
+                                                translationX = -size.width / 2f
+                                            }
+                                    )
+                                }
                             }
                         } else {
-                            Box(
+                            PdfPage(
+                                state = reader,
+                                pageIndex = page,
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .clipToBounds()
-                            ) {
-                                PdfPage(
-                                    state = reader,
-                                    pageIndex = page / 2,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .fillMaxHeight()
-                                        .graphicsLayer {
-                                            scaleX = 2f
-                                            scaleY = 2f
-                                            transformOrigin = TransformOrigin(0.5f, 0.5f)
-                                            translationX = -size.width / 2f
-                                        }
-                                )
-                            }
+                            )
                         }
-
-
-
                     }
 
                     PdfReadingLayout.SPREAD -> {
@@ -253,7 +266,7 @@ fun PdfReader(
                         bookmark.pageOffset = 0
                         viewModel.updateBookmark(bookmark)
 
-                        book.progress = if(settings.pdfReadingLayout == PdfReadingLayout.SPREAD) {
+                        book.progress = if(readingLayout == PdfReadingLayout.SPREAD) {
                             settledPage * 2
                         } else settledPage
                         viewModel.updateBookProgress(book)
@@ -372,12 +385,11 @@ fun PdfReader(
             )
         }
 
-
-
         if(showSheet) {
             BottomSettingsSheet(
                 defaultTabOpen = 1,
                 sheetState = sheetState,
+                additionalContext = PdfSettingsContext(pdfId = pdfId),
                 onHide = {
                     scope.launch {
                         sheetState.hide()

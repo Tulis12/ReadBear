@@ -58,4 +58,9 @@
     <string name="translators">Translators:</string>
     <string name="current_language">Current language</string>
     <string name="thanks_for_using"><![CDATA[Huge thanks for using this app <3]]></string>
+    <string name="split_pages">Split pages in half</string>
+    <string name="read_docs">Read docs</string>
+    <string name="split_pages_tooltip">
+        If a scanned PDF page contains two book pages side by side, automatically split it into two separate pages so the PDF can be read like a normal document, with one page per PDF page. Forces "Flipping" mode.
+    </string>
 </resources>
