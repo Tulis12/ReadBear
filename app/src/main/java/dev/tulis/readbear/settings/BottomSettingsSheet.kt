@@ -93,10 +93,13 @@ import kotlinx.coroutines.launch
 import org.json.JSONArray
 import java.util.Locale
 import androidx.core.net.toUri
+import dev.tulis.readbear.settings.composables.Models
 import dev.tulis.readbear.utils.sampleImages
 import kotlinx.coroutines.delay
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
+
+val models = Models()
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -187,7 +190,8 @@ fun BottomSettingsSheet(
                     timeClockEnabled = timeClockEnabled,
                     onChangeTimeClockEnabled = {
                         timeClockEnabled = it
-                    }
+                    },
+                    models = models
                 )
 
                 1 -> PdfReaderSettings(
@@ -195,7 +199,8 @@ fun BottomSettingsSheet(
                     pdfSettingsContext = additionalContext as? PdfSettingsContext,
                     onChangePdfReadingLayout = {
                         pdfReadingLayout = it
-                    }
+                    },
+                    models = models
                 )
 
                 2 -> AppInfo()
@@ -211,6 +216,7 @@ fun PdfReaderSettings(
     pdfReadingLayout: PdfReadingLayout,
     pdfSettingsContext: PdfSettingsContext? = null,
     onChangePdfReadingLayout: (PdfReadingLayout) -> Unit,
+    models: Models
 ) {
     Column(
         modifier = Modifier
@@ -231,12 +237,14 @@ fun PdfReaderSettings(
                 } else {
                     {}
                 },
+                models = models,
                 disabled = pdf != null && pdf?.splitPages == true
             )
         } else {
             PdfLayout(
                 pdfReadingLayout = pdfReadingLayout,
-                onChangePdfReadingLayout = onChangePdfReadingLayout
+                onChangePdfReadingLayout = onChangePdfReadingLayout,
+                models = models
             )
         }
 
@@ -246,6 +254,8 @@ fun PdfReaderSettings(
 
             val savedPdf = pdf ?: return@let
             val scope = rememberCoroutineScope()
+
+            Text(stringResource(R.string.this_pdf_settings))
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterHorizontally),
@@ -432,12 +442,15 @@ fun LibrarySettings(
     onChangeProgressEnabled: (Boolean) -> Unit,
 
     timeClockEnabled: Boolean,
-    onChangeTimeClockEnabled: (Boolean) -> Unit
+    onChangeTimeClockEnabled: (Boolean) -> Unit,
+    models: Models
 ) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -455,36 +468,40 @@ fun LibrarySettings(
             )
         }
 
-        Text(stringResource(R.string.show))
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)
+        Column(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Checkbox(
-                    checked = progressEnabled,
-                    onCheckedChange = {
-                        onChangeProgressEnabled(it)
-                    }
-                )
-
-                Text(stringResource(R.string.progress_enabled))
-            }
+            Text(stringResource(R.string.show))
 
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterHorizontally)
             ) {
-                Checkbox(
-                    checked = timeClockEnabled,
-                    onCheckedChange = {
-                        onChangeTimeClockEnabled(it)
-                    }
-                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(
+                        checked = progressEnabled,
+                        onCheckedChange = {
+                            onChangeProgressEnabled(it)
+                        }
+                    )
 
-                Text(stringResource(R.string.time_clock_enabled))
+                    Text(stringResource(R.string.progress_enabled))
+                }
+
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Checkbox(
+                        checked = timeClockEnabled,
+                        onCheckedChange = {
+                            onChangeTimeClockEnabled(it)
+                        }
+                    )
+
+                    Text(stringResource(R.string.time_clock_enabled))
+                }
             }
         }
 
@@ -534,7 +551,7 @@ fun LibrarySettings(
             }
         }
 
-        AlreadyRead(alreadyReadOption) {
+        AlreadyRead(models = models, alreadyReadOption = alreadyReadOption) {
             onChangeAlreadyReadOption(it)
         }
     }
