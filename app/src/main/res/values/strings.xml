@@ -63,4 +63,7 @@
         If a scanned PDF page contains two book pages side by side, automatically split it into two separate pages so the PDF can be read like a normal document, with one page per PDF page. Forces "Flipping" mode.
     </string>
     <string name="this_pdf_settings">This PDF settings:</string>
+    <string name="appearance">Appearance</string>
+    <string name="change_langugage">Change language?</string>
+    <string name="change_langugage_dialog">Do you want to change language? Your screen will flicker!</string>
 </resources>

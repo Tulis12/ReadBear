@@ -1,7 +1,21 @@
 package dev.tulis.readbear
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -14,7 +28,16 @@ import dev.tulis.readbear.routes.edit.EditBookDetails
 import dev.tulis.readbear.routes.info.BookDetails
 import dev.tulis.readbear.routes.reader.comic.WebtoonReader
 import dev.tulis.readbear.routes.reader.pdf.PdfReader
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
+
+var changingLanguage by mutableStateOf(false)
+
+fun changeLanguage() {
+    changingLanguage = true
+}
 
 @Composable
 fun App(
@@ -22,6 +45,11 @@ fun App(
     navController: NavHostController
 ) {
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(changingLanguage) {
+        delay(1.seconds)
+        changingLanguage = false
+    }
 
     NavHost(
         navController = navController,
@@ -98,5 +126,12 @@ fun App(
                 navController.popBackStack()
             }
         }
+    }
+
+    AnimatedVisibility(changingLanguage,
+        enter = fadeIn(),
+        exit = fadeOut()
+    ) {
+        Box(modifier = Modifier.fillMaxSize().background(Color(0xff19120C)))
     }
 }
