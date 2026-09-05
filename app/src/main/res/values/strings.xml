@@ -32,8 +32,8 @@
     <string name="add_local_resource">Add from a local resource</string>
     <string name="info">Info</string>
     <string name="error_unsupported_format">Unsupported format!</string>
-    <string name="progress_enabled">reading progress</string>
-    <string name="time_clock_enabled">reading time</string>
+    <string name="progress_enabled">Reading progress</string>
+    <string name="time_clock_enabled">Reading time</string>
     <string name="show">Show:</string>
     <string name="pdf">PDF</string>
     <string name="side_by_side">Side by side</string>
@@ -63,4 +63,5 @@
     <string name="split_pages_tooltip">
         If a scanned PDF page contains two book pages side by side, automatically split it into two separate pages so the PDF can be read like a normal document, with one page per PDF page. Forces "Flipping" mode.
     </string>
+    <string name="this_pdf_settings">This PDF settings:</string>
 </resources>

@@ -6,9 +6,13 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.RadioButton
@@ -20,6 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.IntrinsicMeasureScope
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -32,6 +37,7 @@ import dev.tulis.readbear.utils.sampleImages
 fun PdfLayout(
     pdfReadingLayout: PdfReadingLayout,
     onChangePdfReadingLayout: (PdfReadingLayout) -> Unit,
+    models: Models,
     disabled: Boolean = false
 ) {
     Column(
@@ -41,8 +47,7 @@ fun PdfLayout(
         Text(stringResource(R.string.reading_layout))
 
         Row(
-            horizontalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxWidth()
+            horizontalArrangement = Arrangement.Center
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -54,16 +59,14 @@ fun PdfLayout(
                         onChangePdfReadingLayout(PdfReadingLayout.CONTINUOUS)
                     }
             ) {
-                Box {
-                    val model = remember {
-                        sampleImages.random()
-                    }
-
+                Box(
+                    modifier = Modifier.fillMaxWidth(0.5f)
+                ) {
                     AsyncImage(
-                        model = model,
+                        model = models.model1,
                         contentDescription = null,
                         modifier = Modifier
-                            .width(55.dp)
+                            .fillMaxWidth()
                             .aspectRatio(2f / 3f)
                             .clip(RoundedCornerShape(10.dp)),
                         contentScale = ContentScale.Crop
@@ -82,7 +85,6 @@ fun PdfLayout(
             }
 
 
-
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier.weight(1f)
@@ -94,41 +96,28 @@ fun PdfLayout(
                     }
             ) {
                 Row(
-                    modifier = Modifier.clip(RoundedCornerShape(10.dp)).background(Color.White),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(10.dp))
+                        .background(Color.White),
                     horizontalArrangement = Arrangement.spacedBy(2.dp)
                 ) {
-                    val model1 = remember {
-                        sampleImages.random()
-                    }
-
-                    val model2 = remember {
-                        sampleImages.filter { it != model1 }.random()
-                    }
-
                     AsyncImage(
-                        model = model1,
+                        model = models.model2,
                         contentDescription = null,
                         modifier = Modifier
-                            .width(55.dp)
+                            .weight(1f)
                             .aspectRatio(2f / 3f)
-                            .clip(RoundedCornerShape(
-                                topStart = 10.dp,
-                                bottomStart = 10.dp
-                            )),
-                        contentScale = ContentScale.Crop
+                        ,contentScale = ContentScale.Crop
                     )
 
                     AsyncImage(
-                        model = model2,
+                        model = models.model3,
                         contentDescription = null,
                         modifier = Modifier
-                            .width(55.dp)
+                            .weight(1f)
                             .aspectRatio(2f / 3f)
-                            .clip(RoundedCornerShape(
-                                topEnd = 10.dp,
-                                bottomEnd = 10.dp
-                            )),
-                        contentScale = ContentScale.Crop
+                        ,contentScale = ContentScale.Crop
                     )
                 }
 
@@ -154,16 +143,14 @@ fun PdfLayout(
                         onChangePdfReadingLayout(PdfReadingLayout.PAGED)
                     }
             ) {
-                Box {
-                    val model = remember {
-                        sampleImages.random()
-                    }
-
+                Box(
+                    modifier = Modifier.fillMaxWidth(0.5f)
+                ) {
                     AsyncImage(
-                        model = model,
+                        model = models.model4,
                         contentDescription = null,
                         modifier = Modifier
-                            .width(55.dp)
+                            .fillMaxWidth()
                             .aspectRatio(2f / 3f)
                             .clip(RoundedCornerShape(10.dp)),
                         contentScale = ContentScale.Crop
@@ -182,4 +169,11 @@ fun PdfLayout(
             }
         }
     }
+}
+
+class Models {
+    val model1: Int = sampleImages.random()
+    val model2: Int = sampleImages.filter { it != model1 }.random()
+    val model3: Int = sampleImages.filter { it != model1 && it != model2 }.random()
+    val model4: Int = sampleImages.filter { it != model1 && it != model2 && it != model3 }.random()
 }
