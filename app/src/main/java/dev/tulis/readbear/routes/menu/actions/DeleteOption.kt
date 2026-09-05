@@ -50,8 +50,9 @@ fun DeleteOption(
             text = {
                 Text(
                     pluralStringResource(
-                    R.plurals.are_you_sure_you_want_to_delete_x_elements,
-                    selectedItems.count()
+                        R.plurals.are_you_sure_you_want_to_delete_x_elements,
+                        selectedItems.count(),
+                        selectedItems.count()
                     )
                 )
             },

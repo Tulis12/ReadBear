@@ -179,6 +179,17 @@ fun PdfReader(
                                     PdfPage(
                                         state = reader,
                                         pageIndex = page / 2,
+                                        onLinkClick = {
+                                            if(it.destPageIndex != -1) {
+                                                scope.launch {
+                                                    pagerState.animateScrollToPage(it.destPageIndex * 2)
+                                                }
+
+                                                true
+                                            } else {
+                                                false
+                                            }
+                                        },
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .fillMaxHeight()
@@ -201,6 +212,17 @@ fun PdfReader(
                                     PdfPage(
                                         state = reader,
                                         pageIndex = page / 2,
+                                        onLinkClick = {
+                                            if(it.destPageIndex != -1) {
+                                                scope.launch {
+                                                    pagerState.animateScrollToPage(it.destPageIndex * 2)
+                                                }
+
+                                                true
+                                            } else {
+                                                false
+                                            }
+                                        },
                                         modifier = Modifier
                                             .fillMaxWidth()
                                             .fillMaxHeight()
@@ -217,6 +239,17 @@ fun PdfReader(
                             PdfPage(
                                 state = reader,
                                 pageIndex = page,
+                                onLinkClick = {
+                                    if(it.destPageIndex != -1) {
+                                        scope.launch {
+                                            pagerState.animateScrollToPage(it.destPageIndex)
+                                        }
+
+                                        true
+                                    } else {
+                                        false
+                                    }
+                                },
                                 modifier = Modifier
                                     .fillMaxWidth()
                             )
@@ -224,6 +257,12 @@ fun PdfReader(
                     }
 
                     PdfReadingLayout.SPREAD -> {
+                        val goTo: (Int) -> Unit = {
+                            scope.launch {
+                                pagerState.animateScrollToPage(it / 2)
+                            }
+                        }
+
                         Row {
                             PdfPage(
                                 state = reader,
@@ -234,7 +273,16 @@ fun PdfReader(
                             PdfPage(
                                 state = reader,
                                 pageIndex = page*2 +1,
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f),
+                                onLinkClick = {
+                                    if(it.destPageIndex != -1) {
+                                        goTo(it.destPageIndex)
+
+                                        true
+                                    } else {
+                                        false
+                                    }
+                                }
                             )
                         }
                     }
@@ -348,7 +396,18 @@ fun PdfReader(
                 items(count) { page ->
                     PdfPage(
                         state = reader,
-                        pageIndex = page
+                        pageIndex = page,
+                        onLinkClick = {
+                            if(it.destPageIndex != -1) {
+                                scope.launch {
+                                    listState.animateScrollToItem(it.destPageIndex)
+                                }
+
+                                true
+                            } else {
+                                false
+                            }
+                        }
                     )
                 }
             }

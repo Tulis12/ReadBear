@@ -3,6 +3,7 @@ package dev.tulis.readbear.routes.menu
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.pdf.PdfRenderer
 import android.icu.text.Collator
 import android.net.Uri
@@ -122,6 +123,7 @@ class LibraryViewModel @Inject constructor (
 
         val page = renderer.openPage(0)
         val bitmap = createBitmap(page.width * 2, page.height * 2)
+        bitmap.eraseColor(Color.WHITE)
 
         page.render(
             bitmap,
