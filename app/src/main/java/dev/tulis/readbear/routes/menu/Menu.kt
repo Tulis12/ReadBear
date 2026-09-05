@@ -223,7 +223,7 @@ fun Menu(
         )
 
         Box {
-            val image = ImageBitmap.imageResource(R.drawable.readbear_bg)
+            val image = ImageBitmap.imageResource(R.mipmap.readbear_bg)
             val color = MaterialTheme.colorScheme.surfaceVariant
 
             Canvas(
