@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import dev.tulis.readbear.R
 import dev.tulis.readbear.routes.menu.LibraryViewModel
@@ -47,9 +48,12 @@ fun DeleteOption(
                 Text(stringResource(R.string.confirm))
             },
             text = {
-                if(selectedItems.count() == 1)
-                    Text(stringResource(R.string.are_you_sure_you_want_to_delete_this_element))
-                else Text(stringResource(R.string.are_you_sure_you_want_to_delete_x_elements, selectedItems.count()))
+                Text(
+                    pluralStringResource(
+                    R.plurals.are_you_sure_you_want_to_delete_x_elements,
+                    selectedItems.count()
+                    )
+                )
             },
             confirmButton = {
                 TextButton(
