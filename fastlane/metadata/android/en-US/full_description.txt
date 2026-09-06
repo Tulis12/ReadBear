@@ -1,0 +1,1 @@
+A Android-native application for reading your PDFs, EPUBs and CBZs! Configure it the way you want, reading layout, theme, language, spacing and many more!

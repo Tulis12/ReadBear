@@ -1,0 +1,8 @@
+First version: v0.3.1
+Changelog:
+ - add app logo and background
+ - add reading options: pdf, cbz
+ - add configurable layouts for pdf and pdf splitting
+ - add info page, reading progress and time clock
+ - add configurable library view
+ - add translation credits and link weblate
