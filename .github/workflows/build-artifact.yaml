@@ -37,7 +37,7 @@ jobs:
           KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           WEBLATE_URL: ${{ secrets.WEBLATE_URL }}
           WEBLATE_TOKEN: ${{ secrets.WEBLATE_TOKEN }}
-        run: ./gradlew assembleRelease
+        run: ./gradlew assembleRelease -PsignRelease
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
