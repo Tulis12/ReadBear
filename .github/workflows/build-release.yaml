@@ -22,10 +22,10 @@ jobs:
           distribution: temurin
           java-version: 17
 
-      - name: Setup Gradle
-        uses: gradle/actions/setup-gradle@v6
-        with:
-          cache-provider: enhanced
+#      - name: Setup Gradle
+#        uses: gradle/actions/setup-gradle@v6
+#        with:
+#          cache-provider: enhanced
 
 
       - name: Decode keystore
@@ -34,12 +34,22 @@ jobs:
         run: |
           echo "$KEYSTORE_BASE64" | base64 --decode > release.jks
 
-      - name: Build APK
+#      - name: Build APK
+#        env:
+#          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+#          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+#          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+#        run: ./gradlew assembleRelease -PsignRelease --build-cache --info
+
+      - uses: burrunan/gradle-cache-action@v3
+        name: Build APK
         env:
-          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
-          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
-        run: ./gradlew assembleRelease -PsignRelease --build-cache --info
+            KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+            KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+            KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        with:
+          arguments: assembleRelease -PsignRelease --build-cache
+          gradle-version: wrapper
 
       - name: Upload APK to Release
         uses: actions/upload-release-asset@v1
