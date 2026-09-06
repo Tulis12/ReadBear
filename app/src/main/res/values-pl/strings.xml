@@ -8,7 +8,7 @@
     <string name="select_all">Zaznacz wszystkie</string>
     <string name="importing">Importowanie…</string>
     <string name="edit">Edytuj</string>
-    <string name="when_you_read_the_book_already">Kiedy przeczytałeś już książkę pokaż:</string>
+    <string name="when_you_read_the_book_already">Po przeczytaniu książki pokaż:</string>
     <string name="this_is_a_long_text">To jest bardzo długi tekst, który normalnie by się tutaj nie zmieścił</string>
     <string name="column_count">Liczba kolumn:</string>
     <string name="library_settings">Biblioteka</string>
@@ -62,4 +62,16 @@
     <string name="change_langugage">Zmień język?</string>
     <string name="language">Język:</string>
     <string name="show_more">Pokaż więcej!</string>
+    <string name="side_by_side">Strona przy stronie</string>
+    <string name="flipping">Przerzucanie</string>
+    <string name="panels">Kadry</string>
+    <string name="read_docs">Czytaj dokumentacje</string>
+    <string name="change_langugage_dialog">Czy chcesz zmienić język? Twój ekran będzie migać!</string>
+    <string name="read_more">Czytaj dalej</string>
+    <string name="example_tooltip">Powinno tu być wyjaśnienie, ale to tylko przykład. Możesz pokazać jak wygląda motyw!</string>
+    <string name="sample_button">Przykładowy przycisk</string>
+    <string name="sample_checkbox">Przykładowe pole do odznaczenia</string>
+    <string name="sample_settings">Przykładowe ustawienia</string>
+    <string name="sample_button_pressed">Nacisnąłeś na przykładowe działanie!</string>
+    <string name="sample_tooltip">Przykładowa podpowiedź</string>
 </resources>
