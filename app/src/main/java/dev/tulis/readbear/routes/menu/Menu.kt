@@ -53,6 +53,7 @@ import dev.tulis.readbear.db.Settings
 import dev.tulis.readbear.routes.menu.actions.DeleteOption
 import dev.tulis.readbear.routes.menu.actions.ImportOption
 import dev.tulis.readbear.settings.BottomSettingsSheet
+import dev.tulis.readbear.utils.BackgroundPattern
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
 
@@ -231,26 +232,7 @@ fun Menu(
         )
 
         Box {
-            val image = ImageBitmap.imageResource(R.drawable.readbear_bg)
-            val color = MaterialTheme.colorScheme.surfaceVariant
-
-            Canvas(
-                modifier = Modifier.fillMaxSize()
-            ) {
-                drawRect(
-                    brush = ShaderBrush(
-                        ImageShader(
-                            image,
-                            TileMode.Repeated,
-                            TileMode.Repeated
-                        )
-                    ),
-                    colorFilter = ColorFilter.tint(
-                        color,
-                        BlendMode.SrcIn
-                    )
-                )
-            }
+            BackgroundPattern(modifier = Modifier.matchParentSize())
 
             BookLibrary(
                 settings = settings,
