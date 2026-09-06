@@ -66,4 +66,13 @@
     <string name="appearance">Appearance</string>
     <string name="change_langugage">Change language?</string>
     <string name="change_langugage_dialog">Do you want to change language? Your screen will flicker!</string>
+    <string name="language">Language:</string>
+    <string name="read_more">Read more</string>
+    <string name="example_tooltip">Here should be an explanation but this is just an example. You can showcase how the theme looks!</string>
+    <string name="sample_button">Sample button</string>
+    <string name="sample_checkbox">Sample checkbox</string>
+    <string name="show_more">Show more!</string>
+    <string name="sample_settings">Sample settings</string>
+    <string name="sample_button_pressed">You pressed a sample action!</string>
+    <string name="sample_tooltip">Sample tooltip</string>
 </resources>
