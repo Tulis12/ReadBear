@@ -1,3 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="app_name">ReadBear — CBZ, EPUB и PDF-ридер</string>
+    <string name="settings">Настройки</string>
+    <string name="error_no_space_left">На устройстве не хватает памяти!</string>
+    <string name="error_copy_failed">Не получилось скопировать этот файл! Извините :c</string>
+    <string name="deselect">Убрать выделение</string>
+    <string name="select_all">Выбрать всё</string>
+    <string name="importing">Импортирование…</string>
+    <string name="edit">Отредактировать</string>
+    <string name="when_you_read_the_book_already">После прочтения книги, покажи:</string>
+    <string name="this_is_a_long_text">Это очень долгий текст, который конечно же тут не поместиться</string>
+    <string name="column_count">Число строк:</string>
+    <string name="library_settings">Библиотека</string>
+    <string name="delete">Удалить</string>
+    <string name="confirm">Подтвердить</string>
+    <plurals name="are_you_sure_you_want_to_delete_x_elements">
+        <item quantity="one">Вы уверенны в том, что хотите удалить %d книгу?</item>
+        <item quantity="few">Вы уверенны в том, что хотите удалить %d книги?</item>
+        <item quantity="many">Вы уверенны в том, что хотите удалить %d книг?</item>
+        <item quantity="other">Вы уверенны в том, что хотите удалить %d книг?</item>
+    </plurals>
+    <string name="cancel">Отменить</string>
+    <string name="go_back">Вернуться</string>
+    <string name="save">Сохранить</string>
+    <string name="title">Название</string>
+    <string name="are_you_sure_you_want_to_discard_changes">Отменить изменения и выйти?</string>
+    <string name="import_book">Импорт</string>
+    <string name="add_local_resource">Добавить с устройства</string>
+    <string name="error_unsupported_format">Неподдерживаемый формат!</string>
+    <string name="language">Язык:</string>
+    <string name="read_more">Читать дальше</string>
+    <string name="example_tooltip">Тут должно быть объяснение, но это всего лишь пример! Вы можете показать, как выглядит тема!</string>
+    <string name="sample_button">Пример кнопки</string>
+    <string name="sample_checkbox">Пример поля для галочки</string>
+    <string name="sample_settings">Пример настроек</string>
+    <string name="sample_button_pressed">Нажато на пример кнопки!</string>
+    <string name="sample_tooltip">Пример подсказки</string>
 </resources>
