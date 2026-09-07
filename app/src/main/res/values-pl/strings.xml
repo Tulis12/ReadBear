@@ -21,13 +21,13 @@
     <string name="title">Tytuł</string>
     <string name="author">Autor</string>
     <string name="discard_changes">Odrzuć zmiany</string>
-    <string name="are_you_sure_you_want_to_discard_changes">Jesteś pewien, że chcesz odrzucić zmiany i wyjść?</string>
+    <string name="are_you_sure_you_want_to_discard_changes">Czy na pewno chcesz odrzucić zmiany i wyjść?</string>
     <string name="import_book">Import</string>
     <string name="add_local_resource">Dodaj z lokalnego pliku</string>
     <string name="info">Info</string>
     <string name="error_unsupported_format">Niewspierany format!</string>
-    <string name="progress_enabled">postęp czytania</string>
-    <string name="time_clock_enabled">czas czytania</string>
+    <string name="progress_enabled">Postęp czytania</string>
+    <string name="time_clock_enabled">Czas czytania</string>
     <string name="show">Pokaż:</string>
     <string name="reading_layout">Układ czytania</string>
     <string name="unknown">Nieznany</string>
@@ -47,4 +47,19 @@
     <string name="translators">Tłumacze:</string>
     <string name="current_language">Obecny język</string>
     <string name="thanks_for_using"><![CDATA[Dziękuję, że korzystasz z tej aplikacji &lt;3]]></string>
+    <plurals name="are_you_sure_you_want_to_delete_x_elements">
+        <item quantity="one">Czy na pewno chcesz usunąć tę książkę?</item>
+        <item quantity="few">Czy na pewno chcesz usunąć %d książki?</item>
+        <item quantity="many">Czy na pewno chcesz usunąć %d książek?</item>
+        <item quantity="other">Czy na pewno chcesz usunąć %d książek?</item>
+    </plurals>
+    <string name="pdf">PDF</string>
+    <string name="scrollable">Przewijalne</string>
+    <string name="split_pages">Podziel strony w pół</string>
+    <string name="split_pages_tooltip">Jeżeli zeskanowana strona pliku PDF zawiera dwie złączone strony jedna obok drugiej, automatycznie rozdziel je na dwie osobne strony tak, żeby plik PDF dało się czytać jak każdy normalny dokument z tradycyjnym podziałem stron. Wymusza tryb Przerzucania.</string>
+    <string name="this_pdf_settings">Ustawienia tego pliku PDF:</string>
+    <string name="appearance">Wygląd</string>
+    <string name="change_langugage">Zmień język?</string>
+    <string name="language">Język:</string>
+    <string name="show_more">Pokaż więcej!</string>
 </resources>
