@@ -11,7 +11,6 @@ jobs:
     environment: "Build artifact"
 
     steps:
-      steps:
       - name: Checkout
         uses: actions/checkout@v4
 
