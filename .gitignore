@@ -22,3 +22,4 @@ release.jks.base64
 .sync-exclude.lst
 
 .kotlin
+_sync_
