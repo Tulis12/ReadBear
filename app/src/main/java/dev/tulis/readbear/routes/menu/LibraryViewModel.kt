@@ -21,17 +21,25 @@ import dev.tulis.readbear.db.comics.bookmarks.ComicBookmark
 import dev.tulis.readbear.db.comics.bookmarks.ComicBookmarkDao
 import dev.tulis.readbear.db.comics.pages.ComicPage
 import dev.tulis.readbear.db.comics.pages.ComicPageDao
+import dev.tulis.readbear.db.epubs.Epub
+import dev.tulis.readbear.db.epubs.EpubDao
+import dev.tulis.readbear.db.epubs.bookmarks.EpubBookmark
+import dev.tulis.readbear.db.epubs.bookmarks.EpubBookmarkDao
 import dev.tulis.readbear.db.pdfs.Pdf
 import dev.tulis.readbear.db.pdfs.PdfDao
 import dev.tulis.readbear.db.pdfs.bookmarks.PdfBookmark
 import dev.tulis.readbear.db.pdfs.bookmarks.PdfBookmarkDao
+import dev.tulis.readbear.renderEpubCover
+import dev.tulis.readbear.routes.reader.epub.createEpubCover
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import nl.siegmann.epublib.epub.EpubReader
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileOutputStream
 import java.io.IOException
 import java.util.Locale.getDefault
@@ -47,6 +55,8 @@ class LibraryViewModel @Inject constructor (
     private val comicBookmarkDao: ComicBookmarkDao,
     private val pdfDao: PdfDao,
     private val pdfBookmarkDao: PdfBookmarkDao,
+    private val epubDao: EpubDao,
+    private val epubBookmarkDao: EpubBookmarkDao,
     private val filesDir: File
 ) : ViewModel() {
 
@@ -103,6 +113,47 @@ class LibraryViewModel @Inject constructor (
         pdfBookmarkDao.insert(bookmark)
     }
 
+    suspend fun createEpubBookmark(epubId: Long) {
+        val bookmark = EpubBookmark(epubId = epubId)
+        epubBookmarkDao.insert(bookmark)
+    }
+
+    suspend fun createEpubIndex(
+        book: Book
+    ) = withContext(Dispatchers.IO) {
+        val bookDir = filesDir.resolve(book.path)
+
+        val epub = Epub(bookId = book.id)
+        epub.id = epubDao.insert(epub)
+
+        renderEpubCover = book
+
+        val reader = EpubReader()
+
+        val input = FileInputStream(bookDir.resolve("book.epub"))
+        val bookEpub = reader.readEpub(input)
+
+        println(bookEpub.title) // TODO() METADATA
+        println(bookEpub.metadata.authors)
+
+
+        val spine = bookEpub.spine
+
+        bookEpub.title?.let {
+            if(it.isEmpty()) return@let
+            book.title = it
+        }
+
+        bookEpub.metadata.authors?.let {
+            if(it.isEmpty()) return@let
+            book.author = it.joinToString(", ")
+        }
+
+        book.totalProgress = spine.spineReferences.count()
+        updateBook(book)
+
+        createEpubBookmark(epub.id)
+    }
 
     suspend fun createPdfIndex(
         book: Book
@@ -325,6 +376,10 @@ class LibraryViewModel @Inject constructor (
 
                     "pdf" -> {
                         onFinishPdf(filename)
+                    }
+
+                    "epub" -> {
+                        onFinishEpub(filename)
                     }
                 }
             }

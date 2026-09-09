@@ -20,6 +20,11 @@ sealed interface Route {
         val pdfId: Long
     ) : Route
 
+    @Serializable
+    data class EpubReader(
+        val epubId: Long
+    ) : Route
+
 
     @Serializable
     data class BookDetails(
