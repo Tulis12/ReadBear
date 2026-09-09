@@ -129,9 +129,18 @@ dependencies {
 
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
-    implementation("io.github.yuroyami:kitepdf:0.7.0")
-    implementation("io.github.yuroyami:kitepdf-compose-viewer:0.7.0")
+    implementation("io.github.yuroyami:kitepdf:0.9.0")
+    implementation("io.github.yuroyami:kitepdf-compose-viewer:0.9.0")
 
     implementation("androidx.appcompat:appcompat-resources:1.8.0")
     implementation("dev.nucleusframework:pdfium:154.0.8021.0b")
+
+    implementation("com.positiondev.epublib:epublib-core:3.1") {
+        exclude(
+            group = "xmlpull",
+            module = "xmlpull"
+        )
+    }
+
+    implementation("org.jsoup:jsoup:1.21.2")
 }

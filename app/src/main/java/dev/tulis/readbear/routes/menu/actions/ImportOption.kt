@@ -79,7 +79,6 @@ fun ImportOption(
                 },
                 onFinishPdf = {
                     originalName ->
-                    onChangeImporting(false)
 
                     scope.launch {
                         val bookId = viewModel.addBook(
@@ -91,10 +90,24 @@ fun ImportOption(
                         )
 
                         viewModel.createPdfIndex(viewModel.getBook(bookId))
+                        onChangeImporting(false)
                     }
                 },
                 onFinishEpub = {
+                    originalName ->
 
+                    scope.launch {
+                        val bookId = viewModel.addBook(
+                            Book(
+                                title = originalName.substringBeforeLast("."),
+                                path = bookUuid.toString(),
+                                type = BookType.Epub
+                            )
+                        )
+
+                        viewModel.createEpubIndex(viewModel.getBook(bookId))
+                        onChangeImporting(false)
+                    }
                 },
                 onThrow = {
                     throwable ->

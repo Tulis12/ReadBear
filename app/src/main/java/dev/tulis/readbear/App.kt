@@ -16,28 +16,37 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
+import dev.tulis.readbear.db.books.Book
 import dev.tulis.readbear.db.books.BookType
+import dev.tulis.readbear.db.epubs.Epub
 import dev.tulis.readbear.routes.menu.Menu
 import dev.tulis.readbear.routes.Route
 import dev.tulis.readbear.routes.edit.EditBookDetails
 import dev.tulis.readbear.routes.info.BookDetails
 import dev.tulis.readbear.routes.reader.comic.WebtoonReader
+import dev.tulis.readbear.routes.reader.epub.EpubReader
+import dev.tulis.readbear.routes.reader.epub.createEpubCover
 import dev.tulis.readbear.routes.reader.pdf.PdfReader
+import io.github.yuroyami.kitepdf.compose.KiteDocView
+import io.github.yuroyami.kitepdf.compose.KiteDocViewState
+import io.github.yuroyami.kitepdf.compose.rememberKiteDocViewState
+import io.github.yuroyami.kitepdf.epub.EpubDocument
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.FileInputStream
+import java.util.UUID
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
-var changingLanguage by mutableStateOf(false)
-
-fun changeLanguage() {
-    changingLanguage = true
-}
+var renderEpubCover: Book? by mutableStateOf(null)
 
 @Composable
 fun App(
@@ -46,9 +55,9 @@ fun App(
 ) {
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(changingLanguage) {
-        delay(1.seconds)
-        changingLanguage = false
+    val renderEpubCoverCopy = renderEpubCover
+    if(renderEpubCoverCopy != null) {
+        RenderEpubCover(renderEpubCoverCopy)
     }
 
     NavHost(
@@ -75,9 +84,12 @@ fun App(
                                 ))
                             }
 
-                            else -> {
-                                println(book.type)
-                                TODO()
+                            BookType.Epub -> {
+                                navController.navigate(Route.EpubReader(
+                                    viewModel.getEpubByBookId(it).id
+                                ))
+
+                                println("epub")
                             }
                         }
                     }
@@ -91,6 +103,16 @@ fun App(
             )
         }
 
+        composable<Route.ComicReader> { entry ->
+            val args = entry.toRoute<Route.ComicReader>()
+
+            WebtoonReader(
+                comicId = args.comicId
+            ) {
+                navController.popBackStack()
+            }
+        }
+
         composable<Route.PdfReader> { entry ->
             val args = entry.toRoute<Route.PdfReader>()
 
@@ -101,11 +123,11 @@ fun App(
             }
         }
 
-        composable<Route.ComicReader> { entry ->
-            val args = entry.toRoute<Route.ComicReader>()
+        composable<Route.EpubReader> { entry ->
+            val args = entry.toRoute<Route.EpubReader>()
 
-            WebtoonReader(
-                comicId = args.comicId
+            EpubReader(
+                epubId = args.epubId
             ) {
                 navController.popBackStack()
             }
@@ -127,11 +149,38 @@ fun App(
             }
         }
     }
+}
 
-    AnimatedVisibility(changingLanguage,
-        enter = fadeIn(),
-        exit = fadeOut()
-    ) {
-        Box(modifier = Modifier.fillMaxSize().background(Color(0xff19120C)))
+@Composable
+fun RenderEpubCover(
+    book: Book,
+    viewModel: AppViewModel = hiltViewModel(),
+) {
+    val context = LocalContext.current
+    val filesDir = context.filesDir
+
+    val bookDir = filesDir.resolve(book.path)
+
+    val cover = "cover_${UUID.randomUUID()}.jpeg"
+    val coverFile = bookDir.resolve(cover)
+
+    val reader = nl.siegmann.epublib.epub.EpubReader()
+
+    val input = FileInputStream(bookDir.resolve("book.epub"))
+    val bookEpub = reader.readEpub(input)
+
+    val spine = bookEpub.spine
+
+    spine.spineReferences[0].let { element ->
+        val resource = element.resource
+
+        val xhtml = resource.inputStream
+            .bufferedReader()
+            .readText()
+
+        createEpubCover(xhtml, bookEpub.resources, coverFile, onFinish = {
+            renderEpubCover = null
+            viewModel.updateBookCover(book.id, cover)
+        })
     }
 }
