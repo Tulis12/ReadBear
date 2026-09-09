@@ -11,6 +11,8 @@ import dev.tulis.readbear.db.books.BookDao
 import dev.tulis.readbear.db.comics.ComicDao
 import dev.tulis.readbear.db.comics.bookmarks.ComicBookmarkDao
 import dev.tulis.readbear.db.comics.pages.ComicPageDao
+import dev.tulis.readbear.db.epubs.EpubDao
+import dev.tulis.readbear.db.epubs.bookmarks.EpubBookmarkDao
 import dev.tulis.readbear.db.pdfs.PdfDao
 import dev.tulis.readbear.db.pdfs.bookmarks.PdfBookmarkDao
 import jakarta.inject.Singleton
@@ -80,5 +82,19 @@ object DatabaseModule {
         database: AppDatabase
     ): PdfBookmarkDao {
         return database.pdfBookmarkDao()
+    }
+
+    @Provides
+    fun provideEpubDao(
+        database: AppDatabase
+    ): EpubDao {
+        return database.epubDao()
+    }
+
+    @Provides
+    fun provideEpubBookmarkDao(
+        database: AppDatabase
+    ): EpubBookmarkDao {
+        return database.epubBookmarkDao()
     }
 }
