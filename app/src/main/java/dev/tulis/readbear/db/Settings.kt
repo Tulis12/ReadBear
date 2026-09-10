@@ -34,14 +34,12 @@ object Settings {
                 ThemeType.valueOf(preferences[SettingsKeys.THEME_TYPE] ?: "SYSTEM")
             }
     }
-
     fun getTooLongTextOption(context: Context): Flow<TooLongTextOption> {
         return context.dataStore.data
             .map { preferences ->
                 TooLongTextOption.valueOf(preferences[SettingsKeys.LONG_TEXT_OPTION] ?: "BASIC_MARQUEE")
             }
     }
-
     fun getSettings(context: Context): Flow<SettingsState> {
         return context.dataStore.data.map { preferences ->
             SettingsState(
