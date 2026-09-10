@@ -1,21 +1,10 @@
 package dev.tulis.readbear
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -24,27 +13,17 @@ import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import dev.tulis.readbear.db.books.Book
 import dev.tulis.readbear.db.books.BookType
-import dev.tulis.readbear.db.epubs.Epub
-import dev.tulis.readbear.routes.menu.Menu
 import dev.tulis.readbear.routes.Route
 import dev.tulis.readbear.routes.edit.EditBookDetails
 import dev.tulis.readbear.routes.info.BookDetails
+import dev.tulis.readbear.routes.menu.Menu
 import dev.tulis.readbear.routes.reader.comic.WebtoonReader
 import dev.tulis.readbear.routes.reader.epub.EpubReader
 import dev.tulis.readbear.routes.reader.epub.createEpubCover
 import dev.tulis.readbear.routes.reader.pdf.PdfReader
-import io.github.yuroyami.kitepdf.compose.KiteDocView
-import io.github.yuroyami.kitepdf.compose.KiteDocViewState
-import io.github.yuroyami.kitepdf.compose.rememberKiteDocViewState
-import io.github.yuroyami.kitepdf.epub.EpubDocument
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.FileInputStream
 import java.util.UUID
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 
 var renderEpubCover: Book? by mutableStateOf(null)
 
@@ -88,8 +67,6 @@ fun App(
                                 navController.navigate(Route.EpubReader(
                                     viewModel.getEpubByBookId(it).id
                                 ))
-
-                                println("epub")
                             }
                         }
                     }
