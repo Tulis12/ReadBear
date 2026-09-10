@@ -53,7 +53,7 @@
     <string name="is_manga">Manga?</string>
     <string name="book_type">Book type</string>
     <string name="translator">Translator</string>
-    <string name="translators">Translators:</string>
+    <string name="translators">Translators</string>
     <string name="current_language">Current language</string>
     <string name="thanks_for_using"><![CDATA[Huge thanks for using this app <3]]></string>
     <string name="split_pages">Split pages in half</string>

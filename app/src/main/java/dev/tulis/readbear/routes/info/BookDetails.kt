@@ -51,6 +51,7 @@ import dev.tulis.readbear.R
 import dev.tulis.readbear.db.books.BookType
 import dev.tulis.readbear.db.comics.Comic
 import dev.tulis.readbear.db.pdfs.Pdf
+import dev.tulis.readbear.utils.LongText
 import dev.tulis.readbear.utils.readingProgress
 import dev.tulis.readbear.utils.readingTime
 
@@ -286,7 +287,7 @@ fun InfoRow(
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
 
-        Text(
+        LongText(
             text = value,
             fontWeight = FontWeight.Medium
         )

@@ -102,20 +102,12 @@ fun AppInfo() {
             InfoRow(stringResource(R.string.current_language), locale.getDisplayLanguage(locale))
 
             if(!translators.isEmpty()) {
-                var translatorsText = ""
-                var i = 0
-
-                translators.forEach {
-                    translatorsText += it
-                    if(i != translators.count() - 1) translatorsText += ","
-                    i++
-                }
+                val translatorsText = translators.joinToString(", ")
 
                 if(translators.count() == 1) {
                     InfoRow(stringResource(R.string.translator), translators.first())
                 } else {
-                    Text(stringResource(R.string.translators))
-                    Text(translatorsText, fontWeight = FontWeight.Medium)
+                    InfoRow(stringResource(R.string.translators), translatorsText)
                 }
             }
 
@@ -129,8 +121,6 @@ fun AppInfo() {
                     append(stringResource(R.string.visit_github))
                 }
             })
-
-
         }
     }
 }
