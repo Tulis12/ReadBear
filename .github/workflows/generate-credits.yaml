@@ -1,0 +1,86 @@
+name: Update PR
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    if: github.event.pull_request.user.login == 'weblate-translate-tulisiowice-pl[bot]'
+    environment: "Build artifact"
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v5
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Generate translation credits
+        env:
+          WEBLATE_URL: ${{ secrets.WEBLATE_URL }}
+          WEBLATE_TOKEN: ${{ secrets.WEBLATE_TOKEN }}
+        run: |
+          echo "Generating translation credits"
+          
+          TODAY="$(date '+%Y-%m-%d 23:59:59')"
+          
+          REQUEST_REPORT=$(curl -fsS \
+            -X POST \
+            -H "Authorization: Token $WEBLATE_TOKEN" \
+            -H "Content-Type: application/json" \
+            "$WEBLATE_URL/api/reports/" \
+            -d "{
+              \"kind\": \"credits\",
+              \"project\": \"readbear\",
+              \"start\": \"1970-01-01 00:00:00\",
+              \"end\": \"$TODAY\"
+            }")
+          
+          TASK_URL=$(echo "$REQUEST_REPORT" | jq -r '.task_url')
+          
+          while true; do
+            RESPONSE=$(curl -fsS \
+              -H "Authorization: Token $WEBLATE_TOKEN" \
+              "$WEBLATE_URL$TASK_URL")
+          
+            if [ "$(echo "$RESPONSE" | jq -r '.completed')" = "true" ]; then
+              break
+            fi
+          
+            sleep 1
+          done
+          
+          RESULT_URL=$(echo "$RESPONSE" | jq -r '.result.url')
+          
+          curl -fsS \
+          -H "Authorization: Token $WEBLATE_TOKEN" \
+          "$WEBLATE_URL${RESULT_URL}json/" |
+            jq 'walk(
+            if type == "object" then
+            del(.email, .full_name)
+            elif type == "array" then
+            map(select(.username != "webhook:github-integration"))
+            else
+            .
+            end
+          )' > app/src/main/res/raw/translation_credits.json
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add .
+
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+
+          git commit -m "chore(i18n): update credits"
+          git push
