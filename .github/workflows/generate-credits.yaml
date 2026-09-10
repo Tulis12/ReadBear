@@ -61,13 +61,14 @@ jobs:
           -H "Authorization: Token $WEBLATE_TOKEN" \
           "$WEBLATE_URL${RESULT_URL}json/" |
             jq 'walk(
-              if type == "object" then
-              del(.email, .full_name)
-              else
-              .
-              end
-            ) | map(select(.username != "webhook:github-integration"))' \
-          > app/src/main/res/raw/translation_credits.json
+            if type == "object" then
+            del(.email, .full_name)
+            elif type == "array" then
+            map(select(.username != "webhook:github-integration"))
+            else
+            .
+            end
+          )' > app/src/main/res/raw/translation_credits.json
 
       - name: Commit changes
         run: |
