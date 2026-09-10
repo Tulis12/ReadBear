@@ -52,7 +52,6 @@
     <string name="no">No</string>
     <string name="is_manga">Manga?</string>
     <string name="book_type">Book type</string>
-    <string name="huge_thanks_to">Huge thanks:</string>
     <string name="translator">Translator</string>
     <string name="translators">Translators:</string>
     <string name="current_language">Current language</string>
@@ -62,10 +61,7 @@
     <string name="split_pages_tooltip">If a scanned PDF page contains two book pages side by side, automatically split it into two separate pages so the PDF can be read like a normal document, with one page per PDF page. Forces Flipping mode.</string>
     <string name="this_pdf_settings">This PDF settings:</string>
     <string name="appearance">Appearance</string>
-    <string name="change_langugage">Change language?</string>
-    <string name="change_langugage_dialog">Do you want to change language? Your screen will flicker!</string>
     <string name="language">Language:</string>
-    <string name="read_more">Read more</string>
     <string name="example_tooltip">Here should be an explanation but this is just an example. You can showcase how the theme looks!</string>
     <string name="sample_button">Sample button</string>
     <string name="sample_checkbox">Sample checkbox</string>
