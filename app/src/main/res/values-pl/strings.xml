@@ -45,7 +45,7 @@
     <string name="translator">Tłumacz</string>
     <string name="translators">Tłumacze:</string>
     <string name="current_language">Obecny język</string>
-    <string name="thanks_for_using"><![CDATA[Dziękuję, że korzystasz z tej aplikacji <3]]></string>
+    <string name="thanks_for_using"><![CDATA[Dziękuję, że korzystasz z tej aplikacji &lt;3]]></string>
     <plurals name="are_you_sure_you_want_to_delete_x_elements">
         <item quantity="one">Czy na pewno chcesz usunąć tę książkę?</item>
         <item quantity="few">Czy na pewno chcesz usunąć %d książki?</item>
@@ -70,4 +70,6 @@
     <string name="sample_settings">Przykładowe ustawienia</string>
     <string name="sample_button_pressed">Nacisnąłeś na przykładowe działanie!</string>
     <string name="sample_tooltip">Przykładowa podpowiedź</string>
+    <string name="chapter_x">Odcinek: %1$d</string>
+    <string name="previous_chapter">Poprzedni odcinek</string>
 </resources>
