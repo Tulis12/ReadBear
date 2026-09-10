@@ -58,15 +58,16 @@ jobs:
           RESULT_URL=$(echo "$RESPONSE" | jq -r '.result.url')
           
           curl -fsS \
-            -H "Authorization: Token $WEBLATE_TOKEN" \
-            "$WEBLATE_URL${RESULT_URL}json/" |
+          -H "Authorization: Token $WEBLATE_TOKEN" \
+          "$WEBLATE_URL${RESULT_URL}json/" |
             jq 'walk(
               if type == "object" then
-                del(.email, .full_name)
+              del(.email, .full_name)
               else
-                .
+              .
               end
-            )' > app/src/main/res/raw/translation_credits.json
+            ) | map(select(.username != "webhook:github-integration"))' \
+          > app/src/main/res/raw/translation_credits.json
 
       - name: Commit changes
         run: |
