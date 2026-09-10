@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -121,7 +122,7 @@ fun PdfLayout(
                     )
                 }
 
-                Text(stringResource(R.string.side_by_side))
+                Text(stringResource(R.string.side_by_side), autoSize = TextAutoSize.StepBased(), maxLines = 1)
 
                 RadioButton(
                     selected = pdfReadingLayout == PdfReadingLayout.SPREAD,
