@@ -27,7 +27,8 @@ import dev.tulis.readbear.db.pdfs.bookmarks.PdfBookmarkDao
         Pdf::class, PdfBookmark::class,
         Epub::class, EpubBookmark::class
     ],
-    version = 1
+    version = 1,
+    exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
     abstract fun bookDao(): BookDao
