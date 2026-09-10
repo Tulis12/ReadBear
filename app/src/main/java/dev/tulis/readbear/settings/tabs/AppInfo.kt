@@ -126,7 +126,7 @@ fun AppInfo() {
                 withLink(
                     LinkAnnotation.Url("https://github.com/Tulis12/ReadBear")
                 ) {
-                    append("Visit the project on GitHub")
+                    append(stringResource(R.string.visit_github))
                 }
             })
 

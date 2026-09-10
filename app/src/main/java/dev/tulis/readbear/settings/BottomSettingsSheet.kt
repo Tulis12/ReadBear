@@ -11,6 +11,7 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -55,6 +56,8 @@ fun BottomSettingsSheet(
     var progressEnabled by remember { mutableStateOf(settings.progressEnabled) }
     var timeClockEnabled by remember { mutableStateOf(settings.timeClockEnabled) }
     var pdfReadingLayout by remember { mutableStateOf(settings.pdfReadingLayout) }
+    var themeMode by remember { mutableStateOf(settings.themeType) }
+    var theme by remember { mutableStateOf(settings.theme) }
 
     val onSaveRequest = {
         scope.launch {
@@ -62,11 +65,29 @@ fun BottomSettingsSheet(
                 settings[Settings.SettingsKeys.COLUMNS] = columnCount
                 settings[Settings.SettingsKeys.LONG_TEXT_OPTION] = longTextOption.name
                 settings[Settings.SettingsKeys.ALREADY_READ_OPTION] = alreadyReadOption.name
+
                 settings[Settings.SettingsKeys.PROGRESS_ENABLED] = progressEnabled
                 settings[Settings.SettingsKeys.TIME_CLOCK_ENABLED] = timeClockEnabled
+
                 settings[Settings.SettingsKeys.PDF_LAYOUT] = pdfReadingLayout.name
+
+                settings[Settings.SettingsKeys.THEME_TYPE] = themeMode.name
+                settings[Settings.SettingsKeys.THEME] = theme
             }
         }
+    }
+
+    LaunchedEffect(
+        columnCount,
+        longTextOption,
+        alreadyReadOption,
+        progressEnabled,
+        timeClockEnabled,
+        pdfReadingLayout,
+        themeMode,
+        theme
+    ) {
+        onSaveRequest()
     }
 
     ModalBottomSheet(
@@ -140,7 +161,16 @@ fun BottomSettingsSheet(
                     models = models
                 )
 
-                2 -> Appearance()
+                2 -> Appearance(
+                    themeMode = themeMode,
+                    onChangeThemeMode = {
+                        themeMode = it
+                    },
+                    theme = theme,
+                    onChangeTheme = {
+                        theme = it
+                    }
+                )
 
                 3 -> AppInfo()
             }
