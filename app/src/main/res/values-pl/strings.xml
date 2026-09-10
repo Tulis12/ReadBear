@@ -71,5 +71,5 @@
     <string name="sample_button_pressed">Nacisnąłeś na przykładowe działanie!</string>
     <string name="sample_tooltip">Przykładowa podpowiedź</string>
     <string name="chapter_x">Odcinek: %1$d</string>
-    <string name="previous_chapter">Poprzedni odcinek</string>
+    <string name="previous_chapter">Poprzedni rozdział</string>
 </resources>
