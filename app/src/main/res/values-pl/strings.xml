@@ -42,7 +42,6 @@
     <string name="no">Nie</string>
     <string name="is_manga">Manga?</string>
     <string name="book_type">Typ książki</string>
-    <string name="huge_thanks_to">Wielkie podziękowania dla:</string>
     <string name="translator">Tłumacz</string>
     <string name="translators">Tłumacze:</string>
     <string name="current_language">Obecny język</string>
@@ -59,15 +58,12 @@
     <string name="split_pages_tooltip">Jeżeli zeskanowana strona pliku PDF zawiera dwie złączone strony jedna obok drugiej, automatycznie rozdziel je na dwie osobne strony tak, żeby plik PDF dało się czytać jak każdy normalny dokument z tradycyjnym podziałem stron. Wymusza tryb Przerzucania.</string>
     <string name="this_pdf_settings">Ustawienia tego pliku PDF:</string>
     <string name="appearance">Wygląd</string>
-    <string name="change_langugage">Zmień język?</string>
     <string name="language">Język:</string>
     <string name="show_more">Pokaż więcej!</string>
     <string name="side_by_side">Strona przy stronie</string>
     <string name="flipping">Przerzucanie</string>
     <string name="panels">Kadry</string>
     <string name="read_docs">Czytaj dokumentacje</string>
-    <string name="change_langugage_dialog">Czy chcesz zmienić język? Twój ekran będzie migać!</string>
-    <string name="read_more">Czytaj dalej</string>
     <string name="example_tooltip">Powinno tu być wyjaśnienie, ale to tylko przykład. Możesz pokazać jak wygląda motyw!</string>
     <string name="sample_button">Przykładowy przycisk</string>
     <string name="sample_checkbox">Przykładowe pole do odznaczenia</string>
