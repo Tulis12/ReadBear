@@ -1,37 +1,23 @@
 package dev.tulis.readbear.settings.tabs
 
-import android.content.Intent
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.slideInHorizontally
-import androidx.compose.animation.slideOutHorizontally
-import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Settings
-import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.DropdownMenu
@@ -48,9 +34,7 @@ import androidx.compose.material3.TooltipBox
 import androidx.compose.material3.TooltipDefaults
 import androidx.compose.material3.rememberTooltipState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -58,40 +42,29 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.BlendMode
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.ImageShader
-import androidx.compose.ui.graphics.ShaderBrush
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.TileMode
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.core.net.toUri
 import androidx.core.os.LocaleListCompat
-import coil3.compose.AsyncImage
 import dev.tulis.readbear.ui.theme.darkScheme
 import dev.tulis.readbear.ui.theme.AppTypography
 import dev.tulis.readbear.R
+import dev.tulis.readbear.ui.theme.ThemeType
 import dev.tulis.readbear.ui.theme.lightScheme
 import dev.tulis.readbear.utils.BackgroundPattern
-import dev.tulis.readbear.utils.sampleImages
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlin.time.Duration.Companion.seconds
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Appearance() {
+fun Appearance(
+    themeMode: ThemeType,
+    onChangeThemeMode: (ThemeType) -> Unit,
+    theme: String,
+    onChangeTheme: (String) -> Unit
+) {
     val languages = mapOf(
         Pair("en", "English"),
         Pair("pl", "polski"),
@@ -99,27 +72,30 @@ fun Appearance() {
     )
 
     val locale = LocalConfiguration.current.locales[0]
-    var expanded by remember { mutableStateOf(false) }
-    var selected by remember { mutableStateOf(
-        locale.language
-    ) }
 
     Column(
         verticalArrangement = Arrangement.spacedBy(10.dp, Alignment.CenterVertically),
-//        horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.fillMaxWidth().padding(10.dp)
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(10.dp)
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            var languageSelected by remember { mutableStateOf(
+                locale.language
+            ) }
+
+            var expanded by remember { mutableStateOf(false) }
+
             Text(stringResource(R.string.language))
 
             Box {
                 OutlinedButton(
                     onClick = { expanded = true },
                 ) {
-                    Text(languages[selected] ?: stringResource(R.string.unknown))
+                    Text(languages[languageSelected] ?: stringResource(R.string.unknown))
                 }
 
                 DropdownMenu(
@@ -132,11 +108,55 @@ fun Appearance() {
                                 Text(locale.value)
                             },
                             onClick = {
-                                selected = locale.key
+                                languageSelected = locale.key
                                 expanded = false
 
                                 val appLocale = LocaleListCompat.forLanguageTags(locale.key)
                                 AppCompatDelegate.setApplicationLocales(appLocale)
+                            }
+                        )
+                    }
+                }
+            }
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            var expanded by remember { mutableStateOf(false) }
+
+            Text(stringResource(R.string.theme))
+
+            val themeModes = arrayOf(
+                ThemeMode(stringResource(R.string.dark), ThemeType.DARK),
+                ThemeMode(stringResource(R.string.light), ThemeType.LIGHT),
+                ThemeMode(stringResource(R.string.system), ThemeType.SYSTEM)
+            )
+
+            Box {
+                OutlinedButton(
+                    onClick = { expanded = true },
+                ) {
+                    Text(
+                        themeModes.first {
+                            it.themeType == themeMode
+                        }.modeName
+                    )
+                }
+
+                DropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    themeModes.forEach { themeMode ->
+                        DropdownMenuItem(
+                            text = {
+                                Text(themeMode.modeName)
+                            },
+                            onClick = {
+                                onChangeThemeMode(themeMode.themeType)
+                                expanded = false
                             }
                         )
                     }
@@ -155,7 +175,6 @@ fun Appearance() {
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(items) { item ->
-
                 MaterialTheme(
                     colorScheme = item.colorScheme,
                     typography = AppTypography,
@@ -266,6 +285,11 @@ fun Appearance() {
     }
 
 }
+
+data class ThemeMode(
+    val modeName: String,
+    val themeType: ThemeType
+)
 
 data class ReadBearTheme(
     var themeName: String,
