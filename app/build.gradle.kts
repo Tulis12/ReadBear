@@ -59,8 +59,8 @@ android {
         applicationId = "dev.tulis.readbear"
         minSdk = 24
         targetSdk = 37
-        versionCode = 13
-        versionName = "v0.6.1"
+        versionCode = 14
+        versionName = "v0.6.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -136,10 +136,8 @@ dependencies {
     implementation("dev.nucleusframework:pdfium:154.0.8021.0b")
 
     implementation("com.positiondev.epublib:epublib-core:3.1") {
-        exclude(
-            group = "xmlpull",
-            module = "xmlpull"
-        )
+        exclude(group = "net.sf.kxml", module = "kxml2")
+        exclude(group = "xmlpull", module = "xmlpull")
     }
 
     implementation("org.jsoup:jsoup:1.21.2")
