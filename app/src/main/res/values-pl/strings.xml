@@ -62,7 +62,7 @@
     <string name="show_more">Pokaż więcej!</string>
     <string name="side_by_side">Strona przy stronie</string>
     <string name="flipping">Przerzucanie</string>
-    <string name="panels">Kadry</string>
+    <string name="panels">Panele</string>
     <string name="read_docs">Czytaj dokumentacje</string>
     <string name="example_tooltip">Powinno tu być wyjaśnienie, ale to tylko przykład. Możesz pokazać jak wygląda motyw!</string>
     <string name="sample_button">Przykładowy przycisk</string>
@@ -70,6 +70,6 @@
     <string name="sample_settings">Przykładowe ustawienia</string>
     <string name="sample_button_pressed">Nacisnąłeś na przykładowe działanie!</string>
     <string name="sample_tooltip">Przykładowa podpowiedź</string>
-    <string name="chapter_x">Odcinek: %1$d</string>
+    <string name="chapter_x">Rozdział: %1$d</string>
     <string name="previous_chapter">Poprzedni rozdział</string>
 </resources>
