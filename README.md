@@ -4,5 +4,5 @@
 
 
 # ReadBear
-<a href="http://translate.tulisiowice.pl/engage/readbear/"><img src="http://translate.tulisiowice.pl/widget/readbear/svg-badge.svg" alt="Stan tłumaczenia"></a>
+<a href="https://translate.tulis.dev/engage/readbear/"><img src="https://translate.tulis.dev/widget/readbear/svg-badge.svg" alt="Stan tłumaczenia"></a>
 ## A cute and chill CBZ, PDF, and hopefully EPUB reader that's ridiculously configurable - for free!
