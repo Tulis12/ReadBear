@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   update:
-    if: github.event.pull_request.user.login == 'weblate-translate-tulisiowice-pl[bot]'
+    if: github.event.pull_request.user.login == 'weblate-translate-tulis-dev[bot]'
     environment: "Build artifact"
     runs-on: ubuntu-latest
 
