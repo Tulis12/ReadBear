@@ -4,6 +4,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,6 +28,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipAnchorPosition
@@ -53,6 +55,10 @@ import dev.tulis.readbear.ui.theme.darkScheme
 import dev.tulis.readbear.ui.theme.AppTypography
 import dev.tulis.readbear.R
 import dev.tulis.readbear.ui.theme.ThemeType
+import dev.tulis.readbear.ui.theme.catppuccin.FrappeColorScheme
+import dev.tulis.readbear.ui.theme.catppuccin.LightColorScheme
+import dev.tulis.readbear.ui.theme.catppuccin.MacchiatoColorScheme
+import dev.tulis.readbear.ui.theme.catppuccin.MochaColorScheme
 import dev.tulis.readbear.ui.theme.lightScheme
 import dev.tulis.readbear.utils.BackgroundPattern
 import kotlinx.coroutines.launch
@@ -165,8 +171,11 @@ fun Appearance(
         }
 
         val items = arrayOf(
-            ReadBearTheme("Default Dark", darkScheme),
-            ReadBearTheme("Default Light", lightScheme)
+            ReadBearTheme("Bear", ReadBearTheme.ThemeSchemes(darkScheme, lightScheme)),
+            ReadBearTheme("Catppuccin", ReadBearTheme.ThemeSchemes(
+                MacchiatoColorScheme,
+                LightColorScheme
+            ))
         )
 
         LazyVerticalGrid(
@@ -175,8 +184,16 @@ fun Appearance(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(items) { item ->
+                val themeMode = when (themeMode) {
+                    ThemeType.DARK -> item.themeSchemes.darkScheme
+                    ThemeType.LIGHT -> item.themeSchemes.lightScheme
+                    ThemeType.SYSTEM -> if(isSystemInDarkTheme()) {
+                        item.themeSchemes.darkScheme
+                    } else item.themeSchemes.lightScheme
+                }
+
                 MaterialTheme(
-                    colorScheme = item.colorScheme,
+                    colorScheme = themeMode,
                     typography = AppTypography,
                     content = {
                         Box(
@@ -191,6 +208,12 @@ fun Appearance(
                                 )
                         ) {
                             BackgroundPattern(modifier = Modifier.matchParentSize())
+
+                            RadioButton(
+                                true,
+                                {},
+                                modifier = Modifier.align(Alignment.TopEnd)
+                            )
 
                             Column(
                                 modifier = Modifier.padding(15.dp),
@@ -293,8 +316,13 @@ data class ThemeMode(
 
 data class ReadBearTheme(
     var themeName: String,
-    var colorScheme: ColorScheme
-)
+    var themeSchemes: ThemeSchemes
+) {
+    data class ThemeSchemes(
+        val darkScheme: ColorScheme,
+        val lightScheme: ColorScheme
+    )
+}
 
 data class AppLanguage(
     val locale: Locale,
