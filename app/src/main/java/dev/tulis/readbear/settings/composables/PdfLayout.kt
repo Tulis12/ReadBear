@@ -27,7 +27,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.IntrinsicMeasureScope
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import dev.tulis.readbear.R
 import dev.tulis.readbear.settings.PdfReadingLayout
@@ -122,7 +124,7 @@ fun PdfLayout(
                     )
                 }
 
-                Text(stringResource(R.string.side_by_side), autoSize = TextAutoSize.StepBased(), maxLines = 1)
+                Text(stringResource(R.string.side_by_side), autoSize = TextAutoSize.StepBased(maxFontSize = 16.sp), maxLines = 1)
 
                 RadioButton(
                     selected = pdfReadingLayout == PdfReadingLayout.SPREAD,
