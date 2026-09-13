@@ -1,0 +1,8 @@
+Pierwsza wersja: v0.3.1
+Lista Zmian:
+- dodano logo aplikacji i tło
+- dodano opcje do wczytania: pdf, cbz
+- dodano konfigurowalny układ dla plików pdf i dzielenie plików pdf
+- dodano stronę informacyjną, progres czytania i zegar
+- dodano konfigurowalny widok biblioteki
+- dodano uznania dla tłumaczów i link do weblate
