@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   update:
-    if: github.event.pull_request.user.login == 'weblate-translate-tulis-dev[bot]'
+    if: github.event.pull_request.user.login == 'weblate-tulis-dev[bot]'
     environment: "Build artifact"
     runs-on: ubuntu-latest
 
@@ -26,9 +26,9 @@ jobs:
           WEBLATE_TOKEN: ${{ secrets.WEBLATE_TOKEN }}
         run: |
           echo "Generating translation credits"
-          
+
           TODAY="$(date '+%Y-%m-%d 23:59:59')"
-          
+
           REQUEST_REPORT=$(curl -fsS \
             -X POST \
             -H "Authorization: Token $WEBLATE_TOKEN" \
@@ -40,23 +40,23 @@ jobs:
               \"start\": \"1970-01-01 00:00:00\",
               \"end\": \"$TODAY\"
             }")
-          
+
           TASK_URL=$(echo "$REQUEST_REPORT" | jq -r '.task_url')
-          
+
           while true; do
             RESPONSE=$(curl -fsS \
               -H "Authorization: Token $WEBLATE_TOKEN" \
               "$WEBLATE_URL$TASK_URL")
-          
+
             if [ "$(echo "$RESPONSE" | jq -r '.completed')" = "true" ]; then
               break
             fi
-          
+
             sleep 1
           done
-          
+
           RESULT_URL=$(echo "$RESPONSE" | jq -r '.result.url')
-          
+
           curl -fsS \
           -H "Authorization: Token $WEBLATE_TOKEN" \
           "$WEBLATE_URL${RESULT_URL}json/" |
