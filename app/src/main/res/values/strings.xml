@@ -77,4 +77,9 @@
     <string name="light">Light</string>
     <string name="system">System</string>
     <string name="visit_github">Visit the project on GitHub</string>
+    <string name="select_this_theme">Choose this theme</string>
+    <string name="select">Select</string>
+    <string name="choose">Choose</string>
+    <string name="already_chosen">Already chosen</string>
+    <string name="nothing_here">Nothing here, yet...</string>
 </resources>

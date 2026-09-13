@@ -1,5 +1,6 @@
 package dev.tulis.readbear.db.books
 
+import android.util.Log
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import java.io.File
@@ -40,9 +41,13 @@ class BookRepository @Inject constructor(
     }
 
     suspend fun deleteBook(book: Book) {
-        dao.delete(book)
-
         val target = File(filesDir, book.path)
-        target.deleteRecursively()
+
+        if(!target.deleteRecursively()) {
+            Log.d("Deleting", "ERROR! Could not delete recursively!")
+        }
+
+
+        dao.delete(book)
     }
 }

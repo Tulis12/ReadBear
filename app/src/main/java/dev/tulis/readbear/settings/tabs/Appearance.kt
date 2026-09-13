@@ -17,6 +17,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Button
 import androidx.compose.material3.Checkbox
@@ -28,7 +29,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RichTooltip
 import androidx.compose.material3.Text
 import androidx.compose.material3.TooltipAnchorPosition
@@ -51,15 +51,10 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
-import dev.tulis.readbear.ui.theme.darkScheme
 import dev.tulis.readbear.ui.theme.AppTypography
 import dev.tulis.readbear.R
+import dev.tulis.readbear.themes
 import dev.tulis.readbear.ui.theme.ThemeType
-import dev.tulis.readbear.ui.theme.catppuccin.FrappeColorScheme
-import dev.tulis.readbear.ui.theme.catppuccin.LightColorScheme
-import dev.tulis.readbear.ui.theme.catppuccin.MacchiatoColorScheme
-import dev.tulis.readbear.ui.theme.catppuccin.MochaColorScheme
-import dev.tulis.readbear.ui.theme.lightScheme
 import dev.tulis.readbear.utils.BackgroundPattern
 import kotlinx.coroutines.launch
 
@@ -170,20 +165,14 @@ fun Appearance(
             }
         }
 
-        val items = arrayOf(
-            ReadBearTheme("Bear", ReadBearTheme.ThemeSchemes(darkScheme, lightScheme)),
-            ReadBearTheme("Catppuccin", ReadBearTheme.ThemeSchemes(
-                MacchiatoColorScheme,
-                LightColorScheme
-            ))
-        )
-
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 150.dp),
             horizontalArrangement = Arrangement.spacedBy(8.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(items) { item ->
+            items(themes) { item ->
+                val selected = item.id == theme
+
                 val themeMode = when (themeMode) {
                     ThemeType.DARK -> item.themeSchemes.darkScheme
                     ThemeType.LIGHT -> item.themeSchemes.lightScheme
@@ -209,21 +198,12 @@ fun Appearance(
                         ) {
                             BackgroundPattern(modifier = Modifier.matchParentSize())
 
-                            RadioButton(
-                                true,
-                                {},
+                            Box(
                                 modifier = Modifier.align(Alignment.TopEnd)
-                            )
-
-                            Column(
-                                modifier = Modifier.padding(15.dp),
-                                verticalArrangement = Arrangement.Center
                             ) {
                                 val scope = rememberCoroutineScope()
                                 val context = LocalContext.current
                                 val toastMessage = stringResource(R.string.sample_button_pressed)
-
-                                Text(item.themeName, color = MaterialTheme.colorScheme.onBackground)
                                 val tooltipState = rememberTooltipState(isPersistent = true)
 
                                 TooltipBox(
@@ -291,13 +271,33 @@ fun Appearance(
                                     },
                                     state = tooltipState
                                 ) {
-                                    Button(onClick = {
-                                        scope.launch {
-                                            tooltipState.show()
+                                    IconButton(
+                                        onClick = {
+                                            scope.launch {
+                                                tooltipState.show()
+                                            }
                                         }
-                                    }) {
-                                        Text(stringResource(R.string.show_more))
+                                    ) {
+                                        Icon(Icons.Default.Info, stringResource(R.string.info))
                                     }
+                                }
+                            }
+
+
+                            Column(
+                                modifier = Modifier.padding(15.dp),
+                                verticalArrangement = Arrangement.Center
+                            ) {
+                                Text(item.themeName, color = MaterialTheme.colorScheme.onBackground)
+
+                                Button(onClick = {
+                                    onChangeTheme(item.id)
+                                }, enabled = !selected) {
+                                    Text(
+                                        if(selected) {
+                                            stringResource(R.string.already_chosen)
+                                        } else stringResource(R.string.choose)
+                                    )
                                 }
                             }
                         }
@@ -318,6 +318,8 @@ data class ReadBearTheme(
     var themeName: String,
     var themeSchemes: ThemeSchemes
 ) {
+    var id = themeName.replace(Regex("[^a-zA-Z0-9]"), "_")
+
     data class ThemeSchemes(
         val darkScheme: ColorScheme,
         val lightScheme: ColorScheme

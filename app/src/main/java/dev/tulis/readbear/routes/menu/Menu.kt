@@ -17,6 +17,7 @@ import androidx.compose.material.icons.filled.SelectAll
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -25,6 +26,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -36,6 +38,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
@@ -88,123 +91,139 @@ fun Menu(
 
     Scaffold(
         topBar = {
-            TopAppBar (
-                title = {
-                    Row {
-                        Text(stringResource(R.string.base_app_name))
-                    }
-                },
-                actions = {
-                    if(!selectionMode) {
+            val topBarDefaults = TopAppBarDefaults.topAppBarColors()
 
-                        IconButton(
-                            onClick = {
-                                showSheet = true
-
-                                scope.launch {
-                                    awaitFrame()
-                                    awaitFrame()
-                                    awaitFrame()
-                                    awaitFrame()
-                                    awaitFrame()
-                                    sheetState.show()
-                                }
-                            }
-                        ) {
-                            Icon(
-                                Icons.Default.Settings,
-                                contentDescription = stringResource(R.string.settings)
-                            )
-                        }
-
-                        val noSpaceMessage = stringResource(R.string.error_no_space_left)
-                        val copyFailedMessage = stringResource(R.string.error_copy_failed)
-                        val unsupportedFormatMessage = stringResource(R.string.error_unsupported_format)
-
-                        ImportOption(
-                            viewModel,
-                            onChangeImporting = {
-                                importing = it
-                            },
-                            onThrow = { throwable ->
-                                scope.launch {
-                                    val message = when (throwable) {
-                                        is ErrnoException -> {
-                                            noSpaceMessage
-                                        }
-
-                                        is UnsupportedFormatException -> {
-                                            unsupportedFormatMessage
-                                        }
-
-                                        else -> {
-                                            copyFailedMessage
-                                        }
-                                    }
-
-                                    snackbarHostState.showSnackbar(
-                                        message = message
-                                    )
-                                }
-                            }
-                        )
-
-                        return@TopAppBar
-                    }
-
-                    IconButton(
-                        onClick = {
-                            val allBooksIds = books.map { it.id }
-
-                            if(selectedItems.containsAll(allBooksIds)) {
-                                selectedItems.clear()
-                                selectionMode = false
-                                return@IconButton
-                            }
-
-                            selectedItems.clear()
-                            selectedItems.addAll(allBooksIds)
-                        }
-                    ) {
-                        if(selectedItems.containsAll(books.map{
-                                it.id
-                            })) {
-                            Icon(
-                                Icons.Default.Deselect,
-                                contentDescription = stringResource(R.string.deselect)
-                            )
-                        } else {
-                            Icon(
-                                Icons.Default.SelectAll,
-                                contentDescription = stringResource(R.string.select_all)
-                            )
-                        }
-                    }
-
-                    DeleteOption(viewModel, selectedItems) {
-                        selectedItems.clear()
-                        selectionMode = false
-                    }
-
-                    if(selectedItems.count() == 1) {
-                        IconButton(
-                            onClick = {
-                                onEditBook(selectedItems[0])
-                            }
-                        ) {
-                            Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.edit))
-                        }
-
-                        IconButton(
-                            onClick = {
-                                onBookDetails(selectedItems[0])
-                            }
-                        ) {
-                            Icon(Icons.Default.Info, contentDescription = stringResource(R.string.info))
-                        }
-                    }
+            Box {
+                Box(modifier = Modifier.matchParentSize().background( // TODO() doesn't this look awkward?
+                    topBarDefaults.containerColor
+                )) {
+//                    BackgroundPattern(Modifier.matchParentSize(), color = MaterialTheme.colorScheme.surfaceVariant, rotation = -30f)
                 }
-            )
+
+//                HorizontalDivider(modifier = Modifier.align(Alignment.BottomEnd), thickness = 3.dp)
+
+
+                TopAppBar (
+                    colors = topBarDefaults.copy(
+                        containerColor = Color.Transparent
+                    ),
+                    title = {
+                        Row {
+                            Text(stringResource(R.string.base_app_name))
+                        }
+                    },
+                    actions = {
+                        if(!selectionMode) {
+
+                            IconButton(
+                                onClick = {
+                                    showSheet = true
+
+                                    scope.launch {
+                                        awaitFrame()
+                                        awaitFrame()
+                                        awaitFrame()
+                                        awaitFrame()
+                                        awaitFrame()
+                                        sheetState.show()
+                                    }
+                                }
+                            ) {
+                                Icon(
+                                    Icons.Default.Settings,
+                                    contentDescription = stringResource(R.string.settings)
+                                )
+                            }
+
+                            val noSpaceMessage = stringResource(R.string.error_no_space_left)
+                            val copyFailedMessage = stringResource(R.string.error_copy_failed)
+                            val unsupportedFormatMessage = stringResource(R.string.error_unsupported_format)
+
+                            ImportOption(
+                                viewModel,
+                                onChangeImporting = {
+                                    importing = it
+                                },
+                                onThrow = { throwable ->
+                                    scope.launch {
+                                        val message = when (throwable) {
+                                            is ErrnoException -> {
+                                                noSpaceMessage
+                                            }
+
+                                            is UnsupportedFormatException -> {
+                                                unsupportedFormatMessage
+                                            }
+
+                                            else -> {
+                                                copyFailedMessage
+                                            }
+                                        }
+
+                                        snackbarHostState.showSnackbar(
+                                            message = message
+                                        )
+                                    }
+                                }
+                            )
+
+                            return@TopAppBar
+                        }
+
+                        IconButton(
+                            onClick = {
+                                val allBooksIds = books.map { it.id }
+
+                                if(selectedItems.containsAll(allBooksIds)) {
+                                    selectedItems.clear()
+                                    selectionMode = false
+                                    return@IconButton
+                                }
+
+                                selectedItems.clear()
+                                selectedItems.addAll(allBooksIds)
+                            }
+                        ) {
+                            if(selectedItems.containsAll(books.map{
+                                    it.id
+                                })) {
+                                Icon(
+                                    Icons.Default.Deselect,
+                                    contentDescription = stringResource(R.string.deselect)
+                                )
+                            } else {
+                                Icon(
+                                    Icons.Default.SelectAll,
+                                    contentDescription = stringResource(R.string.select_all)
+                                )
+                            }
+                        }
+
+                        DeleteOption(viewModel, selectedItems) {
+                            selectedItems.clear()
+                            selectionMode = false
+                        }
+
+                        if(selectedItems.count() == 1) {
+                            IconButton(
+                                onClick = {
+                                    onEditBook(selectedItems[0])
+                                }
+                            ) {
+                                Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.edit))
+                            }
+
+                            IconButton(
+                                onClick = {
+                                    onBookDetails(selectedItems[0])
+                                }
+                            ) {
+                                Icon(Icons.Default.Info, contentDescription = stringResource(R.string.info))
+                            }
+                        }
+                    }
+                )
+            }
         },
         modifier = Modifier
             .fillMaxSize(),

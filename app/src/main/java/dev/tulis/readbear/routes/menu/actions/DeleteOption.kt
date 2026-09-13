@@ -59,12 +59,7 @@ fun DeleteOption(
             confirmButton = {
                 TextButton(
                     onClick = {
-                        selectedItems.forEach {
-                            scope.launch {
-                                val book = viewModel.getBook(it)
-                                viewModel.removeBook(book)
-                            }
-                        }
+                        viewModel.removeBooks(selectedItems.toList())
 
                         onClearSelectedItemsAndDisableSelectionMode()
                         showDialog = false

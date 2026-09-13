@@ -178,6 +178,7 @@ fun PdfReader(
                                 ) {
                                     PdfPage(
                                         state = reader,
+                                        selectableText = true,
                                         pageIndex = page / 2,
                                         onLinkClick = {
                                             if(it.destPageIndex != -1) {
@@ -211,6 +212,7 @@ fun PdfReader(
                                 ) {
                                     PdfPage(
                                         state = reader,
+                                        selectableText = true,
                                         pageIndex = page / 2,
                                         onLinkClick = {
                                             if(it.destPageIndex != -1) {
@@ -239,6 +241,7 @@ fun PdfReader(
                             PdfPage(
                                 state = reader,
                                 pageIndex = page,
+                                selectableText = true,
                                 onLinkClick = {
                                     if(it.destPageIndex != -1) {
                                         scope.launch {
@@ -267,7 +270,8 @@ fun PdfReader(
                             PdfPage(
                                 state = reader,
                                 pageIndex = page * 2,
-                                modifier = Modifier.weight(1f)
+                                modifier = Modifier.weight(1f),
+                                selectableText = true
                             )
 
                             PdfPage(
@@ -282,7 +286,8 @@ fun PdfReader(
                                     } else {
                                         false
                                     }
-                                }
+                                },
+                                selectableText = true
                             )
                         }
                     }
@@ -407,7 +412,8 @@ fun PdfReader(
                             } else {
                                 false
                             }
-                        }
+                        },
+                        selectableText = true
                     )
                 }
             }

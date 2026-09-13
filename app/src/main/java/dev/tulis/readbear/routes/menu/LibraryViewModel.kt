@@ -385,6 +385,15 @@ class LibraryViewModel @Inject constructor (
             }
         }
     }
+
+    fun removeBooks(selectedBooks: List<Long>) {
+        viewModelScope.launch {
+            selectedBooks.forEach {
+                val book = bookRepository.getBook(it)
+                bookRepository.deleteBook(book)
+            }
+        }
+    }
 }
 
 class UnsupportedFormatException(

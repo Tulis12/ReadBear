@@ -59,8 +59,8 @@ android {
         applicationId = "dev.tulis.readbear"
         minSdk = 24
         targetSdk = 37
-        versionCode = 15
-        versionName = "v0.6.3"
+        versionCode = 16
+        versionName = "v0.7.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -141,4 +141,6 @@ dependencies {
     }
 
     implementation("org.jsoup:jsoup:1.21.2")
+
+    implementation("net.engawapg.lib:zoomable:2.13.0")
 }

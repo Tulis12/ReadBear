@@ -10,6 +10,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
@@ -55,6 +56,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -64,6 +66,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.ImageLoader
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
+import dev.tulis.readbear.R
 import dev.tulis.readbear.db.books.Book
 import dev.tulis.readbear.db.comics.pages.ComicPage
 import dev.tulis.readbear.utils.zip.ZipImage
@@ -71,6 +74,8 @@ import dev.tulis.readbear.utils.zip.ZipImageFetcher
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
+import net.engawapg.lib.zoomable.rememberZoomState
+import net.engawapg.lib.zoomable.zoomable
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -150,7 +155,7 @@ fun WebtoonReader(
                 Triple(
                     listState.firstVisibleItemIndex,
                     listState.firstVisibleItemScrollOffset,
-                    listState.layoutInfo.visibleItemsInfo.lastOrNull()
+                    listState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
                 )
             }
                 .distinctUntilChanged()
@@ -160,7 +165,7 @@ fun WebtoonReader(
                     if(finished) return@collect
                     bumpTime(book)
 
-                    if(lastElement != null && lastElement.index == comicWithBookmark.comic.panels - 1) {
+                    if(lastElement != null && index == comicWithBookmark.comic.panels - 1) {
                         finished = true
 
                         val bookmark = comicWithBookmark.bookmark
@@ -197,7 +202,13 @@ fun WebtoonReader(
         LazyColumn(
             state = listState,
             modifier = Modifier
-                .fillMaxSize(),
+                .fillMaxSize()
+                .zoomable(
+                    zoomState = rememberZoomState(),
+                    onTap = {
+                        topBarVisible = !topBarVisible
+                    }
+                ),
             userScrollEnabled = focusedPanel == null
         ) {
             items(panels) { page ->
@@ -222,17 +233,7 @@ fun WebtoonReader(
                     contentDescription = null,
                     modifier = Modifier
                         .fillMaxWidth()
-                        .aspectRatio(page.width.toFloat() / page.height.toFloat())
-                        .combinedClickable(
-                            onClick = {
-                                if(focusedPanel == null) topBarVisible = !topBarVisible
-                            },
-                            onLongClick = {
-                                if(focusedPanel == null) focusedPanel = currentPanel
-                            },
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = null
-                        ),
+                        .aspectRatio(page.width.toFloat() / page.height.toFloat()),
                     imageLoader = imageLoader,
                     contentScale = ContentScale.FillWidth
                 )

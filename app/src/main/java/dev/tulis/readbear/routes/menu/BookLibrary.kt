@@ -2,6 +2,7 @@ package dev.tulis.readbear.routes.menu
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -31,14 +32,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
+import dev.tulis.readbear.R
 import dev.tulis.readbear.db.Settings
 import dev.tulis.readbear.settings.AlreadyReadOption
 import dev.tulis.readbear.utils.LongText
@@ -57,146 +63,148 @@ fun BookLibrary(
     onChangeSelectionMode: (Boolean) -> Unit,
     onOpenBook: (Long) -> Unit
 ) {
-    val books by viewModel.books.collectAsState()
-    val context = LocalContext.current
+    Box {
+        val books by viewModel.books.collectAsState()
+        val context = LocalContext.current
 
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(settings.columnCount),
-        horizontalArrangement = Arrangement.spacedBy(5.dp),
-        verticalArrangement = Arrangement.spacedBy(15.dp),
-        modifier = Modifier
-            .padding(
-                padding
-            )
-            .fillMaxSize()
-    ) {
-        items(books.size) { image ->
-            val book = books[image]
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(settings.columnCount),
+            horizontalArrangement = Arrangement.spacedBy(5.dp),
+            verticalArrangement = Arrangement.spacedBy(15.dp),
+            modifier = Modifier
+                .padding(
+                    padding
+                )
+                .fillMaxSize()
+        ) {
+            items(books.size) { image ->
+                val book = books[image]
 
-            val scale by animateFloatAsState(
-                targetValue = if (selectedItems.contains(book.id)) 0.88f else 1f,
-                animationSpec = tween(200),
-                label = "scale"
-            )
+                val scale by animateFloatAsState(
+                    targetValue = if (selectedItems.contains(book.id)) 0.88f else 1f,
+                    animationSpec = tween(200),
+                    label = "scale"
+                )
 
-            val alpha by animateFloatAsState(
-                targetValue = if (selectedItems.contains(book.id)) 0.35f else 0f,
-                animationSpec = tween(200),
-                label = "glass"
-            )
+                val alpha by animateFloatAsState(
+                    targetValue = if (selectedItems.contains(book.id)) 0.35f else 0f,
+                    animationSpec = tween(200),
+                    label = "glass"
+                )
 
-            Box(
-                modifier = Modifier
-                    .background(Color.Gray.copy(alpha = alpha))
-            ) {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(2.dp),
+                Box(
                     modifier = Modifier
-                        .fillMaxWidth()
-                        .combinedClickable(
-                            onClick = {
-                                if(selectionMode) {
-                                    if(selectedItems.contains(book.id)) {
-                                        onRemoveSelectedItem(book.id)
-                                    } else {
-                                        onAddSelectedItem(book.id)
-                                    }
-
-                                    if(selectedItems.count() == 0) {
-                                        onChangeSelectionMode(false)
-                                    }
-
-                                    return@combinedClickable
-                                }
-
-                                onOpenBook(book.id)
-                            },
-                            onLongClick = {
-                                if(selectionMode) return@combinedClickable
-
-                                onChangeSelectionMode(true)
-                                onAddSelectedItem(book.id)
-                            },
-                            interactionSource = remember { MutableInteractionSource() },
-                            indication = ripple()
-                        )
-                        .then(
-                            Modifier
-                                .scale(scale)
-                        )
-
+                        .background(Color.Gray.copy(alpha = alpha))
                 ) {
-                    Box {
-                        AsyncImage(
-                            model = context.filesDir
-                                .resolve(book.path)
-                                .resolve(book.cover),
-                            contentDescription = null,
-                            modifier = Modifier
-                                .aspectRatio(2f / 3f)
-                                .clip(RoundedCornerShape(10.dp))
-                                .fillMaxWidth(),
-                            contentScale = ContentScale.Crop
-                        )
-
-                        if(book.readAlready > 0)
-                            Box(
-                                modifier = Modifier
-                                    .align(Alignment.BottomEnd)
-                                    .padding(end = 5.dp, bottom = 5.dp)
-                                    .clip(RoundedCornerShape(15.dp))
-                                    .background(MaterialTheme.colorScheme.onPrimaryContainer)
-                                    .then(
-                                        if(book.readAlready > 1 && settings.alreadyReadOption == AlreadyReadOption.TIMES_AND_CHECKMARK) {
-                                            Modifier.padding(5.dp)
-                                        } else if(book.readAlready > 1) {
-                                            Modifier.padding(3.dp)
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(2.dp),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .combinedClickable(
+                                onClick = {
+                                    if(selectionMode) {
+                                        if(selectedItems.contains(book.id)) {
+                                            onRemoveSelectedItem(book.id)
                                         } else {
-                                            Modifier
+                                            onAddSelectedItem(book.id)
                                         }
-                                    )
 
-                            ) {
-                                Row {
-                                    if(book.readAlready > 1 && settings.alreadyReadOption == AlreadyReadOption.TIMES_AND_CHECKMARK) {
+                                        if(selectedItems.count() == 0) {
+                                            onChangeSelectionMode(false)
+                                        }
+
+                                        return@combinedClickable
+                                    }
+
+                                    onOpenBook(book.id)
+                                },
+                                onLongClick = {
+                                    if(selectionMode) return@combinedClickable
+
+                                    onChangeSelectionMode(true)
+                                    onAddSelectedItem(book.id)
+                                },
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = ripple()
+                            )
+                            .then(
+                                Modifier
+                                    .scale(scale)
+                            )
+
+                    ) {
+                        Box {
+                            AsyncImage(
+                                model = context.filesDir
+                                    .resolve(book.path)
+                                    .resolve(book.cover),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .aspectRatio(2f / 3f)
+                                    .clip(RoundedCornerShape(10.dp))
+                                    .fillMaxWidth(),
+                                contentScale = ContentScale.Crop
+                            )
+
+                            if(book.readAlready > 0)
+                                Box(
+                                    modifier = Modifier
+                                        .align(Alignment.BottomEnd)
+                                        .padding(end = 5.dp, bottom = 5.dp)
+                                        .clip(RoundedCornerShape(15.dp))
+                                        .background(MaterialTheme.colorScheme.onPrimaryContainer)
+                                        .then(
+                                            if(book.readAlready > 1 && settings.alreadyReadOption == AlreadyReadOption.TIMES_AND_CHECKMARK) {
+                                                Modifier.padding(5.dp)
+                                            } else if(book.readAlready > 1) {
+                                                Modifier.padding(3.dp)
+                                            } else {
+                                                Modifier
+                                            }
+                                        )
+
+                                ) {
+                                    Row {
+                                        if(book.readAlready > 1 && settings.alreadyReadOption == AlreadyReadOption.TIMES_AND_CHECKMARK) {
+                                            Text(
+                                                "${book.readAlready}x",
+                                                color = MaterialTheme.colorScheme.onSecondary
+                                            )
+                                        }
+
+                                        Icon(
+                                            imageVector = Icons.Default.CheckCircle,
+                                            contentDescription = "",
+                                            tint = MaterialTheme.colorScheme.primaryContainer
+                                        )
+                                    }
+                                }
+                        }
+
+                        Column {
+                            LongText(book.title)
+
+                            if(book.totalProgress != 0) {
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(5.dp)
+                                ) {
+                                    if(settings.progressEnabled) {
                                         Text(
-                                            "${book.readAlready}x",
-                                            color = MaterialTheme.colorScheme.onSecondary
+                                            readingProgress(book),
+                                            style = TextStyle(
+                                                fontSize = 12.sp
+                                            )
                                         )
                                     }
 
-                                    Icon(
-                                        imageVector = Icons.Default.CheckCircle,
-                                        contentDescription = "",
-                                        tint = MaterialTheme.colorScheme.primaryContainer
-                                    )
-                                }
-                            }
-                    }
-
-                    Column {
-                        LongText(book.title)
-
-                        if(book.totalProgress != 0) {
-                            Row(
-                                horizontalArrangement = Arrangement.spacedBy(5.dp)
-                            ) {
-                                if(settings.progressEnabled) {
-                                    Text(
-                                        readingProgress(book),
-                                        style = TextStyle(
-                                            fontSize = 12.sp
+                                    if(settings.timeClockEnabled) {
+                                        Text(
+                                            readingTime(book.readingTime),
+                                            style = TextStyle(
+                                                fontSize = 12.sp
+                                            )
                                         )
-                                    )
-                                }
-
-                                if(settings.timeClockEnabled) {
-                                    Text(
-                                        readingTime(book.readingTime),
-                                        style = TextStyle(
-                                            fontSize = 12.sp
-                                        )
-                                    )
+                                    }
                                 }
                             }
                         }
