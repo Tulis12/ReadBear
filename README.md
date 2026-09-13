@@ -6,13 +6,12 @@
 
 <p>
 <a href="https://translate.tulis.dev/engage/readbear/"><img src="https://translate.tulis.dev/widget/readbear/svg-badge.svg" alt="Stan tłumaczenia"></a>
+</p>
 
 <a href="https://f-droid.org/packages/dev.tulis.readbear">
     <img src="https://f-droid.org/badge/get-it-on.png"
     alt="Pobierz z F-Droid"
     height="80">
 </a>
-
-</p>
 
 ## A cute and chill CBZ, PDF, and hopefully EPUB reader that's ridiculously configurable - for free!
