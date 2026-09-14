@@ -1,4 +1,4 @@
-package dev.tulis.readbear.routes.menu.actions
+package dev.tulis.readbear.routes.menu.library.actions
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts

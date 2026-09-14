@@ -82,4 +82,7 @@
     <string name="choose">Choose</string>
     <string name="already_chosen">Already chosen</string>
     <string name="nothing_here">Nothing here, yet…</string>
+    <string name="menu">Menu</string>
+    <string name="library">Library</string>
+    <string name="quotes">Quotes</string>
 </resources>

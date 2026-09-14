@@ -45,7 +45,7 @@ fun App(
     ) {
 
         composable<Route.Menu> {
-            Menu (
+            Menu(
                 onOpenBook = {
                     scope.launch {
                         val book = viewModel.getBook(it)
