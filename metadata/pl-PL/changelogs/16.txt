@@ -1,0 +1,5 @@
+Zmiany:
+ - motywy
+ - tryb motywu
+ - poprawki błędów
+ - automatyczne kredyty tłumaczeń
