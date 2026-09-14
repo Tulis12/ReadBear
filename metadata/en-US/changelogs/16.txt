@@ -1,0 +1,5 @@
+Changelog:
+ - themes
+ - theme mode
+ - improved bugs
+ - automatic translation credits
