@@ -43,7 +43,7 @@
     <string name="is_manga">Manga?</string>
     <string name="book_type">Typ książki</string>
     <string name="translator">Tłumacz</string>
-    <string name="translators">Tłumacze:</string>
+    <string name="translators">Tłumacze</string>
     <string name="current_language">Obecny język</string>
     <string name="thanks_for_using">Dziękuję, że korzystasz z tej aplikacji &lt;3</string>
     <plurals name="are_you_sure_you_want_to_delete_x_elements">
