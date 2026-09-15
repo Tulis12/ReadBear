@@ -155,7 +155,7 @@ fun EpubReader(
 
             val bookmark = epubWithBookmark.bookmark
 
-            if (bookmark.page >= index) {
+            if (bookmark.page >= index && !settings.allowReversingProgress) {
                 if(bookmark.page == index) {
                     if(bookmark.pagePercentage > offset) return@onScroll
                 } else {

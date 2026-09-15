@@ -38,6 +38,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableLongStateOf
@@ -67,6 +68,7 @@ import coil3.ImageLoader
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import dev.tulis.readbear.R
+import dev.tulis.readbear.db.Settings
 import dev.tulis.readbear.db.books.Book
 import dev.tulis.readbear.db.comics.pages.ComicPage
 import dev.tulis.readbear.utils.zip.ZipImage
@@ -80,8 +82,8 @@ import net.engawapg.lib.zoomable.zoomable
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WebtoonReader(
-    comicId: Long,
     viewModel: WebtoonReaderViewModel = hiltViewModel(),
+    comicId: Long,
     returnToMenu: () -> Unit,
 ) {
     var panels by remember { mutableStateOf<List<ComicPage>>(emptyList()) }
@@ -91,6 +93,11 @@ fun WebtoonReader(
 
     val view = LocalView.current
     var topBarVisible by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+
+    val settingsFlow by Settings.getSettings(context).collectAsState(null)
+    val settings = settingsFlow ?: return
 
     DisposableEffect(topBarVisible) {
         val window = (view.context as Activity).window
@@ -111,7 +118,6 @@ fun WebtoonReader(
     }
 
     val comicWithBookmark = flowComicWithBookmark ?: return
-
     var suspendBook: Book? by remember { mutableStateOf(null) }
 
     LaunchedEffect(Unit) {
@@ -182,7 +188,7 @@ fun WebtoonReader(
 
                     val bookmark = comicWithBookmark.bookmark
 
-                    if (bookmark.panelNumber >= index) {
+                    if (bookmark.panelNumber >= index && !settings.allowReversingProgress) {
                         if(bookmark.panelNumber == index) {
                             if(bookmark.panelOffset > offset) return@collect
                         } else {

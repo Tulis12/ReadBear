@@ -322,7 +322,7 @@ fun PdfReader(
 
                         val bookmark = pdfWithBookmark.bookmark
 
-                        if (bookmark.page >= settledPage) {
+                        if (bookmark.page >= settledPage && !settings.allowReversingProgress) {
                             return@collect
                         }
 
@@ -376,7 +376,7 @@ fun PdfReader(
 
                         val bookmark = pdfWithBookmark.bookmark
 
-                        if (bookmark.page >= index) {
+                        if (bookmark.page >= index && !settings.allowReversingProgress) {
                             if(bookmark.page == index) {
                                 if(bookmark.pageOffset > offset) return@collect
                             } else {

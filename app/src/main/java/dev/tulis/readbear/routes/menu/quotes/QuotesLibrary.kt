@@ -1,5 +1,7 @@
 package dev.tulis.readbear.routes.menu.quotes
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
@@ -8,11 +10,16 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun QuotesLibrary() {
+fun QuotesLibrary(
+    padding: PaddingValues
+) {
     val quotes = arrayOf(
         "The hardest battles are often fought in silence.",
         "What we choose to remember shapes who we become.",
@@ -38,14 +45,21 @@ fun QuotesLibrary() {
 
     val state = rememberLazyListState()
 
-    LazyColumn {
+    LazyColumn(
+        modifier = Modifier.padding(padding)
+    ) {
         items(quotes.count()) { quoteIndex ->
             val quote = quotes[quoteIndex]
 
             Card(
                 modifier = Modifier.padding(5.dp).fillMaxWidth().heightIn(min = 50.dp)
             ) {
-                Text(quote, modifier = Modifier.padding(15.dp))
+                Column(
+                    modifier = Modifier.fillMaxWidth().padding(15.dp)
+                ) {
+                    Text(quote, fontStyle = FontStyle.Italic, fontWeight = FontWeight.Bold)
+                    Text("— (Book|Author):page", modifier = Modifier.align(Alignment.End))
+                }
             }
         }
     }

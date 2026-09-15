@@ -53,13 +53,12 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-
-fun BookLibraryMenu(
+fun bookLibraryMenu(
     viewModel: LibraryViewModel = hiltViewModel(),
     onOpenBook: (Long) -> Unit,
     onEditBook: (Long) -> Unit,
     onBookDetails: (Long) -> Unit,
-    suggestedPadding: PaddingValues
+    padding: PaddingValues
 ): (@Composable () -> Unit)? {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
@@ -94,12 +93,7 @@ fun BookLibraryMenu(
             )
         }
 
-        val padding = PaddingValues(
-            top = suggestedPadding.calculateTopPadding() + 3.dp,
-            start = 3.dp,
-            end= 3.dp,
-            bottom = 0.dp
-        )
+
 
         Box {
             BackgroundPattern(modifier = Modifier.matchParentSize())

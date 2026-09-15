@@ -85,4 +85,9 @@
     <string name="menu">Menu</string>
     <string name="library">Library</string>
     <string name="quotes">Quotes</string>
+    <string name="this_is_currently_disabled">This is currently disabled!</string>
+    <string name="allow_reversing_progress">Allow reversing progress</string>
+    <string name="bookmarks">Bookmarks</string>
+    <string name="read_more">Read more</string>
+    <string name="allow_reversing_progress_tooltip">If enabled, reading progress and bookmarks can move backward when navigating to an earlier page. If disabled, they will only move forward.</string>
 </resources>

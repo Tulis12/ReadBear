@@ -26,6 +26,7 @@ object Settings {
         val PDF_LAYOUT = stringPreferencesKey("pdfLayout")
         val THEME_TYPE = stringPreferencesKey("themeType")
         val THEME = stringPreferencesKey("theme")
+        val ALLOW_REVERSING_PROGRESS = stringPreferencesKey("allowReversingProgress")
     }
 
     fun getThemeMode(context: Context): Flow<ThemeType> {
@@ -68,7 +69,10 @@ object Settings {
                         ?: "SYSTEM"
                 ),
 
-                theme = preferences[SettingsKeys.THEME] ?: "Bear"
+                theme = preferences[SettingsKeys.THEME] ?: "Bear",
+                allowReversingProgress = if(preferences[SettingsKeys.ALLOW_REVERSING_PROGRESS] == null) true else {
+                    preferences[SettingsKeys.ALLOW_REVERSING_PROGRESS].toBoolean()
+                }
             )
         }
     }
@@ -81,6 +85,7 @@ object Settings {
         val timeClockEnabled: Boolean,
         val pdfReadingLayout: PdfReadingLayout,
         val themeType: ThemeType,
-        val theme: String
+        val theme: String,
+        val allowReversingProgress: Boolean
     )
 }

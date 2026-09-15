@@ -30,6 +30,7 @@ import dev.tulis.readbear.db.Settings.dataStore
 import dev.tulis.readbear.settings.composables.Models
 import dev.tulis.readbear.settings.tabs.AppInfo
 import dev.tulis.readbear.settings.tabs.Appearance
+import dev.tulis.readbear.settings.tabs.BookmarkSettings
 import dev.tulis.readbear.settings.tabs.LibrarySettings
 import dev.tulis.readbear.settings.tabs.PdfReaderSettings
 import kotlinx.coroutines.launch
@@ -58,6 +59,7 @@ fun BottomSettingsSheet(
     var pdfReadingLayout by remember { mutableStateOf(settings.pdfReadingLayout) }
     var themeMode by remember { mutableStateOf(settings.themeType) }
     var theme by remember { mutableStateOf(settings.theme) }
+    var allowReversingProgress by remember { mutableStateOf(settings.allowReversingProgress) }
 
     val onSaveRequest = {
         scope.launch {
@@ -73,6 +75,8 @@ fun BottomSettingsSheet(
 
                 settings[Settings.SettingsKeys.THEME_TYPE] = themeMode.name
                 settings[Settings.SettingsKeys.THEME] = theme
+
+                settings[Settings.SettingsKeys.ALLOW_REVERSING_PROGRESS] = allowReversingProgress.toString()
             }
         }
     }
@@ -85,7 +89,8 @@ fun BottomSettingsSheet(
         timeClockEnabled,
         pdfReadingLayout,
         themeMode,
-        theme
+        theme,
+        allowReversingProgress
     ) {
         onSaveRequest()
     }
@@ -104,6 +109,7 @@ fun BottomSettingsSheet(
         val tabs = listOf(
             stringResource(R.string.library_settings),
             stringResource(R.string.pdf),
+            stringResource(R.string.bookmarks),
             stringResource(R.string.appearance),
             stringResource(R.string.info),
         )
@@ -161,7 +167,11 @@ fun BottomSettingsSheet(
                     models = models
                 )
 
-                2 -> Appearance(
+                2 -> BookmarkSettings(allowReversingProgress) {
+                    allowReversingProgress = it
+                }
+
+                3 -> Appearance(
                     themeMode = themeMode,
                     onChangeThemeMode = {
                         themeMode = it
@@ -172,7 +182,7 @@ fun BottomSettingsSheet(
                     }
                 )
 
-                3 -> AppInfo()
+                4 -> AppInfo()
             }
         }
     }
