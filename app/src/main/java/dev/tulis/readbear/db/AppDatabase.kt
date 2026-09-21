@@ -18,6 +18,10 @@ import dev.tulis.readbear.db.pdfs.Pdf
 import dev.tulis.readbear.db.pdfs.PdfDao
 import dev.tulis.readbear.db.pdfs.bookmarks.PdfBookmark
 import dev.tulis.readbear.db.pdfs.bookmarks.PdfBookmarkDao
+import dev.tulis.readbear.db.quotes.Quote
+import dev.tulis.readbear.db.quotes.QuoteDao
+import dev.tulis.readbear.db.quotes.snippets.Snippet
+import dev.tulis.readbear.db.quotes.snippets.SnippetDao
 
 
 @Database(
@@ -25,9 +29,10 @@ import dev.tulis.readbear.db.pdfs.bookmarks.PdfBookmarkDao
         Book::class,
         Comic::class, ComicPage::class, ComicBookmark::class,
         Pdf::class, PdfBookmark::class,
-        Epub::class, EpubBookmark::class
+        Epub::class, EpubBookmark::class,
+        Quote::class, Snippet::class
     ],
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -42,4 +47,7 @@ abstract class AppDatabase : RoomDatabase() {
 
     abstract fun epubDao(): EpubDao
     abstract fun epubBookmarkDao(): EpubBookmarkDao
+
+    abstract fun quoteDao(): QuoteDao
+    abstract fun snippetDao(): SnippetDao
 }

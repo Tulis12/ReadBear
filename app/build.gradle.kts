@@ -1,9 +1,3 @@
-import groovy.json.JsonSlurper
-import java.net.HttpURLConnection
-import java.net.URI
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
@@ -133,7 +127,7 @@ dependencies {
     implementation("io.github.yuroyami:kitepdf-compose-viewer:0.9.0")
 
     implementation("androidx.appcompat:appcompat-resources:1.8.0")
-    implementation("dev.nucleusframework:pdfium:154.0.8021.0b")
+    implementation("dev.nucleusframework:pdfium:155.0.8057.0")
 
     implementation("com.positiondev.epublib:epublib-core:3.1") {
         exclude(group = "net.sf.kxml", module = "kxml2")

@@ -32,7 +32,6 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import dev.tulis.readbear.R
 import dev.tulis.readbear.settings.AlreadyReadOption
-import dev.tulis.readbear.utils.sampleImages
 
 @Composable
 fun AlreadyRead(

@@ -7,8 +7,6 @@ import dev.tulis.readbear.db.books.Book
 import dev.tulis.readbear.db.books.BookRepository
 import dev.tulis.readbear.db.comics.Comic
 import dev.tulis.readbear.db.comics.ComicDao
-import dev.tulis.readbear.db.comics.bookmarks.ComicBookmarkDao
-import dev.tulis.readbear.db.comics.pages.ComicPageDao
 import dev.tulis.readbear.db.epubs.Epub
 import dev.tulis.readbear.db.epubs.EpubDao
 import dev.tulis.readbear.db.pdfs.Pdf

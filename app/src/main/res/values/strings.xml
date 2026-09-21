@@ -90,4 +90,11 @@
     <string name="bookmarks">Bookmarks</string>
     <string name="read_more">Read more</string>
     <string name="allow_reversing_progress_tooltip">If enabled, reading progress and bookmarks can move backward when navigating to an earlier page. If disabled, they will only move forward.</string>
+    <string name="quote">Quote</string>
+    <string name="photo_snippet">Photo snippet</string>
+    <string name="text_quote">Text quote</string>
+    <string name="selection_prompt">Select the area for the snippet (hold and drag)</string>
+    <string name="add_snippet">Create snippet</string>
+    <string name="name">Name</string>
+    <string name="description">Description</string>
 </resources>
