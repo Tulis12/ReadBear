@@ -15,6 +15,8 @@ import dev.tulis.readbear.db.epubs.EpubDao
 import dev.tulis.readbear.db.epubs.bookmarks.EpubBookmarkDao
 import dev.tulis.readbear.db.pdfs.PdfDao
 import dev.tulis.readbear.db.pdfs.bookmarks.PdfBookmarkDao
+import dev.tulis.readbear.db.quotes.QuoteDao
+import dev.tulis.readbear.db.quotes.snippets.SnippetDao
 import jakarta.inject.Singleton
 import java.io.File
 
@@ -31,7 +33,9 @@ object DatabaseModule {
             context,
             AppDatabase::class.java,
             "reader.db"
-        ).build()
+        )
+            .addMigrations(MIGRATION_1_2)
+            .build()
     }
 
     @Provides
@@ -96,5 +100,19 @@ object DatabaseModule {
         database: AppDatabase
     ): EpubBookmarkDao {
         return database.epubBookmarkDao()
+    }
+
+    @Provides
+    fun provideQuoteDao(
+        database: AppDatabase
+    ): QuoteDao {
+        return database.quoteDao()
+    }
+
+    @Provides
+    fun provideSnippetDao(
+        database: AppDatabase
+    ): SnippetDao {
+        return database.snippetDao()
     }
 }

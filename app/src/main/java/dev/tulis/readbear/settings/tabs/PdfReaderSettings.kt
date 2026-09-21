@@ -49,6 +49,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
@@ -121,7 +122,7 @@ fun PdfReaderSettings(
                 Checkbox(checked = savedPdf.splitPages, onCheckedChange = {
                     savedPdf.splitPages = it
                     viewModel.updatePdf(savedPdf)
-                })
+                }, enabled = false)
 
                 Text(
                     stringResource(R.string.split_pages),
@@ -165,6 +166,7 @@ fun PdfReaderSettings(
                                 verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
+                                Text("This option is currently under development. Sorry, but it is not available.", color = Color.Red, textDecoration = TextDecoration.Underline)
                                 Text(stringResource(R.string.split_pages_tooltip), textAlign = TextAlign.Justify)
 
                                 val example1 = remember {

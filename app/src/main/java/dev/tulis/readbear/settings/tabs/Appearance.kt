@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -53,9 +52,9 @@ import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.os.LocaleListCompat
-import dev.tulis.readbear.ui.theme.AppTypography
 import dev.tulis.readbear.R
 import dev.tulis.readbear.themes
+import dev.tulis.readbear.ui.theme.AppTypography
 import dev.tulis.readbear.ui.theme.ThemeType
 import dev.tulis.readbear.utils.BackgroundPattern
 import kotlinx.coroutines.launch
