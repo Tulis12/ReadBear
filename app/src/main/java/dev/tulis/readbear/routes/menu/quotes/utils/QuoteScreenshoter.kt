@@ -1,11 +1,10 @@
-package dev.tulis.readbear.utils
+package dev.tulis.readbear.routes.menu.quotes.utils
 
 import android.graphics.Bitmap
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
@@ -34,7 +34,6 @@ import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.asAndroidBitmap
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.drawscope.Stroke
@@ -59,6 +58,7 @@ import java.util.UUID
 @Composable
 fun quoteScreenshooter(
     viewModel: QuoteViewModel = hiltViewModel(),
+    modifier: Modifier = Modifier,
     book: Book,
     progress: Int,
     content: @Composable () -> Unit
@@ -267,8 +267,11 @@ fun quoteScreenshooter(
                     Text(
                         text = stringResource(R.string.selection_prompt),
                         color = Color.White,
+                        autoSize = TextAutoSize.StepBased(),
+                        maxLines = 1,
                         modifier = Modifier
                             .padding(top = 200.dp)
+                            .fillMaxWidth(0.75f)
                             .align(Alignment.TopCenter)
                     )
                 }
@@ -360,7 +363,7 @@ fun quoteScreenshooter(
                     },
                     modifier = Modifier
                         .align(Alignment.BottomCenter)
-                        .padding(32.dp)
+                        .padding(80.dp)
                 ) {
                     Text(stringResource(R.string.save))
                 }

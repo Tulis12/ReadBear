@@ -4,7 +4,9 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
+import dev.tulis.readbear.db.relations.SnippetWithBook
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -24,13 +26,11 @@ interface SnippetDao {
     @Query("SELECT * FROM Snippet WHERE id = :id")
     fun getFlow(id: Long): Flow<Snippet>
 
+
     @Query("DELETE FROM Snippet WHERE id = :id")
     suspend fun deleteById(id: Long)
 
-//    @Query("SELECT * FROM Pdf WHERE bookId = :bookId")
-//    suspend fun getPdfByBookId(bookId: Long): Quote
-//
-//    @Transaction
-//    @Query("SELECT * FROM Pdf WHERE id = :pdfId")
-//    fun getPdfWithBookmark(pdfId: Long): Flow<PdfWithBookmark>
+    @Transaction
+    @Query("SELECT * FROM Snippet")
+    fun getAllFlow(): Flow<List<SnippetWithBook>>
 }

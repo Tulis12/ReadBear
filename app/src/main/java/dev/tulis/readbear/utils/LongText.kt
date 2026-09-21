@@ -82,3 +82,7 @@ fun LongText(
         style = style
     )
 }
+
+fun cutText(text: String, length: Int = 25): String {
+    return text.take(length) + if (text.length > length) "(...)" else ""
+}
