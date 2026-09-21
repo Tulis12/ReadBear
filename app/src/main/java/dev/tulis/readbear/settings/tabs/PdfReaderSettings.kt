@@ -122,7 +122,7 @@ fun PdfReaderSettings(
                 Checkbox(checked = savedPdf.splitPages, onCheckedChange = {
                     savedPdf.splitPages = it
                     viewModel.updatePdf(savedPdf)
-                }, enabled = false)
+                })
 
                 Text(
                     stringResource(R.string.split_pages),
@@ -166,7 +166,6 @@ fun PdfReaderSettings(
                                 verticalArrangement = Arrangement.spacedBy(5.dp, Alignment.CenterVertically),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
-                                Text("This option is currently under development. Sorry, but it is not available.", color = Color.Red, textDecoration = TextDecoration.Underline)
                                 Text(stringResource(R.string.split_pages_tooltip), textAlign = TextAlign.Justify)
 
                                 val example1 = remember {

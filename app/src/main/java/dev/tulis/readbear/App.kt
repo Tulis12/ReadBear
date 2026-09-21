@@ -85,6 +85,8 @@ fun App(
     viewModel: AppViewModel = hiltViewModel(),
     navController: NavHostController
 ) {
+
+
     val scope = rememberCoroutineScope()
 
     val renderEpubCoverCopy = renderEpubCover

@@ -14,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuBook
 import androidx.compose.material.icons.filled.FormatQuote
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.PhotoSizeSelectLarge
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -43,6 +44,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import dev.tulis.readbear.R
 import dev.tulis.readbear.routes.menu.library.bookLibraryMenu
 import dev.tulis.readbear.routes.menu.quotes.QuotesLibrary
+import dev.tulis.readbear.routes.menu.quotes.SnippetsLibrary
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -124,13 +126,21 @@ fun Menu(
                         targetRoute = MenuRoute.BOOK_LIBRARY,
                     )
 
+//                    NavigationRoute(
+//                        Icons.Default.FormatQuote,
+//                        name = stringResource(R.string.quotes),
+//                        route = route,
+//                        onChangeRoute = ::changeRoute,
+//                        targetRoute = MenuRoute.QUOTES,
+//                        disabled = true
+//                    )
+
                     NavigationRoute(
-                        Icons.Default.FormatQuote,
-                        name = stringResource(R.string.quotes),
+                        Icons.Default.PhotoSizeSelectLarge,
+                        name = stringResource(R.string.snippets),
                         route = route,
                         onChangeRoute = ::changeRoute,
-                        targetRoute = MenuRoute.QUOTES,
-                        disabled = true
+                        targetRoute = MenuRoute.SNIPPETS,
                     )
                 }
             }
@@ -138,24 +148,8 @@ fun Menu(
     ) {
         Scaffold(
             topBar = {
-                val topBarDefaults = TopAppBarDefaults.topAppBarColors()
-
                 Box {
-                    Box(modifier = Modifier
-                        .matchParentSize()
-                        .background( // TODO() doesn't this look awkward?
-                            topBarDefaults.containerColor
-                        )) {
-//                    BackgroundPattern(Modifier.matchParentSize(), color = MaterialTheme.colorScheme.surfaceVariant, rotation = -30f)
-                    }
-
-//                HorizontalDivider(modifier = Modifier.align(Alignment.BottomEnd), thickness = 3.dp)
-
-
                     TopAppBar (
-                        colors = topBarDefaults.copy(
-                            containerColor = Color.Transparent
-                        ),
                         navigationIcon = {
                             IconButton(onClick = {
                                 scope.launch { drawerState.open() }
@@ -214,6 +208,11 @@ fun Menu(
                         actions = null
                         QuotesLibrary(padding)
                     }
+
+                    MenuRoute.SNIPPETS -> {
+                        actions = null
+                        SnippetsLibrary(padding = padding)
+                    }
                 }
             }
         }
@@ -222,5 +221,6 @@ fun Menu(
 
 enum class MenuRoute {
     BOOK_LIBRARY,
-    QUOTES
+    QUOTES,
+    SNIPPETS
 }
