@@ -102,7 +102,7 @@ fun PdfReader(
     val bumpTime: (Book) -> Unit = { book ->
         val currentTime = System.currentTimeMillis()
 
-        if(currentTime - lastReadingTime > 600 * 1000) lastReadingTime = System.currentTimeMillis()
+        if (currentTime - lastReadingTime > 600 * 1000) lastReadingTime = System.currentTimeMillis()
         book.readingTime += currentTime - lastReadingTime
         viewModel.updateBookProgress(book)
 
@@ -120,7 +120,7 @@ fun PdfReader(
         controller.systemBarsBehavior =
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 
-        if(!topBarVisible) {
+        if (!topBarVisible) {
             controller.hide(WindowInsetsCompat.Type.navigationBars())
         } else {
             controller.show(WindowInsetsCompat.Type.navigationBars())
@@ -159,7 +159,7 @@ fun PdfReader(
 
         var count = reader.pageCount
         val splitPages = pdfWithBookmark.pdf.splitPages
-        val readingLayout = if(splitPages) {
+        val readingLayout = if (splitPages) {
             PdfReadingLayout.PAGED
         } else {
             settings.pdfReadingLayout
@@ -167,7 +167,7 @@ fun PdfReader(
 
         val screenshot = quoteScreenshooter(
             book = book,
-            progress = 1
+            progress = pdfWithBookmark.bookmark.page
         ) {
             Box(
                 modifier = Modifier.zoomable(zoomState = rememberZoomState(), onTap = {
@@ -539,7 +539,7 @@ fun PdfReader(
             )
         }
 
-        if(showSheet) {
+        if (showSheet) {
             BottomSettingsSheet(
                 defaultTabOpen = 1,
                 sheetState = sheetState,
