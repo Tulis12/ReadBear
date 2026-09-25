@@ -53,8 +53,8 @@ android {
         applicationId = "dev.tulis.readbear"
         minSdk = 24
         targetSdk = 37
-        versionCode = 18
-        versionName = "v0.7.2"
+        versionCode = 19
+        versionName = "v0.7.3"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
