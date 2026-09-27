@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
@@ -29,6 +30,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,7 +55,17 @@ import dev.tulis.readbear.utils.clickableWithRipple
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
+import java.util.Locale
+import java.util.Locale.getDefault
 import java.util.UUID
+import androidx.compose.ui.platform.LocalLocale
+import dev.tulis.readbear.db.books.BookType
+import dev.tulis.readbear.db.comics.Comic
+import dev.tulis.readbear.db.epubs.Epub
+import dev.tulis.readbear.db.pdfs.Pdf
+import dev.tulis.readbear.routes.info.InfoRow
+import net.engawapg.lib.zoomable.rememberZoomState
+import net.engawapg.lib.zoomable.zoomable
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -88,6 +100,7 @@ fun EditBookDetails(
     var changedCover = false
     var chosenTitle: String? by remember { mutableStateOf(null) }
     var chosenAuthor: String? by remember { mutableStateOf(null) }
+    var chosenSummary: String? by remember { mutableStateOf(null) }
 
     var cover by remember {
         mutableStateOf(
@@ -149,13 +162,14 @@ fun EditBookDetails(
 
                     IconButton(onClick = {
                         if(changedCover) {
+                            val coverFilename = "cover_${UUID.randomUUID()}.${cover.extension}"
+                            val oldCover = context.filesDir
+                                .resolve(book.path)
+                                .resolve(book.cover)
+
+                            book.cover = coverFilename
+
                             scope.launch(Dispatchers.IO) {
-                                val oldCover = context.filesDir
-                                    .resolve(book.path)
-                                    .resolve(book.cover)
-
-                                val coverFilename = "cover_${UUID.randomUUID()}.${cover.extension}"
-
                                 val targetCover = context.filesDir
                                     .resolve(book.path)
                                     .resolve(coverFilename)
@@ -168,10 +182,18 @@ fun EditBookDetails(
                         }
 
                         chosenTitle?.let {
-                            book.title = chosenTitle!!
-                            viewModel.updateBook(book)
+                            book.title = it
                         }
 
+                        chosenAuthor?.let {
+                            book.author = it
+                        }
+
+                        chosenSummary?.let {
+                            book.summary = it
+                        }
+
+                        viewModel.updateBook(book)
                         onPopBack()
                     }) {
                         Icon(Icons.Default.Save, contentDescription = stringResource(R.string.save))
@@ -226,28 +248,115 @@ fun EditBookDetails(
                 }
             }
 
-            OutlinedTextField(
-                value = chosenTitle ?: book.title,
-                onValueChange = {
-                    changed = true
-                    chosenTitle = it
-                },
-                label = {
-                    Text(stringResource(R.string.title))
-                },
-                singleLine = true
-            )
+            Column(
+                modifier = Modifier.fillMaxWidth(0.75f),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(5.dp)
+            ) {
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = chosenTitle ?: book.title,
+                    onValueChange = {
+                        changed = true
+                        chosenTitle = it
+                    },
+                    label = {
+                        Text(stringResource(R.string.title))
+                    },
+                    singleLine = true
+                )
 
-            OutlinedTextField(
-                value = "autor",
-                onValueChange = {
-                    changed = true
-                },
-                label = {
-                    Text(stringResource(R.string.author))
-                },
-                singleLine = true
-            )
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = chosenAuthor ?: (book.author ?: ""),
+                    onValueChange = {
+                        changed = true
+                        chosenAuthor = it
+                    },
+                    label = {
+                        Text(stringResource(R.string.author))
+                    },
+                    singleLine = true
+                )
+
+                OutlinedTextField(
+                    modifier = Modifier.fillMaxWidth(),
+                    value = chosenSummary ?: (book.summary ?: ""),
+                    onValueChange = {
+                        changed = true
+                        chosenSummary = it
+                    },
+                    label = {
+                        Text(stringResource(R.string.summary))
+                    }
+                )
+
+                when(book.type) {
+                    BookType.Epub -> {
+                        var epub: Epub? by remember { mutableStateOf(null) }
+                        LaunchedEffect(Unit) {
+                            epub = viewModel.getEpubByBookId(bookId)
+                        }
+
+                        val savedEpub = epub
+
+                        if(savedEpub != null) {
+//                            InfoRow(
+//                                stringResource(R.string.keywords),
+//                                epub. ?: stringResource(R.string.unknown)
+//                            )
+                        }
+                    }
+
+                    BookType.Pdf -> {
+                        var pdf: Pdf? by remember { mutableStateOf(null) }
+                        LaunchedEffect(Unit) {
+                            pdf = viewModel.getPdfByBookId(bookId)
+                        }
+
+                        val savedPdf = pdf
+
+                        if(savedPdf != null) {
+                            InfoRow(
+                                stringResource(R.string.keywords),
+                                savedPdf.keywords ?: stringResource(R.string.unknown)
+                            )
+                        }
+                    }
+
+                    BookType.Comic -> {
+                        var comic: Comic? by remember { mutableStateOf(null) }
+                        LaunchedEffect(Unit) {
+                            comic = viewModel.getComicByBookId(bookId)
+                        }
+
+                        val savedComic = comic
+
+                        if(savedComic != null) {
+                            InfoRow(
+                                stringResource(R.string.series),
+                                savedComic.series ?: stringResource(R.string.unknown)
+                            )
+
+                            InfoRow(
+                                stringResource(R.string.series_status),
+                                savedComic.seriesStatus ?: stringResource(R.string.unknown)
+                            )
+
+                            InfoRow(
+                                stringResource(R.string.is_manga),
+                                if(savedComic.manga != null && savedComic.manga == true) {
+                                    stringResource(R.string.yes)
+                                } else if(savedComic.manga != null) {
+                                    stringResource(R.string.no)
+                                } else {
+                                    stringResource(R.string.unknown)
+                                }
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 }

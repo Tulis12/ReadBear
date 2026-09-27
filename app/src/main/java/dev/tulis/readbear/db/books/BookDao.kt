@@ -29,7 +29,7 @@ interface BookDao {
     suspend fun get(id: Long): Book
 
     @Query("SELECT * FROM Book WHERE id = :id")
-    fun getBookFlow(id: Long): Flow<Book?>
+    fun getBookFlow(id: Long): Flow<Book>
 
     @Query("DELETE FROM Book WHERE id = :id")
     suspend fun deleteById(id: Long)

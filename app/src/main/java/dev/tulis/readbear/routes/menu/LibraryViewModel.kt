@@ -75,6 +75,22 @@ class LibraryViewModel @Inject constructor (
         )
 
 
+    fun getBookById(bookId: Long): Flow<Book?> {
+        return bookRepository.getBookFlow(bookId)
+    }
+
+    suspend fun getPdfByBookId(bookId: Long): Pdf {
+        return pdfDao.getPdfByBookId(bookId)
+    }
+
+    suspend fun getEpubByBookId(bookId: Long): Epub {
+        return epubDao.getEpubByBookId(bookId)
+    }
+
+    suspend fun getComicByBookId(bookId: Long): Comic {
+        return comicDao.getComicByBookId(bookId)
+    }
+
     suspend fun getBook(bookId: Long): Book {
         return bookRepository.getBook(bookId)
     }

@@ -36,7 +36,7 @@ class BookRepository @Inject constructor(
         return dao.get(bookId)
     }
 
-    fun getBookFlow(bookId: Long): Flow<Book?> {
+    fun getBookFlow(bookId: Long): Flow<Book> {
         return dao.getBookFlow(bookId)
     }
 

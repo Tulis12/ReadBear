@@ -36,7 +36,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLocale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -50,6 +49,7 @@ import coil3.request.ImageRequest
 import dev.tulis.readbear.R
 import dev.tulis.readbear.db.books.BookType
 import dev.tulis.readbear.db.comics.Comic
+import dev.tulis.readbear.db.epubs.Epub
 import dev.tulis.readbear.db.pdfs.Pdf
 import dev.tulis.readbear.utils.LongText
 import dev.tulis.readbear.utils.readingProgress
@@ -179,15 +179,67 @@ fun BookDetails(
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 InfoRow(
+                    stringResource(R.string.book_format),
+                    when(book.type) {
+                        BookType.Comic -> {
+                            "CBZ"
+                        }
+
+                        BookType.Pdf -> {
+                            "PDF"
+                        }
+
+                        BookType.Epub -> {
+                            "EPUB"
+                        }
+                    }
+                )
+
+                InfoRow(
                     stringResource(R.string.book_type),
-                    book.type.toString().lowercase(LocalLocale.current.platformLocale)
-                        .replaceFirstChar { if (it.isLowerCase()) it.titlecase(
-                            LocalLocale.current.platformLocale
-                        ) else it.toString() }
+                    when(book.type) {
+                        BookType.Comic -> {
+                            var comic: Comic? by remember { mutableStateOf(null) }
+                            LaunchedEffect(Unit) {
+                                comic = viewModel.getComicByBookId(bookId)
+                            }
+
+                            val savedComic = comic
+
+                            if(savedComic != null && savedComic.manga == true) {
+                                stringResource(R.string.manga)
+                            }
+
+                            stringResource(R.string.comic)
+                        }
+
+                        BookType.Pdf -> {
+                            stringResource(R.string.pdf)
+                        }
+
+                        BookType.Epub -> {
+                            stringResource(R.string.epub)
+                        }
+                    }
                 )
 
                 when(book.type) {
-                    BookType.Epub -> TODO()
+                    BookType.Epub -> {
+                        var epub: Epub? by remember { mutableStateOf(null) }
+                        LaunchedEffect(Unit) {
+                            epub = viewModel.getEpubByBookId(bookId)
+                        }
+
+                        val savedEpub = epub
+
+                        if(savedEpub != null) {
+//                            InfoRow(
+//                                stringResource(R.string.keywords),
+//                                epub. ?: stringResource(R.string.unknown)
+//                            )
+                        }
+                    }
+
                     BookType.Pdf -> {
                         var pdf: Pdf? by remember { mutableStateOf(null) }
                         LaunchedEffect(Unit) {
@@ -203,6 +255,7 @@ fun BookDetails(
                             )
                         }
                     }
+
                     BookType.Comic -> {
                         var comic: Comic? by remember { mutableStateOf(null) }
                         LaunchedEffect(Unit) {
