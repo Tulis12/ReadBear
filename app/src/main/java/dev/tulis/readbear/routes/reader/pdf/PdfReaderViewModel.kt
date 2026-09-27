@@ -37,6 +37,10 @@ class PdfReaderViewModel @Inject constructor (
         return bookRepository.getBook(bookId)
     }
 
+    fun getBookFlow(bookId: Long): Flow<Book> {
+        return bookRepository.getBookFlow(bookId)
+    }
+
     fun getPdfWithBookmark(pdfId: Long): Flow<PdfWithBookmark> {
         return pdfDao.getPdfWithBookmark(pdfId)
     }

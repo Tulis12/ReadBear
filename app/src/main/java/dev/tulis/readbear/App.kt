@@ -181,8 +181,6 @@ fun App(
             }
         }
     }
-
-    ScreenshotCropExample()
 }
 
 @Composable

@@ -98,4 +98,12 @@
     <string name="name">Name</string>
     <string name="description">Description</string>
     <string name="snippets">Snippets</string>
+    <string name="there_is_nothing_here">There is nothing here… Yet!</string>
+    <string name="add_snippet_during_reading">You can add a snippet when reading using the photo symbol.</string>
+    <string name="add_a_book">You can add a book using the \"+\" symbol.</string>
+    <string name="summary">Summary</string>
+    <string name="epub">EPUB</string>
+    <string name="comic">Comic</string>
+    <string name="manga">Manga</string>
+    <string name="book_format">Book format</string>
 </resources>

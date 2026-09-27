@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="pages/assets/readbear_logo.png" width="300">
+<img src="pages/assets/readbear_logo.png" width="300">
 </p>
 
 # ReadBear
@@ -9,9 +9,9 @@
 </p>
 
 <a href="https://f-droid.org/packages/dev.tulis.readbear">
-    <img src="https://f-droid.org/badge/get-it-on.png"
-    alt="Pobierz z F-Droid"
-    height="80">
+<img src="https://f-droid.org/badge/get-it-on.png"
+alt="Pobierz z F-Droid"
+height="80">
 </a>
 
 ## A cute and chill CBZ, PDF, and hopefully EPUB reader that's ridiculously configurable - for free!
