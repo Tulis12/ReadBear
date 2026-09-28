@@ -1,35 +1,27 @@
 package dev.tulis.readbear
 
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.awaitEachGesture
-import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.AnnotatedString
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.withLink
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
-import dev.nucleusframework.pdfium.PdfPage
-import dev.nucleusframework.pdfium.rememberPdfReaderState
 import dev.tulis.readbear.db.books.Book
 import dev.tulis.readbear.db.books.BookType
 import dev.tulis.readbear.routes.Route
@@ -40,58 +32,46 @@ import dev.tulis.readbear.routes.reader.comic.WebtoonReader
 import dev.tulis.readbear.routes.reader.epub.EpubReader
 import dev.tulis.readbear.routes.reader.epub.createEpubCover
 import dev.tulis.readbear.routes.reader.pdf.PdfReader
-import io.github.yuroyami.kitepdf.PdfDocument
-import io.github.yuroyami.kitepdf.compose.KiteDocLayout
-import io.github.yuroyami.kitepdf.compose.KiteDocView
-import io.github.yuroyami.kitepdf.compose.KiteRenderSpec
-import io.github.yuroyami.kitepdf.compose.KiteSelectionMenu
-import io.github.yuroyami.kitepdf.compose.KiteSelectionMenuItem
-import io.github.yuroyami.kitepdf.compose.KiteZoomSpec
-import io.github.yuroyami.kitepdf.compose.rememberKiteDocViewState
 import kotlinx.coroutines.launch
 import java.io.FileInputStream
 import java.util.UUID
-
-import android.graphics.Bitmap
-import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.detectDragGestures
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.*
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.graphics.*
-import androidx.compose.ui.graphics.asAndroidBitmap
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.graphics.drawscope.Stroke
-import androidx.compose.ui.graphics.layer.drawLayer
-import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.IntSize
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import java.io.File
 
 var renderEpubCover: Book? by mutableStateOf(null)
 
 @Composable
 fun App(
     viewModel: AppViewModel = hiltViewModel(),
-    navController: NavHostController
+    navController: NavHostController,
+    onReady: () -> Unit
 ) {
-
-
     val scope = rememberCoroutineScope()
 
     val renderEpubCoverCopy = renderEpubCover
     if(renderEpubCoverCopy != null) {
         RenderEpubCover(renderEpubCoverCopy)
+    }
+
+    Box(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Text(
+            buildAnnotatedString {
+                append("You 100% should not see this. But if you do, please for the love of god create an issue: ")
+
+                withLink(
+                    LinkAnnotation.Url("https://github.com/Tulis12/ReadBear")
+                ) {
+                    append("GitHub")
+                }
+
+                append(" and attach a screenshot. Or not. Just please tell me. I love you. You are the best human being. You will succeed in life.")
+            },
+            modifier = Modifier
+                .align(Alignment.Center)
+                .fillMaxWidth(0.7f),
+            textAlign = TextAlign.Justify,
+            color = Color.White
+        )
     }
 
     NavHost(
@@ -131,7 +111,8 @@ fun App(
                 },
                 onBookDetails = {
                     navController.navigate(Route.BookDetails(it))
-                }
+                },
+                onReady = onReady
             )
         }
 
@@ -215,9 +196,4 @@ fun RenderEpubCover(
             viewModel.updateBookCover(book.id, cover)
         })
     }
-}
-
-@Composable
-fun ScreenshotCropExample() {
-
 }

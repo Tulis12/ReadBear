@@ -52,6 +52,7 @@ fun bookLibraryMenu(
     onOpenBook: (Long) -> Unit,
     onEditBook: (Long) -> Unit,
     onBookDetails: (Long) -> Unit,
+    onReady: () -> Unit,
     padding: PaddingValues
 ): (@Composable () -> Unit)? {
     val context = LocalContext.current
@@ -108,7 +109,8 @@ fun bookLibraryMenu(
             },
             onOpenBook = {
                 onOpenBook(it)
-            }
+            },
+            onReady = onReady
         )
     }
 

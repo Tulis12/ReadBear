@@ -50,6 +50,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import dev.tulis.readbear.R
 import dev.tulis.readbear.db.Settings
+import dev.tulis.readbear.db.books.Book
 import dev.tulis.readbear.routes.menu.LibraryViewModel
 import dev.tulis.readbear.settings.AlreadyReadOption
 import dev.tulis.readbear.utils.LongText
@@ -66,11 +67,15 @@ fun BookLibrary(
     onRemoveSelectedItem: (Long) -> Unit,
     selectionMode: Boolean,
     onChangeSelectionMode: (Boolean) -> Unit,
-    onOpenBook: (Long) -> Unit
+    onOpenBook: (Long) -> Unit,
+    onReady: () -> Unit
 ) {
     Box {
-        val books by viewModel.books.collectAsState()
+        val booksFlow: List<Book>? by viewModel.books.collectAsState(null)
         val context = LocalContext.current
+
+        val books = booksFlow ?: return@Box
+        onReady()
 
         if(books.count() == 0) {
             Box(

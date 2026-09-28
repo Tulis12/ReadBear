@@ -54,6 +54,7 @@ fun Menu(
     onOpenBook: (Long) -> Unit,
     onEditBook: (Long) -> Unit,
     onBookDetails: (Long) -> Unit,
+    onReady: () -> Unit
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -200,7 +201,8 @@ fun Menu(
                             onOpenBook = onOpenBook,
                             onEditBook = onEditBook,
                             onBookDetails = onBookDetails,
-                            padding = padding
+                            padding = padding,
+                            onReady = onReady
                         )
                     }
 

@@ -63,6 +63,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
+
     buildFeatures {
         compose = true
     }
@@ -137,4 +138,6 @@ dependencies {
     implementation("org.jsoup:jsoup:1.21.2")
 
     implementation("net.engawapg.lib:zoomable:2.13.0")
+
+    implementation("androidx.core:core-splashscreen:1.2.0")
 }
