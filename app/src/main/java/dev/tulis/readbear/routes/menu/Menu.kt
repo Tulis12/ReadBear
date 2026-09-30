@@ -1,7 +1,6 @@
 package dev.tulis.readbear.routes.menu
 
 import androidx.compose.animation.Crossfade
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.MenuBook
-import androidx.compose.material.icons.filled.FormatQuote
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.PhotoSizeSelectLarge
 import androidx.compose.material3.DrawerValue
@@ -27,7 +25,6 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -36,13 +33,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import dev.tulis.readbear.R
-import dev.tulis.readbear.routes.menu.library.bookLibraryMenu
+import dev.tulis.readbear.routes.menu.library.BookLibraryMenu
 import dev.tulis.readbear.routes.menu.quotes.QuotesLibrary
 import dev.tulis.readbear.routes.menu.quotes.SnippetsLibrary
 import kotlinx.coroutines.launch
@@ -50,7 +45,6 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Menu(
-    viewModel: LibraryViewModel = hiltViewModel(),
     onOpenBook: (Long) -> Unit,
     onEditBook: (Long) -> Unit,
     onBookDetails: (Long) -> Unit,
@@ -61,7 +55,7 @@ fun Menu(
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
-    var actions: (@Composable () -> Unit)? by remember { mutableStateOf(null) }
+    val menuState = rememberMenuState(stringResource(R.string.base_app_name))
     var route by remember { mutableStateOf(MenuRoute.BOOK_LIBRARY) }
 
     fun changeRoute(newRoute: MenuRoute) {
@@ -75,8 +69,6 @@ fun Menu(
     fun NavigationRoute(
         imageVector: ImageVector,
         name: String,
-        route: MenuRoute,
-        onChangeRoute: (MenuRoute) -> Unit,
         targetRoute: MenuRoute,
         disabled: Boolean = false
     ) {
@@ -98,7 +90,7 @@ fun Menu(
             selected = route == targetRoute,
             onClick = {
                 if(!disabled) {
-                    onChangeRoute(targetRoute)
+                    changeRoute(targetRoute)
                 } else {
                     scope.launch {
                         drawerState.close()
@@ -122,25 +114,12 @@ fun Menu(
                     NavigationRoute(
                         Icons.AutoMirrored.Filled.MenuBook,
                         name = stringResource(R.string.library),
-                        route = route,
-                        onChangeRoute = ::changeRoute,
                         targetRoute = MenuRoute.BOOK_LIBRARY,
                     )
-
-//                    NavigationRoute(
-//                        Icons.Default.FormatQuote,
-//                        name = stringResource(R.string.quotes),
-//                        route = route,
-//                        onChangeRoute = ::changeRoute,
-//                        targetRoute = MenuRoute.QUOTES,
-//                        disabled = true
-//                    )
 
                     NavigationRoute(
                         Icons.Default.PhotoSizeSelectLarge,
                         name = stringResource(R.string.snippets),
-                        route = route,
-                        onChangeRoute = ::changeRoute,
                         targetRoute = MenuRoute.SNIPPETS,
                     )
                 }
@@ -149,34 +128,42 @@ fun Menu(
     ) {
         Scaffold(
             topBar = {
-                Box {
-                    TopAppBar (
-                        navigationIcon = {
-                            IconButton(onClick = {
-                                scope.launch { drawerState.open() }
-                            }) {
-                                Icon(Icons.Default.Menu, stringResource(R.string.menu))
-                            }
-                        },
-                        title = {
-                            Row {
-                                Text(stringResource(R.string.base_app_name))
-                            }
-                        },
-                        actions = {
-                            Crossfade(
-                                targetState = actions,
-                                label = "menu"
-                            ) { actions ->
-                                if(actions != null) {
-                                    Row {
-                                        actions()
-                                    }
+                TopAppBar (
+                    navigationIcon = {
+                        Crossfade(
+                            targetState = menuState.navigation,
+                            label = "navigation"
+                        ) { navigation ->
+                            navigation?.invoke() ?: run {
+                                IconButton(onClick = {
+                                    scope.launch { drawerState.open() }
+                                }) {
+                                    Icon(Icons.Default.Menu, stringResource(R.string.menu))
                                 }
                             }
                         }
-                    )
-                }
+                    },
+                    title = {
+                        Crossfade(
+                            targetState = menuState.title,
+                            label = "title"
+                        ) { title ->
+                            Text(title)
+                        }
+                    },
+                    actions = {
+                        Crossfade(
+                            targetState = menuState.actions,
+                            label = "menu"
+                        ) { actions ->
+                            actions?.let {
+                                Row {
+                                    it()
+                                }
+                            }
+                        }
+                    }
+                )
             },
             modifier = Modifier
                 .fillMaxSize(),
@@ -197,7 +184,10 @@ fun Menu(
 
                 when (targetRoute) {
                     MenuRoute.BOOK_LIBRARY -> {
-                        actions = bookLibraryMenu(
+                        menuState.resetNavigation()
+
+                        BookLibraryMenu(
+                            menuState = menuState,
                             onOpenBook = onOpenBook,
                             onEditBook = onEditBook,
                             onBookDetails = onBookDetails,
@@ -209,13 +199,19 @@ fun Menu(
                     }
 
                     MenuRoute.QUOTES -> {
-                        actions = null
+                        menuState.resetNavigation()
+                        menuState.resetActions()
+
                         QuotesLibrary(padding)
                     }
 
                     MenuRoute.SNIPPETS -> {
-                        actions = null
-                        SnippetsLibrary(padding = padding)
+                        menuState.resetActions()
+
+                        SnippetsLibrary(
+                            menuState = menuState,
+                            padding = padding
+                        )
                     }
                 }
             }

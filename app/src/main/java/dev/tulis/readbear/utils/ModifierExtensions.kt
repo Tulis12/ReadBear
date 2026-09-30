@@ -21,3 +21,18 @@ fun Modifier.clickableWithRipple(
         )
     }
 }
+
+fun Modifier.clickableWithoutRipple(
+    onClick: () -> Unit
+): Modifier {
+    return this.composed {
+        this.clickable(
+            enabled = true,
+            onClickLabel = null,
+            role = null,
+            onClick = onClick,
+            interactionSource = remember { MutableInteractionSource() },
+            indication = null
+        )
+    }
+}

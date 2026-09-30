@@ -98,7 +98,7 @@ fun PdfReader(
     var showSheet by remember { mutableStateOf(false) }
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
-    var topBarVisible by remember { mutableStateOf(false) }
+    var topBarVisible by remember { mutableStateOf(true) }
     NavigationBars(topBarVisible)
 
     val pdfWithBookmark = flowComicWithBookmark ?: return
@@ -122,143 +122,106 @@ fun PdfReader(
         settings.pdfReadingLayout
     }
 
-    val pdfState = PdfState(
-        book = book,
-        pdfWithBookmark = pdfWithBookmark,
-        readingLayout = readingLayout,
-        count = reader.pageCount,
-        topBarVisible = topBarVisible,
-        splitPages = splitPages,
-        finished = finished,
-        onChangeFinished = {
-            finished = it
-        },
-        onChangeTopBarVisible = {
-            topBarVisible = it
-        }
-    )
+    Box {
+        val pdfState = PdfState(
+            book = book,
+            pdfWithBookmark = pdfWithBookmark,
+            readingLayout = readingLayout,
+            count = reader.pageCount,
+            topBarVisible = topBarVisible,
+            splitPages = splitPages,
+            finished = finished,
+            onChangeFinished = {
+                finished = it
+            },
+            onChangeTopBarVisible = {
+                topBarVisible = it
+            }
+        )
 
-    var currentPage by remember { mutableIntStateOf(0) }
+        var currentPage by remember { mutableIntStateOf(0) }
 
-    val screenshot = quoteScreenshooter(
-        book = book,
-        progress = currentPage
-    ) {
-        Box(
-            modifier = Modifier.zoomable(zoomState = rememberZoomState(), onTap = {
-                topBarVisible = !topBarVisible
-            })
+        val screenshot = quoteScreenshooter(
+            book = book,
+            progress = currentPage
         ) {
-            if (readingLayout == PdfReadingLayout.PAGED || readingLayout == PdfReadingLayout.SPREAD) {
-                PagerReader(settings, reader, pdfState)
-                return@Box
-            }
+            Box(
+                modifier = Modifier.zoomable(zoomState = rememberZoomState(), onTap = {
+                    topBarVisible = !topBarVisible
+                })
+            ) {
+                if (readingLayout == PdfReadingLayout.PAGED || readingLayout == PdfReadingLayout.SPREAD) {
+                    PagerReader(settings, reader, pdfState)
+                    return@Box
+                }
 
-            LazyReader(settings, reader, pdfState)
+                LazyReader(settings, reader, pdfState)
+            }
         }
-    }
 
-    AnimatedVisibility(
-        visible = topBarVisible,
-        enter = slideInVertically(
-            initialOffsetY = { -it }
-        ) + fadeIn(),
-        exit = slideOutVertically(
-            targetOffsetY = { -it }
-        ) + fadeOut()
-    ) {
-        TopAppBar(
-            navigationIcon = {
-                IconButton(onClick = returnToMenu) {
-                    Icon(Icons.AutoMirrored.Default.ArrowBack, stringResource(R.string.go_back))
-                }
-            },
-            title = {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    LongText(book.title, modifier = Modifier.padding(4.dp))
-                }
-            },
-            actions = {
-                IconButton(onClick = {
-                    showSheet = true
-
-                    scope.launch {
-                        for(i in 0..5) awaitFrame()
-                        sheetState.show()
+        AnimatedVisibility(
+            visible = topBarVisible,
+            enter = slideInVertically(
+                initialOffsetY = { -it }
+            ) + fadeIn(),
+            exit = slideOutVertically(
+                targetOffsetY = { -it }
+            ) + fadeOut()
+        ) {
+            TopAppBar(
+                navigationIcon = {
+                    IconButton(onClick = returnToMenu) {
+                        Icon(Icons.AutoMirrored.Default.ArrowBack, stringResource(R.string.go_back))
                     }
-                }) {
-                    Icon(Icons.Default.Settings, stringResource(R.string.settings))
-                }
-            }
-        )
-    }
-
-    AnimatedVisibility(
-        visible = topBarVisible,
-        enter = slideInVertically(
-            initialOffsetY = { -it }
-        ) + fadeIn(),
-        exit = slideOutVertically(
-            targetOffsetY = { -it }
-        ) + fadeOut()
-    ) {
-        TopAppBar(
-            navigationIcon = {
-                IconButton(onClick = returnToMenu) {
-                    Icon(Icons.AutoMirrored.Default.ArrowBack, stringResource(R.string.go_back))
-                }
-            },
-            title = {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    LongText(book.title, modifier = Modifier.padding(4.dp))
-                }
-            },
-            actions = {
-                IconButton(onClick = {
-                    showSheet = true
-
-                    scope.launch {
-                        for(i in 0..5) awaitFrame()
-                        sheetState.show()
+                },
+                title = {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterHorizontally),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        LongText(book.title, modifier = Modifier.padding(4.dp))
                     }
-                }) {
-                    Icon(
-                        Icons.Default.Settings,
-                        stringResource(R.string.settings)
-                    )
-                }
+                },
+                actions = {
+                    IconButton(onClick = {
+                        showSheet = true
 
-                IconButton(onClick = {
-                    screenshot()
-                }) {
-                    Icon(
-                        Icons.Default.PhotoSizeSelectLarge,
-                        stringResource(R.string.quote)
-                    )
-                }
-            }
-        )
-    }
+                        scope.launch {
+                            repeat(5) { awaitFrame() }
+                            sheetState.show()
+                        }
+                    }) {
+                        Icon(
+                            Icons.Default.Settings,
+                            stringResource(R.string.settings)
+                        )
+                    }
 
-    if(showSheet) {
-        BottomSettingsSheet(
-            defaultTabOpen = 1,
-            sheetState = sheetState,
-            additionalContext = PdfSettingsContext(pdfId = pdfId),
-            onHide = {
-                scope.launch {
-                    sheetState.hide()
-                    showSheet = false
+                    IconButton(onClick = {
+                        screenshot()
+                    }) {
+                        Icon(
+                            Icons.Default.PhotoSizeSelectLarge,
+                            stringResource(R.string.quote)
+                        )
+                    }
                 }
-            }
-        )
+            )
+        }
+
+        if(showSheet) {
+            BottomSettingsSheet(
+                defaultTabOpen = 1,
+                sheetState = sheetState,
+                additionalContext = PdfSettingsContext(pdfId = pdfId),
+                onHide = {
+                    scope.launch {
+                        sheetState.hide()
+                        showSheet = false
+                    }
+                }
+            )
+        }
     }
 }

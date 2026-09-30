@@ -106,4 +106,9 @@
     <string name="comic">Comic</string>
     <string name="manga">Manga</string>
     <string name="book_format">Book format</string>
+    <string name="page_attrib">(p. %1d)</string>
+    <string name="close">Close</string>
+    <string name="save_as_file">Save as file</string>
+    <string name="show_source">Show source</string>
+    <string name="snippet">Snippet</string>
 </resources>

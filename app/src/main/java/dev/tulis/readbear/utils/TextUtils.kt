@@ -21,6 +21,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import dev.tulis.readbear.db.Settings
 import dev.tulis.readbear.settings.TooLongTextOption
+import java.text.Normalizer
+import java.util.Locale
 
 @Composable
 fun LongText(
@@ -83,6 +85,24 @@ fun LongText(
     )
 }
 
-fun cutText(text: String, length: Int = 25): String {
-    return text.take(length) + if (text.length > length) "(...)" else ""
+fun shortTitle(title: String): String {
+    return title.substringBefore(":").substringBefore("(").trim()
+}
+
+fun String.nbsp() = replace(' ', '\u00A0')
+
+fun cutText(text: String, max: Int): String  {
+    return if (text.length <= max) {
+        text
+    } else {
+        text.take(max).substringBeforeLast(' ').trimEnd(',', ';', ':', ' ') + "…"
+    }
+}
+
+fun normalizeName(name: String): String {
+    return Normalizer
+        .normalize(name, Normalizer.Form.NFD)
+        .replace("\\p{M}+".toRegex(), "")
+        .replace("[^a-zA-Z0-9]".toRegex(), "_")
+        .lowercase(Locale.ROOT)
 }

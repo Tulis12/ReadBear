@@ -24,6 +24,10 @@ class QuoteViewModel @Inject constructor (
         }
     }
 
+    fun getSnippetById(snippetId: Long): Flow<Snippet> {
+        return snippetDao.getFlow(snippetId)
+    }
+
     fun getSnippets(): Flow<List<SnippetWithBook>> {
         return snippetDao.getAllFlow()
     }

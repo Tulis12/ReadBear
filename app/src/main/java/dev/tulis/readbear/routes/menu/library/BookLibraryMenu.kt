@@ -38,6 +38,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.tulis.readbear.R
 import dev.tulis.readbear.db.Settings
 import dev.tulis.readbear.routes.menu.LibraryViewModel
+import dev.tulis.readbear.routes.menu.MenuState
 import dev.tulis.readbear.routes.menu.UnsupportedFormatException
 import dev.tulis.readbear.routes.menu.library.actions.DeleteOption
 import dev.tulis.readbear.routes.menu.library.actions.ImportOption
@@ -48,19 +49,23 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun bookLibraryMenu(
+fun BookLibraryMenu(
     viewModel: LibraryViewModel = hiltViewModel(),
+    menuState: MenuState,
     onOpenBook: (Long) -> Unit,
     onEditBook: (Long) -> Unit,
     onBookDetails: (Long) -> Unit,
     onReady: () -> Unit,
     padding: PaddingValues
-): (@Composable () -> Unit)? {
+) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
     val booksFlow by viewModel.books.collectAsStateWithLifecycle()
-    val books = booksFlow ?: return null
+    val books = booksFlow ?: run {
+        menuState.resetActions()
+        return
+    }
 
     val selectedItems = remember {
         mutableStateListOf<Long>()
@@ -68,7 +73,10 @@ fun bookLibraryMenu(
 
     var selectionMode by remember { mutableStateOf(false) }
     val settingsFlow by Settings.getSettings(context).collectAsState(null)
-    val settings = settingsFlow ?: return null
+    val settings = settingsFlow ?: run {
+        menuState.resetActions()
+        return
+    }
 
     var importing by remember { mutableStateOf(false) }
 
@@ -135,7 +143,7 @@ fun bookLibraryMenu(
         }
     }
 
-    return actions@{
+    menuState.updateActions actions@{
         if(!selectionMode) {
 
             IconButton(

@@ -25,6 +25,11 @@ sealed interface Route {
         val epubId: Long
     ) : Route
 
+    @Serializable
+    data class SnippetDetails(
+        val snippetId: Long
+    ) : Route
+
 
     @Serializable
     data class BookDetails(

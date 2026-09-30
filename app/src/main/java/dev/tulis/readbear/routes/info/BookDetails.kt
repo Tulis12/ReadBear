@@ -60,7 +60,7 @@ import dev.tulis.readbear.utils.readingTime
 fun BookDetails(
     viewModel: BookDetailsViewModel = hiltViewModel(),
     bookId: Long,
-    onPopBack: () -> Unit
+    returnToMenu: () -> Unit
 ) {
     val bookFlow by viewModel.getBookById(bookId).collectAsState(null)
     val book = bookFlow ?: return
@@ -83,7 +83,7 @@ fun BookDetails(
                 },
                 navigationIcon = {
                     IconButton(onClick = {
-                        onPopBack()
+                        returnToMenu()
                     }) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.go_back))
                     }

@@ -1,27 +1,15 @@
 package dev.tulis.readbear
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.LinkAnnotation
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withLink
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import dev.tulis.readbear.db.books.Book
@@ -53,34 +41,16 @@ fun App(
         RenderEpubCover(renderEpubCoverCopy)
     }
 
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Text(
-            buildAnnotatedString {
-                append("You 100% should not see this. But if you do, please for the love of god create an issue: ")
-
-                withLink(
-                    LinkAnnotation.Url("https://github.com/Tulis12/ReadBear")
-                ) {
-                    append("GitHub")
-                }
-
-                append(" and attach a screenshot. Or not. Just please tell me. I love you. You are the best human being. You will succeed in life.")
-            },
-            modifier = Modifier
-                .align(Alignment.Center)
-                .fillMaxWidth(0.7f),
-            textAlign = TextAlign.Justify,
-            color = Color.White
-        )
+    fun goBack() {
+        if (navController.previousBackStackEntry != null) {
+            navController.popBackStack()
+        }
     }
 
     NavHost(
         navController = navController,
         startDestination = Route.Menu
     ) {
-
         composable<Route.Menu> {
             Menu(
                 onOpenBook = {
@@ -124,47 +94,41 @@ fun App(
             val args = entry.toRoute<Route.ComicReader>()
 
             WebtoonReader(
-                comicId = args.comicId
-            ) {
-                navController.popBackStack()
-            }
+                comicId = args.comicId,
+                returnToMenu = ::goBack
+            )
         }
 
         composable<Route.PdfReader> { entry ->
             val args = entry.toRoute<Route.PdfReader>()
 
             PdfReader(
-                pdfId = args.pdfId
-            ) {
-                navController.popBackStack()
-            }
+                pdfId = args.pdfId,
+                returnToMenu = ::goBack
+            )
         }
 
         composable<Route.EpubReader> { entry ->
             val args = entry.toRoute<Route.EpubReader>()
 
             EpubReader(
-                epubId = args.epubId
-            ) {
-                navController.popBackStack()
-            }
+                epubId = args.epubId,
+                returnToMenu = ::goBack
+            )
         }
 
         composable<Route.BookDetails> { entry ->
             val args = entry.toRoute<Route.BookDetails>()
 
-            BookDetails(bookId = args.bookId) {
-                navController.popBackStack()
-            }
+            BookDetails(bookId = args.bookId, returnToMenu = ::goBack)
         }
 
         composable<Route.EditBookDetails> { entry ->
             val args = entry.toRoute<Route.EditBookDetails>()
 
-            EditBookDetails(bookId = args.bookId) {
-                navController.popBackStack()
-            }
+            EditBookDetails(bookId = args.bookId, onPopBack = ::goBack)
         }
+
     }
 }
 
