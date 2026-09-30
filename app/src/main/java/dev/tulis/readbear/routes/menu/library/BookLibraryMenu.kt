@@ -34,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.tulis.readbear.R
 import dev.tulis.readbear.db.Settings
 import dev.tulis.readbear.routes.menu.LibraryViewModel
@@ -58,7 +59,8 @@ fun bookLibraryMenu(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    val books by viewModel.books.collectAsState()
+    val booksFlow by viewModel.books.collectAsStateWithLifecycle()
+    val books = booksFlow ?: return null
 
     val selectedItems = remember {
         mutableStateListOf<Long>()

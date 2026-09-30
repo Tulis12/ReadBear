@@ -71,7 +71,7 @@ class LibraryViewModel @Inject constructor (
         .stateIn(
             viewModelScope,
             SharingStarted.WhileSubscribed(),
-            emptyList()
+            null
         )
 
 

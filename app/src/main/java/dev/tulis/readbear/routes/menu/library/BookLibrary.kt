@@ -31,6 +31,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -48,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
+import coil3.compose.AsyncImagePainter
 import dev.tulis.readbear.R
 import dev.tulis.readbear.db.Settings
 import dev.tulis.readbear.db.books.Book
@@ -75,7 +77,10 @@ fun BookLibrary(
         val context = LocalContext.current
 
         val books = booksFlow ?: return@Box
-        onReady()
+
+        LaunchedEffect(Unit) {
+            onReady()
+        }
 
         if(books.count() == 0) {
             Box(
@@ -113,6 +118,8 @@ fun BookLibrary(
                     }
                 }
             }
+
+            return@Box
         }
 
         LazyVerticalGrid(

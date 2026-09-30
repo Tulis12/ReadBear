@@ -101,13 +101,9 @@ class MainActivity : AppCompatActivity() {
             val context = LocalContext.current
             val settings = Settings.getSettings(context).collectAsState(null).value ?: return@setContent
 
-            var readBearTheme = themes.firstOrNull {
+            val readBearTheme = themes.firstOrNull {
                 it.id == settings.theme
-            }
-
-            if(readBearTheme == null) {
-                readBearTheme = themes[0]
-            }
+            } ?: themes[0]
 
             ReadBearMaterialTheme(
                 readBearTheme = readBearTheme,
