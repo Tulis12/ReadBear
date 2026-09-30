@@ -12,6 +12,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.LinkAnnotation
 import androidx.compose.ui.text.buildAnnotatedString
@@ -21,6 +22,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import dev.tulis.readbear.db.books.Book
 import dev.tulis.readbear.db.books.BookType
@@ -41,9 +43,9 @@ var renderEpubCover: Book? by mutableStateOf(null)
 @Composable
 fun App(
     viewModel: AppViewModel = hiltViewModel(),
-    navController: NavHostController,
     onReady: () -> Unit
 ) {
+    val navController = rememberNavController()
     val scope = rememberCoroutineScope()
 
     val renderEpubCoverCopy = renderEpubCover
@@ -112,7 +114,9 @@ fun App(
                 onBookDetails = {
                     navController.navigate(Route.BookDetails(it))
                 },
-                onReady = onReady
+                onReady = {
+                    onReady()
+                }
             )
         }
 

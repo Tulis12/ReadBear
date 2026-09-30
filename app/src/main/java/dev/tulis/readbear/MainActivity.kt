@@ -86,6 +86,8 @@ val themes = arrayOf(
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
+
         var isReady = false
 
         val splashScreen = installSplashScreen()
@@ -97,15 +99,7 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             val context = LocalContext.current
-            val settings = Settings.getSettings(context).collectAsState(null).value
-
-
-            val navController = rememberNavController()
-            enableEdgeToEdge()
-
-            if(settings == null) {
-                return@setContent
-            }
+            val settings = Settings.getSettings(context).collectAsState(null).value ?: return@setContent
 
             var readBearTheme = themes.firstOrNull {
                 it.id == settings.theme
@@ -119,7 +113,7 @@ class MainActivity : AppCompatActivity() {
                 readBearTheme = readBearTheme,
                 themeType = settings.themeType
             ) {
-                App(navController = navController, onReady = {
+                App(onReady = {
                     isReady = true
                 })
             }

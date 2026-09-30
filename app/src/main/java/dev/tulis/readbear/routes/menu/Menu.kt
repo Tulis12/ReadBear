@@ -202,7 +202,9 @@ fun Menu(
                             onEditBook = onEditBook,
                             onBookDetails = onBookDetails,
                             padding = padding,
-                            onReady = onReady
+                            onReady = {
+                                onReady()
+                            }
                         )
                     }
 
