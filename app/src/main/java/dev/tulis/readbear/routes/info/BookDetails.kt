@@ -47,11 +47,11 @@ import coil3.compose.AsyncImage
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import dev.tulis.readbear.R
-import dev.tulis.readbear.db.books.BookType
-import dev.tulis.readbear.db.comics.Comic
-import dev.tulis.readbear.db.epubs.Epub
-import dev.tulis.readbear.db.pdfs.Pdf
-import dev.tulis.readbear.utils.LongText
+import dev.tulis.readbear.db.entities.books.BookType
+import dev.tulis.readbear.db.entities.comics.Comic
+import dev.tulis.readbear.db.entities.epubs.Epub
+import dev.tulis.readbear.db.entities.pdfs.Pdf
+import dev.tulis.readbear.utils.InfoRow
 import dev.tulis.readbear.utils.readingProgress
 import dev.tulis.readbear.utils.readingTime
 
@@ -326,23 +326,3 @@ fun BookStat(
     }
 }
 
-@Composable
-fun InfoRow(
-    label: String,
-    value: String
-) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween
-    ) {
-        Text(
-            text = label,
-            color = MaterialTheme.colorScheme.onSurfaceVariant
-        )
-
-        LongText(
-            text = value,
-            fontWeight = FontWeight.Medium
-        )
-    }
-}

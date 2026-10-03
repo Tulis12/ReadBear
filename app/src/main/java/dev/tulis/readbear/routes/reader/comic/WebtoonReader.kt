@@ -10,10 +10,8 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.gestures.detectTransformGestures
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -57,7 +55,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
@@ -67,10 +64,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.ImageLoader
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
-import dev.tulis.readbear.R
 import dev.tulis.readbear.db.Settings
-import dev.tulis.readbear.db.books.Book
-import dev.tulis.readbear.db.comics.pages.ComicPage
+import dev.tulis.readbear.db.entities.books.Book
+import dev.tulis.readbear.db.entities.comics.pages.ComicPage
 import dev.tulis.readbear.utils.zip.ZipImage
 import dev.tulis.readbear.utils.zip.ZipImageFetcher
 import kotlinx.coroutines.coroutineScope

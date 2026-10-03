@@ -3,11 +3,11 @@ package dev.tulis.readbear.routes.reader.epub
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.tulis.readbear.db.books.Book
-import dev.tulis.readbear.db.books.BookRepository
-import dev.tulis.readbear.db.epubs.EpubDao
-import dev.tulis.readbear.db.epubs.bookmarks.EpubBookmark
-import dev.tulis.readbear.db.epubs.bookmarks.EpubBookmarkDao
+import dev.tulis.readbear.db.entities.books.Book
+import dev.tulis.readbear.db.entities.books.BookRepository
+import dev.tulis.readbear.db.entities.epubs.EpubDao
+import dev.tulis.readbear.db.entities.epubs.bookmarks.EpubBookmark
+import dev.tulis.readbear.db.entities.epubs.bookmarks.EpubBookmarkDao
 import dev.tulis.readbear.db.relations.EpubWithBookmark
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch

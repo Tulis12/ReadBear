@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
 import dev.tulis.readbear.BuildConfig
 import dev.tulis.readbear.R
-import dev.tulis.readbear.routes.info.InfoRow
+import dev.tulis.readbear.utils.InfoRow
 import org.json.JSONArray
 import java.util.Locale
 

@@ -48,7 +48,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.tulis.readbear.R
 import dev.tulis.readbear.db.Settings
-import dev.tulis.readbear.db.books.Book
+import dev.tulis.readbear.db.entities.books.Book
 import dev.tulis.readbear.utils.LongText
 import java.io.FileInputStream
 

@@ -7,16 +7,15 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import dev.tulis.readbear.db.books.BookDao
-import dev.tulis.readbear.db.comics.ComicDao
-import dev.tulis.readbear.db.comics.bookmarks.ComicBookmarkDao
-import dev.tulis.readbear.db.comics.pages.ComicPageDao
-import dev.tulis.readbear.db.epubs.EpubDao
-import dev.tulis.readbear.db.epubs.bookmarks.EpubBookmarkDao
-import dev.tulis.readbear.db.pdfs.PdfDao
-import dev.tulis.readbear.db.pdfs.bookmarks.PdfBookmarkDao
-import dev.tulis.readbear.db.quotes.QuoteDao
-import dev.tulis.readbear.db.quotes.snippets.SnippetDao
+import dev.tulis.readbear.db.entities.books.BookDao
+import dev.tulis.readbear.db.entities.comics.ComicDao
+import dev.tulis.readbear.db.entities.comics.bookmarks.ComicBookmarkDao
+import dev.tulis.readbear.db.entities.comics.pages.ComicPageDao
+import dev.tulis.readbear.db.entities.epubs.EpubDao
+import dev.tulis.readbear.db.entities.epubs.bookmarks.EpubBookmarkDao
+import dev.tulis.readbear.db.entities.pdfs.PdfDao
+import dev.tulis.readbear.db.entities.pdfs.bookmarks.PdfBookmarkDao
+import dev.tulis.readbear.db.entities.snippets.SnippetDao
 import jakarta.inject.Singleton
 import java.io.File
 
@@ -35,6 +34,7 @@ object DatabaseModule {
             "reader.db"
         )
             .addMigrations(MIGRATION_1_2)
+            .addMigrations(MIGRATION_2_3)
             .build()
     }
 
@@ -100,13 +100,6 @@ object DatabaseModule {
         database: AppDatabase
     ): EpubBookmarkDao {
         return database.epubBookmarkDao()
-    }
-
-    @Provides
-    fun provideQuoteDao(
-        database: AppDatabase
-    ): QuoteDao {
-        return database.quoteDao()
     }
 
     @Provides

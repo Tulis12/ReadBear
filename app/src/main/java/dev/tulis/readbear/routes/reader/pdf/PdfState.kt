@@ -1,7 +1,7 @@
 package dev.tulis.readbear.routes.reader.pdf
 
 import androidx.compose.runtime.Stable
-import dev.tulis.readbear.db.books.Book
+import dev.tulis.readbear.db.entities.books.Book
 import dev.tulis.readbear.db.relations.PdfWithBookmark
 import dev.tulis.readbear.settings.PdfReadingLayout
 

@@ -23,7 +23,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.CheckCircle
-import androidx.compose.material.icons.filled.PhotoSizeSelectLarge
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
@@ -49,10 +48,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
-import coil3.compose.AsyncImagePainter
 import dev.tulis.readbear.R
 import dev.tulis.readbear.db.Settings
-import dev.tulis.readbear.db.books.Book
+import dev.tulis.readbear.db.entities.books.Book
 import dev.tulis.readbear.routes.menu.LibraryViewModel
 import dev.tulis.readbear.settings.AlreadyReadOption
 import dev.tulis.readbear.utils.LongText

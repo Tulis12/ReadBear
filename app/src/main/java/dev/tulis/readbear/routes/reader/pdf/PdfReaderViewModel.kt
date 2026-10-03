@@ -3,11 +3,11 @@ package dev.tulis.readbear.routes.reader.pdf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.tulis.readbear.db.books.Book
-import dev.tulis.readbear.db.books.BookRepository
-import dev.tulis.readbear.db.pdfs.PdfDao
-import dev.tulis.readbear.db.pdfs.bookmarks.PdfBookmark
-import dev.tulis.readbear.db.pdfs.bookmarks.PdfBookmarkDao
+import dev.tulis.readbear.db.entities.books.Book
+import dev.tulis.readbear.db.entities.books.BookRepository
+import dev.tulis.readbear.db.entities.pdfs.PdfDao
+import dev.tulis.readbear.db.entities.pdfs.bookmarks.PdfBookmark
+import dev.tulis.readbear.db.entities.pdfs.bookmarks.PdfBookmarkDao
 import dev.tulis.readbear.db.relations.PdfWithBookmark
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch

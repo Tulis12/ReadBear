@@ -18,8 +18,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import dev.tulis.readbear.R
-import dev.tulis.readbear.db.books.Book
-import dev.tulis.readbear.db.books.BookType
+import dev.tulis.readbear.db.entities.books.Book
+import dev.tulis.readbear.db.entities.books.BookType
 import dev.tulis.readbear.routes.menu.LibraryViewModel
 import kotlinx.coroutines.launch
 import java.util.UUID

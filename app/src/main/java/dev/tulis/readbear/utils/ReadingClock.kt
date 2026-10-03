@@ -2,7 +2,7 @@ package dev.tulis.readbear.utils
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
-import dev.tulis.readbear.db.books.Book
+import dev.tulis.readbear.db.entities.books.Book
 import dev.tulis.readbear.routes.reader.pdf.PdfReaderViewModel
 
 @Composable

@@ -26,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,15 +45,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import dev.tulis.readbear.R
 import dev.tulis.readbear.routes.menu.MenuState
-import dev.tulis.readbear.routes.menu.quotes.utils.QuoteViewModel
+import dev.tulis.readbear.routes.menu.quotes.utils.SnippetViewModel
 import dev.tulis.readbear.utils.BackgroundPattern
-import dev.tulis.readbear.utils.clickableWithoutRipple
 import dev.tulis.readbear.utils.cutText
 import dev.tulis.readbear.utils.shortTitle
 
 @Composable
 fun SnippetsLibrary(
-    viewModel: QuoteViewModel = hiltViewModel(),
+    viewModel: SnippetViewModel = hiltViewModel(),
     menuState: MenuState,
     padding: PaddingValues
 ) {
@@ -165,8 +165,13 @@ fun SnippetsLibrary(
                 }
             }
         }
-    }
 
-    menuState.resetNavigation()
-    menuState.resetTitle()
+        LaunchedEffect(clickedSnipped) {
+            if(clickedSnipped == null) {
+                menuState.resetActions()
+                menuState.resetNavigation()
+                menuState.resetTitle()
+            }
+        }
+    }
 }

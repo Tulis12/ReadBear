@@ -19,9 +19,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import dev.nucleusframework.pdfium.PdfPage
 import dev.nucleusframework.pdfium.PdfReaderState
 import dev.tulis.readbear.db.Settings
-import dev.tulis.readbear.db.books.Book
-import dev.tulis.readbear.db.relations.PdfWithBookmark
-import dev.tulis.readbear.routes.reader.epub.EpubReaderState
 import dev.tulis.readbear.settings.PdfReadingLayout
 import dev.tulis.readbear.utils.readingClock
 import kotlinx.coroutines.flow.distinctUntilChanged

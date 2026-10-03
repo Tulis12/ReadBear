@@ -50,22 +50,17 @@ import coil3.compose.AsyncImage
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import dev.tulis.readbear.R
+import dev.tulis.readbear.db.entities.books.BookType
+import dev.tulis.readbear.db.entities.comics.Comic
+import dev.tulis.readbear.db.entities.epubs.Epub
+import dev.tulis.readbear.db.entities.pdfs.Pdf
 import dev.tulis.readbear.routes.menu.LibraryViewModel
+import dev.tulis.readbear.utils.InfoRow
 import dev.tulis.readbear.utils.clickableWithRipple
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
-import java.util.Locale
-import java.util.Locale.getDefault
 import java.util.UUID
-import androidx.compose.ui.platform.LocalLocale
-import dev.tulis.readbear.db.books.BookType
-import dev.tulis.readbear.db.comics.Comic
-import dev.tulis.readbear.db.epubs.Epub
-import dev.tulis.readbear.db.pdfs.Pdf
-import dev.tulis.readbear.routes.info.InfoRow
-import net.engawapg.lib.zoomable.rememberZoomState
-import net.engawapg.lib.zoomable.zoomable
 
 
 @OptIn(ExperimentalMaterial3Api::class)

@@ -49,14 +49,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import dev.tulis.readbear.R
-import dev.tulis.readbear.db.pdfs.Pdf
+import dev.tulis.readbear.db.entities.pdfs.Pdf
 import dev.tulis.readbear.settings.PdfReadingLayout
 import dev.tulis.readbear.settings.PdfSettingsContext
 import dev.tulis.readbear.settings.SettingsViewModel

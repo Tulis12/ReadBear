@@ -3,14 +3,14 @@ package dev.tulis.readbear
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.tulis.readbear.db.books.Book
-import dev.tulis.readbear.db.books.BookRepository
-import dev.tulis.readbear.db.comics.Comic
-import dev.tulis.readbear.db.comics.ComicDao
-import dev.tulis.readbear.db.epubs.Epub
-import dev.tulis.readbear.db.epubs.EpubDao
-import dev.tulis.readbear.db.pdfs.Pdf
-import dev.tulis.readbear.db.pdfs.PdfDao
+import dev.tulis.readbear.db.entities.books.Book
+import dev.tulis.readbear.db.entities.books.BookRepository
+import dev.tulis.readbear.db.entities.comics.Comic
+import dev.tulis.readbear.db.entities.comics.ComicDao
+import dev.tulis.readbear.db.entities.epubs.Epub
+import dev.tulis.readbear.db.entities.epubs.EpubDao
+import dev.tulis.readbear.db.entities.pdfs.Pdf
+import dev.tulis.readbear.db.entities.pdfs.PdfDao
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 

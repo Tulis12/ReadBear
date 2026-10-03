@@ -1,6 +1,6 @@
 package dev.tulis.readbear.utils
 
-import dev.tulis.readbear.db.books.Book
+import dev.tulis.readbear.db.entities.books.Book
 import kotlin.math.ceil
 import kotlin.math.roundToInt
 

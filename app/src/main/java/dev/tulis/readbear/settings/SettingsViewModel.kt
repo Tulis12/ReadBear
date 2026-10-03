@@ -3,8 +3,8 @@ package dev.tulis.readbear.settings
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dev.tulis.readbear.db.pdfs.Pdf
-import dev.tulis.readbear.db.pdfs.PdfDao
+import dev.tulis.readbear.db.entities.pdfs.Pdf
+import dev.tulis.readbear.db.entities.pdfs.PdfDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject

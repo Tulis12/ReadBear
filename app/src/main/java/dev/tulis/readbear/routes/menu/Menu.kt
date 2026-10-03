@@ -2,7 +2,6 @@ package dev.tulis.readbear.routes.menu
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -38,7 +37,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.tulis.readbear.R
 import dev.tulis.readbear.routes.menu.library.BookLibraryMenu
-import dev.tulis.readbear.routes.menu.quotes.QuotesLibrary
 import dev.tulis.readbear.routes.menu.quotes.SnippetsLibrary
 import kotlinx.coroutines.launch
 
@@ -198,16 +196,7 @@ fun Menu(
                         )
                     }
 
-                    MenuRoute.QUOTES -> {
-                        menuState.resetNavigation()
-                        menuState.resetActions()
-
-                        QuotesLibrary(padding)
-                    }
-
                     MenuRoute.SNIPPETS -> {
-                        menuState.resetActions()
-
                         SnippetsLibrary(
                             menuState = menuState,
                             padding = padding
@@ -221,6 +210,5 @@ fun Menu(
 
 enum class MenuRoute {
     BOOK_LIBRARY,
-    QUOTES,
     SNIPPETS
 }

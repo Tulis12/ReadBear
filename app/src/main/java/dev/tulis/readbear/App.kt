@@ -9,11 +9,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import dev.tulis.readbear.db.books.Book
-import dev.tulis.readbear.db.books.BookType
+import dev.tulis.readbear.db.entities.books.Book
+import dev.tulis.readbear.db.entities.books.BookType
 import dev.tulis.readbear.routes.Route
 import dev.tulis.readbear.routes.edit.EditBookDetails
 import dev.tulis.readbear.routes.info.BookDetails

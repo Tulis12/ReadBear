@@ -111,4 +111,7 @@
     <string name="save_as_file">Save as file</string>
     <string name="show_source">Show source</string>
     <string name="snippet">Snippet</string>
+    <string name="confirm_snippet_delete">Are you sure you want to delete this snippet? This won\'t delete your local copy.</string>
+    <string name="book">Book</string>
+    <string name="source">Page source</string>
 </resources>
