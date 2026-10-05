@@ -49,6 +49,7 @@ import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
 import net.engawapg.lib.zoomable.rememberZoomState
 import net.engawapg.lib.zoomable.zoomable
+import kotlin.time.Clock
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,6 +85,8 @@ fun PdfReader(
 
     LaunchedEffect(Unit) {
         reader.open(filesDir.resolve(book.path).resolve("book.pdf").readBytes())
+        book.lastReadAt = Clock.System.now()
+        viewModel.updateBook(book)
     }
 
     val splitPages = pdfWithBookmark.pdf.splitPages

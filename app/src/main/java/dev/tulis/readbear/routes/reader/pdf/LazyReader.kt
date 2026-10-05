@@ -67,7 +67,7 @@ fun LazyReader(
 
                     book.progress = 0
                     book.readAlready++
-                    viewModel.updateBookProgress(book)
+                    viewModel.updateBook(book)
                     return@collect
                 }
 
@@ -84,7 +84,7 @@ fun LazyReader(
                 viewModel.updateBookmark(bookmark)
 
                 book.progress = index
-                viewModel.updateBookProgress(book)
+                viewModel.updateBook(book)
             }
     }
 

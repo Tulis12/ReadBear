@@ -51,6 +51,7 @@ import dev.tulis.readbear.db.Settings
 import dev.tulis.readbear.db.entities.books.Book
 import dev.tulis.readbear.utils.LongText
 import java.io.FileInputStream
+import kotlin.time.Clock
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -79,7 +80,7 @@ fun EpubReader(
 
         if(currentTime - lastReadingTime > 600 * 1000) lastReadingTime = System.currentTimeMillis()
         book.readingTime += currentTime - lastReadingTime
-        viewModel.updateBookProgress(book)
+        viewModel.updateBook(book)
 
         lastReadingTime = currentTime
     }
@@ -118,6 +119,11 @@ fun EpubReader(
     val filesDir = LocalContext.current.filesDir
     var finished by remember { mutableStateOf(false) }
 
+    LaunchedEffect(Unit) {
+        book.lastReadAt = Clock.System.now()
+        viewModel.updateBook(book)
+    }
+
     Box(
         modifier = Modifier.fillMaxSize().clickable(
             indication = null,
@@ -149,7 +155,7 @@ fun EpubReader(
 
                 book.progress = 0
                 book.readAlready++
-                viewModel.updateBookProgress(book)
+                viewModel.updateBook(book)
                 return@onScroll
             }
 
@@ -168,7 +174,7 @@ fun EpubReader(
             viewModel.updateBookmark(bookmark)
 
             book.progress = index
-            viewModel.updateBookProgress(book)
+            viewModel.updateBook(book)
         }
 
         LaunchedEffect(Unit) {

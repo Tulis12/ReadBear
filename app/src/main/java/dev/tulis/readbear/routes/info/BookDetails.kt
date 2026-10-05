@@ -52,6 +52,7 @@ import dev.tulis.readbear.db.entities.comics.Comic
 import dev.tulis.readbear.db.entities.epubs.Epub
 import dev.tulis.readbear.db.entities.pdfs.Pdf
 import dev.tulis.readbear.utils.InfoRow
+import dev.tulis.readbear.utils.formatDate
 import dev.tulis.readbear.utils.readingProgress
 import dev.tulis.readbear.utils.readingTime
 
@@ -175,26 +176,9 @@ fun BookDetails(
             )
 
             Column(
-                modifier = Modifier.fillMaxWidth(0.5f),
+                modifier = Modifier.fillMaxWidth(0.75f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                InfoRow(
-                    stringResource(R.string.book_format),
-                    when(book.type) {
-                        BookType.Comic -> {
-                            "CBZ"
-                        }
-
-                        BookType.Pdf -> {
-                            "PDF"
-                        }
-
-                        BookType.Epub -> {
-                            "EPUB"
-                        }
-                    }
-                )
-
                 InfoRow(
                     stringResource(R.string.book_type),
                     when(book.type) {
@@ -288,6 +272,18 @@ fun BookDetails(
                         }
                     }
                 }
+
+                book.lastReadAt?.let {
+                    InfoRow(
+                        stringResource(R.string.last_read_on),
+                        formatDate(it)
+                    )
+                }
+
+                InfoRow(
+                    stringResource(R.string.created_on),
+                    formatDate(book.createdAt)
+                )
             }
         }
     }

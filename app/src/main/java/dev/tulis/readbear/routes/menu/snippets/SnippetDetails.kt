@@ -69,6 +69,7 @@ import dev.tulis.readbear.routes.menu.MenuState
 import dev.tulis.readbear.routes.menu.snippets.utils.SnippetViewModel
 import dev.tulis.readbear.routes.menu.snippets.utils.rememberSnippetEditState
 import dev.tulis.readbear.utils.InfoRow
+import dev.tulis.readbear.utils.formatDate
 import dev.tulis.readbear.utils.normalizeName
 import net.engawapg.lib.zoomable.ExperimentalZoomableApi
 import net.engawapg.lib.zoomable.rememberZoomState
@@ -264,6 +265,11 @@ fun SnippetDetails(
                             InfoRow(
                                 stringResource(R.string.source),
                                 snippet.progress.toString()
+                            )
+
+                            InfoRow(
+                                stringResource(R.string.created_on),
+                                formatDate(snippet.createdAt)
                             )
                         }
 

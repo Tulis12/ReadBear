@@ -74,6 +74,7 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import net.engawapg.lib.zoomable.rememberZoomState
 import net.engawapg.lib.zoomable.zoomable
+import kotlin.time.Clock
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -144,6 +145,8 @@ fun WebtoonReader(
         val listState = rememberLazyListState()
 
         LaunchedEffect(Unit) {
+            book.lastReadAt = Clock.System.now()
+
             finished = false
 
             listState.scrollToItem(

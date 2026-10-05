@@ -22,7 +22,7 @@ data class Book(
     var progress: Int = 0,
     var totalProgress: Int = 0,
     var readAlready: Int = 0,
-    val lastReadAt: Instant? = null,
+    var lastReadAt: Instant? = null,
     val createdAt: Instant = Clock.System.now()
 )
 

@@ -27,7 +27,7 @@ class PdfReaderViewModel @Inject constructor (
         }
     }
 
-    fun updateBookProgress(book: Book) {
+    fun updateBook(book: Book) {
         viewModelScope.launch {
             bookRepository.updateBook(book)
         }

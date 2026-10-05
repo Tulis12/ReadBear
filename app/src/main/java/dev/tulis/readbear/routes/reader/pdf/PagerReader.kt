@@ -204,7 +204,7 @@ fun PagerReader(
 
                     book.progress = 0
                     book.readAlready++
-                    viewModel.updateBookProgress(book)
+                    viewModel.updateBook(book)
                     return@collect
                 }
 
@@ -222,7 +222,7 @@ fun PagerReader(
                     settledPage * 2
                 } else settledPage
 
-                viewModel.updateBookProgress(book)
+                viewModel.updateBook(book)
             }
     }
 }

@@ -17,7 +17,7 @@ fun readingClock(
 
         if(currentTime - lastReadingTime > 600 * 1000) lastReadingTime = System.currentTimeMillis()
         book.readingTime += currentTime - lastReadingTime
-        viewModel.updateBookProgress(book)
+        viewModel.updateBook(book)
 
         lastReadingTime = currentTime
     }

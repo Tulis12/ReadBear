@@ -115,4 +115,6 @@
     <string name="book">Book</string>
     <string name="source">Page source</string>
     <string name="name_not_empty">Name cannot be empty</string>
+    <string name="created_on">Created on</string>
+    <string name="last_read_on">Last read on</string>
 </resources>
