@@ -1,0 +1,5 @@
+Changelog:
+ - working on snippets feature
+ - code optimizations
+ - fix bugs
+ - add background to logo

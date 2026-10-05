@@ -262,10 +262,10 @@ fun SnippetDetails(
                                 )
                             }
 
-                            InfoRow(
-                                stringResource(R.string.source),
-                                snippet.progress.toString()
-                            )
+//                            InfoRow( // TODO()
+//                                stringResource(R.string.source),
+//                                snippet.progress.toString()
+//                            )
 
                             InfoRow(
                                 stringResource(R.string.created_on),
@@ -286,7 +286,7 @@ fun SnippetDetails(
                                 Text(stringResource(R.string.save_as_file))
                             }
 
-                            Button(onClick = {
+                            Button(enabled = false, onClick = {
                                 TODO()
                             }) {
                                 Text(stringResource(R.string.show_source))
