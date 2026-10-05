@@ -70,7 +70,9 @@ fun BookLibrary(
     onOpenBook: (Long) -> Unit,
     onReady: () -> Unit
 ) {
-    Box {
+    Box(
+        modifier = Modifier.padding(padding).fillMaxSize()
+    ) {
         val booksFlow: List<Book>? by viewModel.books.collectAsState(null)
         val context = LocalContext.current
 
@@ -82,7 +84,7 @@ fun BookLibrary(
 
         if(books.count() == 0) {
             Box(
-                modifier = Modifier.padding(padding).fillMaxWidth().padding(32.dp),
+                modifier = Modifier.fillMaxWidth().padding(32.dp),
                 contentAlignment = Alignment.TopCenter
             ) {
                 Card(colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)) {
@@ -125,9 +127,6 @@ fun BookLibrary(
             horizontalArrangement = Arrangement.spacedBy(5.dp),
             verticalArrangement = Arrangement.spacedBy(15.dp),
             modifier = Modifier
-                .padding(
-                    padding
-                )
                 .fillMaxSize()
         ) {
             items(books.size) { image ->

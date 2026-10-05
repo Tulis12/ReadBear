@@ -1,8 +1,9 @@
-package dev.tulis.readbear.routes.menu.quotes
+package dev.tulis.readbear.routes.menu.snippets
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -35,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
@@ -45,7 +47,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil3.compose.AsyncImage
 import dev.tulis.readbear.R
 import dev.tulis.readbear.routes.menu.MenuState
-import dev.tulis.readbear.routes.menu.quotes.utils.SnippetViewModel
+import dev.tulis.readbear.routes.menu.snippets.utils.SnippetViewModel
 import dev.tulis.readbear.utils.BackgroundPattern
 import dev.tulis.readbear.utils.cutText
 import dev.tulis.readbear.utils.shortTitle
@@ -141,11 +143,15 @@ fun SnippetsLibrary(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(bottom = 5.dp)
-                                .clip(RoundedCornerShape(15.dp))
+                                .clip(RoundedCornerShape(15.dp)),
+                            contentScale = ContentScale.Crop
                         )
 
                         Text(snippet.name, fontSize = 20.sp, modifier = Modifier.padding(top = 5.dp))
-                        snippet.description?.let { Text(it, fontStyle = FontStyle.Italic) }
+                        snippet.description?.let {
+                            if(it.isBlank()) return@let
+                            Text(it, fontStyle = FontStyle.Italic)
+                        }
                         Text("— $attrib", modifier = Modifier.align(Alignment.End))
                     }
                 }
@@ -160,9 +166,15 @@ fun SnippetsLibrary(
             val clickedSnippetSaved = remember { clickedSnipped }
 
             clickedSnippetSaved?.let {
-                SnippetDetails(menuState = menuState, snippetId = clickedSnippetSaved) {
-                    clickedSnipped = null
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize().background(MaterialTheme.colorScheme.background)
+                ) {
+                    SnippetDetails(menuState = menuState, snippetId = clickedSnippetSaved) {
+                        clickedSnipped = null
+                    }
                 }
+
             }
         }
 

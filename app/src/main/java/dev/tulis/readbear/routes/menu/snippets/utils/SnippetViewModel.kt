@@ -1,4 +1,4 @@
-package dev.tulis.readbear.routes.menu.quotes.utils
+package dev.tulis.readbear.routes.menu.snippets.utils
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

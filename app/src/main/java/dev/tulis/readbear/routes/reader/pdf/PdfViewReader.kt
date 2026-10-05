@@ -43,7 +43,7 @@ import dev.tulis.readbear.settings.BottomSettingsSheet
 import dev.tulis.readbear.settings.PdfReadingLayout
 import dev.tulis.readbear.settings.PdfSettingsContext
 import dev.tulis.readbear.utils.LongText
-import dev.tulis.readbear.routes.menu.quotes.utils.quoteScreenshooter
+import dev.tulis.readbear.routes.menu.snippets.utils.snippetScreenshooter
 import dev.tulis.readbear.utils.NavigationBars
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
@@ -112,7 +112,7 @@ fun PdfReader(
 
         var currentPage by remember { mutableIntStateOf(0) }
 
-        val screenshot = quoteScreenshooter(
+        val screenshot = snippetScreenshooter(
             book = book,
             progress = currentPage
         ) {

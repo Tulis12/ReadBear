@@ -1,4 +1,4 @@
-package dev.tulis.readbear.routes.menu.quotes.utils
+package dev.tulis.readbear.routes.menu.snippets.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable

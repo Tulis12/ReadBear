@@ -37,7 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.tulis.readbear.R
 import dev.tulis.readbear.routes.menu.library.BookLibraryMenu
-import dev.tulis.readbear.routes.menu.quotes.SnippetsLibrary
+import dev.tulis.readbear.routes.menu.snippets.SnippetsLibrary
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
