@@ -5,6 +5,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +20,7 @@ import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -29,6 +31,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TriStateCheckbox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -43,6 +46,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -55,7 +59,6 @@ import dev.tulis.readbear.db.entities.comics.Comic
 import dev.tulis.readbear.db.entities.epubs.Epub
 import dev.tulis.readbear.db.entities.pdfs.Pdf
 import dev.tulis.readbear.routes.menu.LibraryViewModel
-import dev.tulis.readbear.utils.InfoRow
 import dev.tulis.readbear.utils.clickableWithRipple
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -96,6 +99,35 @@ fun EditBookDetails(
     var chosenTitle: String? by remember { mutableStateOf(null) }
     var chosenAuthor: String? by remember { mutableStateOf(null) }
     var chosenSummary: String? by remember { mutableStateOf(null) }
+
+    var additionalData: EditBookDetails? by remember { mutableStateOf(null) }
+
+    LaunchedEffect(Unit) {
+        when(book.type) {
+            BookType.Epub -> {
+                val epub = viewModel.getEpubByBookId(bookId)
+                additionalData = EpubBookDetails(epub)
+            }
+
+            BookType.Pdf -> {
+                val pdf = viewModel.getPdfByBookId(bookId)
+                additionalData = PdfBookDetails(
+                    pdf = pdf,
+                    keywords = pdf.keywords
+                )
+            }
+
+            BookType.Comic -> {
+                val comic = viewModel.getComicByBookId(bookId)
+                additionalData = ComicBookDetails(
+                    comic = comic,
+                    series = comic.series,
+                    seriesStatus = comic.seriesStatus,
+                    manga = comic.manga,
+                )
+            }
+        }
+    }
 
     var cover by remember {
         mutableStateOf(
@@ -188,6 +220,29 @@ fun EditBookDetails(
                             book.summary = it
                         }
 
+                        additionalData?.let { data ->
+
+                            when(data) {
+                                is ComicBookDetails -> {
+                                    val comic = data.comic
+                                    comic.series = data.series
+                                    comic.seriesStatus = data.seriesStatus
+                                    comic.manga = data.manga
+                                    viewModel.updateComic(comic)
+                                }
+
+                                is PdfBookDetails -> {
+                                    val pdf = data.pdf
+                                    pdf.keywords = data.keywords
+                                    viewModel.updatePdf(pdf)
+                                }
+
+                                is EpubBookDetails -> {
+
+                                }
+                            }
+                        }
+
                         viewModel.updateBook(book)
                         onPopBack()
                     }) {
@@ -196,8 +251,8 @@ fun EditBookDetails(
                 }
             )
         }
-    ) {
-        paddingValues ->
+    ) { paddingValues ->
+
         Column(
             modifier = Modifier
                 .padding(paddingValues)
@@ -286,68 +341,80 @@ fun EditBookDetails(
                     }
                 )
 
-                when(book.type) {
-                    BookType.Epub -> {
-                        var epub: Epub? by remember { mutableStateOf(null) }
-                        LaunchedEffect(Unit) {
-                            epub = viewModel.getEpubByBookId(bookId)
-                        }
+                additionalData?.let { data ->
 
-                        val savedEpub = epub
-
-                        if(savedEpub != null) {
-//                            InfoRow(
-//                                stringResource(R.string.keywords),
-//                                epub. ?: stringResource(R.string.unknown)
-//                            )
-                        }
-                    }
-
-                    BookType.Pdf -> {
-                        var pdf: Pdf? by remember { mutableStateOf(null) }
-                        LaunchedEffect(Unit) {
-                            pdf = viewModel.getPdfByBookId(bookId)
-                        }
-
-                        val savedPdf = pdf
-
-                        if(savedPdf != null) {
-                            InfoRow(
-                                stringResource(R.string.keywords),
-                                savedPdf.keywords ?: stringResource(R.string.unknown)
-                            )
-                        }
-                    }
-
-                    BookType.Comic -> {
-                        var comic: Comic? by remember { mutableStateOf(null) }
-                        LaunchedEffect(Unit) {
-                            comic = viewModel.getComicByBookId(bookId)
-                        }
-
-                        val savedComic = comic
-
-                        if(savedComic != null) {
-                            InfoRow(
-                                stringResource(R.string.series),
-                                savedComic.series ?: stringResource(R.string.unknown)
+                    when(data) {
+                        is ComicBookDetails -> {
+                            OutlinedTextField(
+                                modifier = Modifier.fillMaxWidth(),
+                                value = data.series ?: "",
+                                onValueChange = {
+                                    changed = true
+                                    data.series = it
+                                },
+                                label = {
+                                    Text(stringResource(R.string.series))
+                                },
+                                singleLine = true
                             )
 
-                            InfoRow(
-                                stringResource(R.string.series_status),
-                                savedComic.seriesStatus ?: stringResource(R.string.unknown)
+                            OutlinedTextField(
+                                modifier = Modifier.fillMaxWidth(),
+                                value = data.seriesStatus ?: "",
+                                onValueChange = {
+                                    changed = true
+                                    data.seriesStatus = it
+                                },
+                                label = {
+                                    Text(stringResource(R.string.series_status))
+                                },
+                                singleLine = true
                             )
 
-                            InfoRow(
-                                stringResource(R.string.is_manga),
-                                if(savedComic.manga != null && savedComic.manga == true) {
-                                    stringResource(R.string.yes)
-                                } else if(savedComic.manga != null) {
-                                    stringResource(R.string.no)
-                                } else {
-                                    stringResource(R.string.unknown)
-                                }
+                            val state = when (data.manga) {
+                                true -> ToggleableState.On
+                                false -> ToggleableState.Off
+                                null -> ToggleableState.Indeterminate
+                            }
+
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                TriStateCheckbox(
+                                    state = state,
+                                    onClick = {
+                                        changed = true
+
+                                        data.manga = when (state) {
+                                            ToggleableState.Indeterminate -> true
+                                            ToggleableState.On -> false
+                                            ToggleableState.Off -> true
+                                        }
+                                    }
+                                )
+
+                                Text(stringResource(R.string.is_manga))
+                            }
+                        }
+
+                        is PdfBookDetails -> {
+                            OutlinedTextField(
+                                modifier = Modifier.fillMaxWidth(),
+                                value = data.keywords ?: "",
+                                onValueChange = {
+                                    changed = true
+                                    data.keywords
+                                },
+                                label = {
+                                    stringResource(R.string.keywords)
+                                },
+                                singleLine = true
                             )
+                        }
+
+                        is EpubBookDetails -> {
+
                         }
                     }
                 }
@@ -355,6 +422,30 @@ fun EditBookDetails(
         }
     }
 }
+
+open class EditBookDetails {}
+
+class ComicBookDetails(
+    comic: Comic,
+    series: String?,
+    seriesStatus: String?,
+    manga: Boolean?
+) : EditBookDetails() {
+    var comic by mutableStateOf(comic)
+    var series by mutableStateOf(series)
+    var seriesStatus by mutableStateOf(seriesStatus)
+    var manga by mutableStateOf(manga)
+}
+
+data class EpubBookDetails(
+    var epub: Epub
+) : EditBookDetails() // TODO()
+
+data class PdfBookDetails(
+    var pdf: Pdf,
+    var keywords: String?
+) : EditBookDetails()
+
 
 @Composable
 fun GoBack(

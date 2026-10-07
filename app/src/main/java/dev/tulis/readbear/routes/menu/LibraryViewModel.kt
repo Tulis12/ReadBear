@@ -409,6 +409,24 @@ class LibraryViewModel @Inject constructor (
             }
         }
     }
+
+    fun updateComic(comic: Comic) {
+        viewModelScope.launch {
+            comicDao.update(comic)
+        }
+    }
+
+    fun updatePdf(pdf: Pdf) {
+        viewModelScope.launch {
+            pdfDao.update(pdf)
+        }
+    }
+
+    fun updateEpub(epub: Epub) {
+        viewModelScope.launch {
+            epubDao.update(epub)
+        }
+    }
 }
 
 class UnsupportedFormatException(
