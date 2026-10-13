@@ -7,3 +7,4 @@ Changelog:
  - splash screen now waits for app load
  - add dates (created on, last read on)
  - change roundness of the app image
+ - fix permissions
