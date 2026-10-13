@@ -67,6 +67,10 @@ android {
     buildFeatures {
         compose = true
     }
+
+    lint {
+        abortOnError = false
+    }
 }
 
 dependencies {
@@ -83,7 +87,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.uiautomator)
     testImplementation(libs.junit)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)

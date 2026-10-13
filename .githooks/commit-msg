@@ -1,0 +1,14 @@
+#!/bin/bash
+set -e
+
+MESSAGE_FILE="$1"
+
+set -a
+source .env
+set +a
+
+if grep -qi 'release' "$MESSAGE_FILE"; then
+    ./gradlew lint assembleRelease -PsignRelease --build-cache
+    python3 .github/scripts/check_permissions.py
+    python3 .github/scripts/check_lint.py
+fi
