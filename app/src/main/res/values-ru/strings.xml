@@ -35,4 +35,7 @@
     <string name="sample_settings">Пример настроек</string>
     <string name="sample_button_pressed">Нажато на пример кнопки!</string>
     <string name="sample_tooltip">Пример подсказки</string>
+    <string name="select_file">Выбрать файл</string>
+    <string name="author">Автор</string>
+    <string name="discard_changes">Отменить изменения</string>
 </resources>
