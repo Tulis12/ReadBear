@@ -46,4 +46,24 @@
     <string name="side_by_side">Страница при странице</string>
     <string name="reading_layout">Компановка при чтении</string>
     <string name="scrollable">Можно скроллить</string>
+    <string name="flipping">Переворачивание</string>
+    <string name="unknown">Неизвестно</string>
+    <string name="pages">Страницы</string>
+    <string name="panels">Панели</string>
+    <string name="chapters">Главы</string>
+    <string name="reading_progress">Прогресс</string>
+    <string name="reading_time">Время</string>
+    <string name="keywords">Ключевые слова</string>
+    <string name="series">Серии</string>
+    <string name="series_status">Статус серии</string>
+    <string name="yes">Да</string>
+    <string name="no">Нет</string>
+    <string name="is_manga">Манга?</string>
+    <string name="book_type">Тип книги</string>
+    <string name="translator">Переводчик</string>
+    <string name="translators">Переводчики</string>
+    <string name="current_language">Используемый язык</string>
+    <string name="thanks_for_using">Большое спасибо за использование этого приложения &lt;3</string>
+    <string name="split_pages">Разделить страницы пополам</string>
+    <string name="read_docs">Прочти доксы</string>
 </resources>
