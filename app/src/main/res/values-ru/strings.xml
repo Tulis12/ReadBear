@@ -67,4 +67,11 @@
     <string name="split_pages">Разделить страницы пополам</string>
     <string name="read_docs">Прочти доксы</string>
     <string name="split_pages_tooltip">Если в отсканнированым PDF на одной виртуальной странице будут одновременно две страницы со скана, автоматически разрежь их, для нормального прочтения. Насильно включает режим переворачивания.</string>
+    <string name="this_pdf_settings">Настойки для этого файла PDF:</string>
+    <string name="appearance">Вид:</string>
+    <string name="show_more">Показать больше!</string>
+    <string name="chapter_x">Раздел: %1$d</string>
+    <string name="previous_chapter">Предыдущий раздел</string>
+    <string name="next_chapter">Следующий раздел</string>
+    <string name="theme">Режим темы:</string>
 </resources>
