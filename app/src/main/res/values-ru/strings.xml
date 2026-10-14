@@ -38,4 +38,12 @@
     <string name="select_file">Выбрать файл</string>
     <string name="author">Автор</string>
     <string name="discard_changes">Отменить изменения</string>
+    <string name="info">Инфо</string>
+    <string name="progress_enabled">Прогресс в чтении</string>
+    <string name="time_clock_enabled">Время чтения</string>
+    <string name="show">Показать:</string>
+    <string name="pdf">PDF</string>
+    <string name="side_by_side">Страница при странице</string>
+    <string name="reading_layout">Компановка при чтении</string>
+    <string name="scrollable">Можно скроллить</string>
 </resources>
