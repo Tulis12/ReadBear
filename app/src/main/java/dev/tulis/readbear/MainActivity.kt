@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.text.Layout
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -32,6 +33,7 @@ import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
 import dagger.hilt.android.AndroidEntryPoint
 import dev.tulis.readbear.db.Settings
+import dev.tulis.readbear.routes.menu.LibraryViewModel
 import dev.tulis.readbear.settings.tabs.ReadBearTheme
 import dev.tulis.readbear.ui.theme.AppTypography
 import dev.tulis.readbear.ui.theme.ReadBearMaterialTheme
@@ -85,10 +87,13 @@ val themes = arrayOf(
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    private val viewModel: AppViewModel by viewModels()
+    var isReady = false
+
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
 
-        var isReady = false
+
 
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition {
@@ -96,6 +101,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         super.onCreate(savedInstanceState)
+        handleIncomingIntent(intent)
 
         setContent {
             val context = LocalContext.current
@@ -109,10 +115,30 @@ class MainActivity : AppCompatActivity() {
                 readBearTheme = readBearTheme,
                 themeType = settings.themeType
             ) {
-                App(onReady = {
-                    isReady = true
-                })
+                App(
+                    viewModel = viewModel,
+                    onReady = {
+                        isReady = true
+                    }
+                )
             }
         }
     }
+
+    override fun onNewIntent(intent: android.content.Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleIncomingIntent(intent)
+    }
+
+    private fun handleIncomingIntent(intent: android.content.Intent?) {
+        if (intent?.action != android.content.Intent.ACTION_VIEW) return
+
+        val uri = intent.data ?: return
+        viewModel.requestImport(uri)
+        println("jest ready?$isReady")
+
+        println("requested import")
+    }
 }
+

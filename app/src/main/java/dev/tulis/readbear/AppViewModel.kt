@@ -1,5 +1,6 @@
 package dev.tulis.readbear
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -11,6 +12,8 @@ import dev.tulis.readbear.db.entities.epubs.Epub
 import dev.tulis.readbear.db.entities.epubs.EpubDao
 import dev.tulis.readbear.db.entities.pdfs.Pdf
 import dev.tulis.readbear.db.entities.pdfs.PdfDao
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -42,5 +45,18 @@ class AppViewModel @Inject constructor(
 
     suspend fun getEpubByBookId(bookId: Long): Epub {
         return epubDao.getEpubByBookId(bookId)
+    }
+
+    private val _importRequest = Channel<Uri>(Channel.BUFFERED)
+    val importRequest = _importRequest.receiveAsFlow()
+
+    fun requestImport(uri: Uri) {
+        println("import requested: vm=${System.identityHashCode(this)}, uri=$uri")
+
+        viewModelScope.launch {
+            println("sending: vm=${System.identityHashCode(this)}")
+            _importRequest.send(uri)
+            println("sent")
+        }
     }
 }

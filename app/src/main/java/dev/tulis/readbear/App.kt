@@ -29,7 +29,7 @@ var renderEpubCover: Book? by mutableStateOf(null)
 
 @Composable
 fun App(
-    viewModel: AppViewModel = hiltViewModel(),
+    viewModel: AppViewModel,
     onReady: () -> Unit
 ) {
     val navController = rememberNavController()
@@ -52,6 +52,7 @@ fun App(
     ) {
         composable<Route.Menu> {
             Menu(
+                appViewModel = viewModel,
                 onOpenBook = {
                     scope.launch {
                         val book = viewModel.getBook(it)

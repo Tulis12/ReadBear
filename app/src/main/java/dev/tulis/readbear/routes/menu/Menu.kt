@@ -35,6 +35,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import dev.tulis.readbear.AppViewModel
 import dev.tulis.readbear.R
 import dev.tulis.readbear.routes.menu.library.BookLibraryMenu
 import dev.tulis.readbear.routes.menu.snippets.SnippetsLibrary
@@ -46,7 +47,8 @@ fun Menu(
     onOpenBook: (Long) -> Unit,
     onEditBook: (Long) -> Unit,
     onBookDetails: (Long) -> Unit,
-    onReady: () -> Unit
+    onReady: () -> Unit,
+    appViewModel: AppViewModel
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -185,6 +187,7 @@ fun Menu(
                         menuState.resetNavigation()
 
                         BookLibraryMenu(
+                            appViewModel = appViewModel,
                             menuState = menuState,
                             onOpenBook = onOpenBook,
                             onEditBook = onEditBook,

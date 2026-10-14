@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import dev.tulis.readbear.AppViewModel
 import dev.tulis.readbear.R
 import dev.tulis.readbear.db.Settings
 import dev.tulis.readbear.routes.menu.LibraryViewModel
@@ -51,6 +52,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun BookLibraryMenu(
     viewModel: LibraryViewModel = hiltViewModel(),
+    appViewModel: AppViewModel,
     menuState: MenuState,
     onOpenBook: (Long) -> Unit,
     onEditBook: (Long) -> Unit,
@@ -171,7 +173,8 @@ fun BookLibraryMenu(
             val unsupportedFormatMessage = stringResource(R.string.error_unsupported_format)
 
             ImportOption(
-                viewModel,
+                appViewModel = appViewModel,
+                viewModel = viewModel,
                 onChangeImporting = {
                     importing = it
                 },

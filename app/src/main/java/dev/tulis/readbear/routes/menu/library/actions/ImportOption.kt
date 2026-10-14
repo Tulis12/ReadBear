@@ -1,5 +1,7 @@
 package dev.tulis.readbear.routes.menu.library.actions
 
+import android.content.Context
+import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.material.icons.Icons
@@ -10,6 +12,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -17,15 +20,94 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import dev.tulis.readbear.AppViewModel
 import dev.tulis.readbear.R
 import dev.tulis.readbear.db.entities.books.Book
 import dev.tulis.readbear.db.entities.books.BookType
 import dev.tulis.readbear.routes.menu.LibraryViewModel
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import java.util.UUID
 
+fun importBook(
+    uri: Uri,
+    context: Context,
+    viewModel: LibraryViewModel,
+    scope: CoroutineScope,
+    onChangeImporting: (Boolean) -> Unit,
+    onThrow: (Throwable?) -> Unit
+) {
+    onChangeImporting(true)
+
+    val bookUuid = UUID.randomUUID()
+    val bookDir = context.filesDir.resolve(bookUuid.toString())
+
+    bookDir.mkdirs()
+
+    viewModel.copyFileToAppStorage(
+        context = context,
+        bookDir = bookDir,
+        uri = uri,
+        onFinishCbz = {
+                originalName ->
+
+            scope.launch {
+                val bookId = viewModel.addBook(
+                    Book(
+                        title = originalName.substringBeforeLast("."),
+                        path = bookUuid.toString(),
+                        type = BookType.Comic
+                    )
+                )
+
+                viewModel.createComicIndex(viewModel.getBook(bookId))
+                onChangeImporting(false)
+            }
+        },
+        onFinishPdf = {
+                originalName ->
+
+            scope.launch {
+                val bookId = viewModel.addBook(
+                    Book(
+                        title = originalName.substringBeforeLast("."),
+                        path = bookUuid.toString(),
+                        type = BookType.Pdf
+                    )
+                )
+
+                viewModel.createPdfIndex(viewModel.getBook(bookId))
+                onChangeImporting(false)
+            }
+        },
+        onFinishEpub = {
+                originalName ->
+
+            scope.launch {
+                val bookId = viewModel.addBook(
+                    Book(
+                        title = originalName.substringBeforeLast("."),
+                        path = bookUuid.toString(),
+                        type = BookType.Epub
+                    )
+                )
+
+                viewModel.createEpubIndex(viewModel.getBook(bookId))
+                onChangeImporting(false)
+            }
+        },
+        onThrow = {
+                throwable ->
+
+            onChangeImporting(false)
+            onThrow(throwable)
+        }
+    )
+}
+
 @Composable
 fun ImportOption(
+    appViewModel: AppViewModel,
     viewModel: LibraryViewModel,
     onChangeImporting: (Boolean) -> Unit,
     onThrow: (Throwable?) -> Unit
@@ -33,6 +115,19 @@ fun ImportOption(
     val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(appViewModel) {
+        appViewModel.importRequest.collect { uri ->
+            importBook(
+                uri = uri,
+                context = context,
+                viewModel = viewModel,
+                scope = scope,
+                onChangeImporting = onChangeImporting,
+                onThrow = onThrow
+            )
+        }
+    }
 
     IconButton(
         onClick = {
@@ -45,76 +140,17 @@ fun ImportOption(
         )
     }
 
-
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
     ) { uri ->
         uri?.let {
-            onChangeImporting(true)
-
-            val bookUuid = UUID.randomUUID()
-            val bookDir = context.filesDir.resolve(bookUuid.toString())
-
-            bookDir.mkdirs()
-
-            viewModel.copyFileToAppStorage(
-                context = context,
-                bookDir = bookDir,
+            importBook(
                 uri = it,
-                onFinishCbz = {
-                    originalName ->
-
-                    scope.launch {
-                        val bookId = viewModel.addBook(
-                            Book(
-                                title = originalName.substringBeforeLast("."),
-                                path = bookUuid.toString(),
-                                type = BookType.Comic
-                            )
-                        )
-
-                        viewModel.createComicIndex(viewModel.getBook(bookId))
-                        onChangeImporting(false)
-                    }
-                },
-                onFinishPdf = {
-                    originalName ->
-
-                    scope.launch {
-                        val bookId = viewModel.addBook(
-                            Book(
-                                title = originalName.substringBeforeLast("."),
-                                path = bookUuid.toString(),
-                                type = BookType.Pdf
-                            )
-                        )
-
-                        viewModel.createPdfIndex(viewModel.getBook(bookId))
-                        onChangeImporting(false)
-                    }
-                },
-                onFinishEpub = {
-                    originalName ->
-
-                    scope.launch {
-                        val bookId = viewModel.addBook(
-                            Book(
-                                title = originalName.substringBeforeLast("."),
-                                path = bookUuid.toString(),
-                                type = BookType.Epub
-                            )
-                        )
-
-                        viewModel.createEpubIndex(viewModel.getBook(bookId))
-                        onChangeImporting(false)
-                    }
-                },
-                onThrow = {
-                    throwable ->
-
-                    onChangeImporting(false)
-                    onThrow(throwable)
-                }
+                context = context,
+                viewModel = viewModel,
+                scope = scope,
+                onChangeImporting = onChangeImporting,
+                onThrow = onThrow
             )
         }
     }
