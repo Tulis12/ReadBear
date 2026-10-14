@@ -1,0 +1,4 @@
+* Pracuję nad funkcją snipettów
+* Optymalizacja kodu: prędkość załadowania aplikacji, okienko ustawień jest teraz płynniejsze
+* Naprawa różnorodnych błędów
+* Do logo zostało dodane tło, z lekko zaokrąglonymi rogami

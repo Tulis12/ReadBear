@@ -1,0 +1,6 @@
+* Logo i tło aplikacji
+* Opcje odczytu: PDF, CBZ
+* Konfigurowalny układ dla plików PDF oraz dzielenie stron PDF
+* Strona informacyjna, progres oraz czas czytania
+* Konfigurowalny widok biblioteki
+* Uznania dla tłumaczy oraz podlinkowanie weblate'a
