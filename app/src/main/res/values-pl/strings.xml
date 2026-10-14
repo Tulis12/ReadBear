@@ -109,4 +109,13 @@
     <string name="book_format">Format książki</string>
     <string name="page_attrib">(s. %1d)</string>
     <string name="close">Zamknij</string>
+    <string name="save_as_file">Zapisz jako plik</string>
+    <string name="show_source">Pokaż źródło</string>
+    <string name="snippet">Snippet</string>
+    <string name="confirm_snippet_delete">Czy na pewno chcesz usunąć ten snippet? Nie spowoduje to usunięcie jego kopii lokalnej.</string>
+    <string name="book">Książka</string>
+    <string name="source">Źródło strony</string>
+    <string name="name_not_empty">Nazwa nie może być pusta</string>
+    <string name="created_on">Stworzono</string>
+    <string name="last_read_on">Ostatnio czytano</string>
 </resources>
