@@ -1,0 +1,3 @@
+* Naprawa uprawnień aplikacji
+* Naprawa opisów (w języku Polskim i Angielskim)
+* Naprawa dzienniku zmian

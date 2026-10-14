@@ -1,0 +1,1 @@
+* Konfigurowalne ustawienie dotyczące zakładek: zezwalaj, bądź nie zezwalaj na powrót

@@ -1,0 +1,4 @@
+* Motywy, takie jak: Misiowy, Słonecznikowy, Palisandrowy i wiele innych!
+* Tryby motywów: ciemny, jasny oraz systemowy
+* Naprawienie wielu błędów w UI
+* Automatyczne uznania dla tłumaczy
