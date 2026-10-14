@@ -1,2 +1,1 @@
-Changelog:
- - fix icon being blurry
+* Fix icon being blurry

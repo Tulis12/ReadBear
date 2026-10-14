@@ -1,5 +1,4 @@
-Changelog:
- - themes
- - theme mode
- - improved bugs
- - automatic translation credits
+* Themes, such as: Bear, Sunflower, Rosewood, and many more!
+* Theme modes: dark, light and system
+* Fixed multiple bugs in the UI
+* Automatic translation credits

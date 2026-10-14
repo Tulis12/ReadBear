@@ -1,5 +1,4 @@
-Changelog:
- - working on snippets feature
- - code optimizations
- - fix bugs
- - add background to logo
+* Working on snippets feature
+* Code optimizations: launch speed, settings tray is now smoother
+* Fix various bugs
+* Background was added to logo, with slightly rounded edges

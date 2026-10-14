@@ -1,2 +1,1 @@
-Changelog:
- - add a configurable options regarding bookmarks
+* Configurable options regarding bookmarks: allow returning or not

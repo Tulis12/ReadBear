@@ -12,7 +12,7 @@
     <img src="https://f-droid.org/badge/get-it-on.png" alt="Download from F-Droid" height="80">
 </a>
 
-## A cute and chill CBZ, PDF, EPUB reader that's ridiculously configurable - for free!
+### A cute and chill CBZ, PDF, EPUB reader that's ridiculously configurable&nbsp;-&nbsp;for free!
 
 ## How to verify app signature, and verify that the app is genuine?
 

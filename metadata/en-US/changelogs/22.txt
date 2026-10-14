@@ -1,10 +1,3 @@
-Changelog:
- - snippets feature:
-    - now with pretty ui!
-    - better selecting options
-    - still working on some custom features
- - code optimizations
- - splash screen now waits for app load
- - add dates (created on, last read on)
- - change roundness of the app image
- - fix permissions
+* Fix app permissions
+* Fix descriptions (in Polish and English)
+* Fix changelogs

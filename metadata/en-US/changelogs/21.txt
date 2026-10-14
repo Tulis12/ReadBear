@@ -1,0 +1,6 @@
+* Snippets feature, now with pretty UI
+* Better selecting options, you can now use boxes on the edges
+* Code optimizations
+* Splash screen now waits for app load
+* Dates (created on, last read on)
+* Change roundness of the app image
