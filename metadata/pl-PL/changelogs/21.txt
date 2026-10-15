@@ -1,0 +1,6 @@
+* Funkcja snippetów, teraz z ładnym UI
+* Lepsze opcje wyboru, można teraz używać pudełek na rogach
+* Optymalizacja kodu
+* Ekran powitalny oczekuje teraz na załadowanie się aplikacji
+* Daty (stworzono w dniu, ostatnio czytano)
+* Zmiana zaokrąglęnia obrazku aplikacji
