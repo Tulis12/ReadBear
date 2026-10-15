@@ -95,10 +95,10 @@
     <string name="photo_snippet">Wycinek zdjęciowy</string>
     <string name="text_quote">Cytat tekstowy</string>
     <string name="selection_prompt">Wybierz fragment dla wycinka (przytrzymaj i przesuń)</string>
-    <string name="add_snippet">Stwórz snippet</string>
+    <string name="add_snippet">Stwórz wycinek</string>
     <string name="name">Nazwa</string>
     <string name="description">Opis</string>
-    <string name="snippets">Snippety</string>
+    <string name="snippets">Wycinki</string>
     <string name="there_is_nothing_here">Nic tu nie ma... Jeszcze!</string>
     <string name="add_snippet_during_reading">Możesz dodać wycinek podczas czytania za pomocą symbolu zdjęcia.</string>
     <string name="add_a_book">Możesz dodać utwór za pomocą znaku \"+\".</string>
