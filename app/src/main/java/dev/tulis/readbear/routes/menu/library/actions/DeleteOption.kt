@@ -17,12 +17,12 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import dev.tulis.readbear.R
 import dev.tulis.readbear.routes.menu.LibraryViewModel
+import dev.tulis.readbear.routes.menu.library.SelectionState
 
 @Composable
 fun DeleteOption(
     viewModel: LibraryViewModel,
-    selectedItems: List<Long>,
-    onClearSelectedItemsAndDisableSelectionMode: () -> Unit
+    selectionState: SelectionState
 ) {
     val scope = rememberCoroutineScope()
     var showDialog by remember { mutableStateOf(false) }
@@ -50,17 +50,18 @@ fun DeleteOption(
                 Text(
                     pluralStringResource(
                         R.plurals.are_you_sure_you_want_to_delete_x_elements,
-                        selectedItems.count(),
-                        selectedItems.count()
+                        selectionState.selectedItems.count(),
+                        selectionState.selectedItems.count()
                     )
                 )
             },
             confirmButton = {
                 TextButton(
                     onClick = {
-                        viewModel.removeBooks(selectedItems.toList())
+                        viewModel.removeItems(selectionState.selectedItems)
 
-                        onClearSelectedItemsAndDisableSelectionMode()
+                        selectionState.selectedItems.clear()
+                        selectionState.selectionMode = false
                         showDialog = false
                     }
                 ) {

@@ -1,11 +1,22 @@
 package dev.tulis.readbear.db.entities.books
 
 import androidx.room.Entity
+import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
+import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderItem
 import kotlin.time.Clock
 import kotlin.time.Instant
 
-@Entity
+@Entity(
+    foreignKeys = [
+        ForeignKey(
+            entity = BookFolderItem::class,
+            parentColumns = ["id"],
+            childColumns = ["folderItemId"],
+            onDelete = ForeignKey.CASCADE
+        )
+    ]
+)
 data class Book(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
@@ -22,6 +33,7 @@ data class Book(
     var progress: Int = 0,
     var totalProgress: Int = 0,
     var readAlready: Int = 0,
+    var folderItemId: Long,
     var lastReadAt: Instant? = null,
     val createdAt: Instant = Clock.System.now()
 )

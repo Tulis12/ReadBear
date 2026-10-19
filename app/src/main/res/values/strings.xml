@@ -117,4 +117,15 @@
     <string name="name_not_empty">Name cannot be empty</string>
     <string name="created_on">Created on</string>
     <string name="last_read_on">Last read on</string>
+    <string name="copying">Copying…</string>
+    <string name="verifying">Verifying…</string>
+    <string name="success">Success</string>
+    <string name="hang_on">Hang on…</string>
+    <string name="updating">Updating data to the new version</string>
+    <string name="moving">Moving…</string>
+    <string name="unsafe_v1_migration">Free up space to migrate your files safely, or continue with unsafe migration. Unsafe migration skips verification and may result in data loss if interrupted. You need %.1fGB more space to migrate safely.</string>
+    <string name="unsafe_migration">Unsafe migration</string>
+    <string name="migrate_unsafely">Migrate unsafely</string>
+    <string name="free_up_space">Free up space</string>
+    <string name="unsafe_migration_dont_close_the_app">Unsafe migration, don\'t close the app!</string>
 </resources>

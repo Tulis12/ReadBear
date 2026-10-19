@@ -16,6 +16,10 @@ import dev.tulis.readbear.db.entities.epubs.Epub
 import dev.tulis.readbear.db.entities.epubs.EpubDao
 import dev.tulis.readbear.db.entities.epubs.bookmarks.EpubBookmark
 import dev.tulis.readbear.db.entities.epubs.bookmarks.EpubBookmarkDao
+import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolder
+import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderDao
+import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderItem
+import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderItemDao
 import dev.tulis.readbear.db.entities.pdfs.Pdf
 import dev.tulis.readbear.db.entities.pdfs.PdfDao
 import dev.tulis.readbear.db.entities.pdfs.bookmarks.PdfBookmark
@@ -30,9 +34,10 @@ import dev.tulis.readbear.db.entities.snippets.SnippetDao
         Comic::class, ComicPage::class, ComicBookmark::class,
         Pdf::class, PdfBookmark::class,
         Epub::class, EpubBookmark::class,
-        Snippet::class
+        Snippet::class,
+        BookFolder::class, BookFolderItem::class
     ],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(InstantConverter::class)
@@ -50,4 +55,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun epubBookmarkDao(): EpubBookmarkDao
 
     abstract fun snippetDao(): SnippetDao
+
+    abstract fun bookFolderDao(): BookFolderDao
+    abstract fun bookFolderItemDao(): BookFolderItemDao
 }

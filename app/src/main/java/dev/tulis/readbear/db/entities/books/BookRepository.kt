@@ -10,7 +10,7 @@ class BookRepository @Inject constructor(
     private val filesDir: File
 ) {
 
-    val books = dao.getAll()
+    val books = dao.getAllFlow()
 
     suspend fun addBook(book: Book): Long {
         return dao.insert(book)
@@ -40,6 +40,10 @@ class BookRepository @Inject constructor(
         return dao.getBookFlow(bookId)
     }
 
+    fun synchronizeDeletedPaths() {
+        filesDir
+    }
+
     suspend fun deleteBook(book: Book) {
         val target = File(filesDir, book.path)
 
@@ -49,5 +53,9 @@ class BookRepository @Inject constructor(
 
 
         dao.delete(book)
+    }
+
+    fun getBookByItemId(itemId: Long): Flow<Book?> {
+        return dao.getByItemId(itemId)
     }
 }

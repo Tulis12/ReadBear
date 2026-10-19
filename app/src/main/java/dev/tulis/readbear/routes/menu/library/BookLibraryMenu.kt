@@ -38,6 +38,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import dev.tulis.readbear.AppViewModel
 import dev.tulis.readbear.R
 import dev.tulis.readbear.db.Settings
+import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderItemType
 import dev.tulis.readbear.routes.menu.LibraryViewModel
 import dev.tulis.readbear.routes.menu.MenuState
 import dev.tulis.readbear.routes.menu.UnsupportedFormatException
@@ -63,17 +64,27 @@ fun BookLibraryMenu(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    val booksFlow by viewModel.books.collectAsStateWithLifecycle()
-    val books = booksFlow ?: run {
+    val itemsFlow by viewModel.getItems().collectAsState(null)
+    val items = itemsFlow ?: run {
         menuState.resetActions()
         return
     }
 
-    val selectedItems = remember {
-        mutableStateListOf<Long>()
-    }
+//    val booksFlow by viewModel.books.collectAsStateWithLifecycle()
+//    val books = booksFlow ?: run {
+//        menuState.resetActions()
+//        return
+//    }
 
-    var selectionMode by remember { mutableStateOf(false) }
+//    val selectedItems = remember {
+//        mutableStateListOf<Long>()
+//    }
+
+//    var selectionMode by remember { mutableStateOf(false) }
+
+    val selectionState = rememberSelectionState()
+
+
     val settingsFlow by Settings.getSettings(context).collectAsState(null)
     val settings = settingsFlow ?: run {
         menuState.resetActions()
@@ -108,17 +119,7 @@ fun BookLibraryMenu(
         BookLibrary(
             settings = settings,
             padding = padding,
-            selectedItems = selectedItems,
-            onAddSelectedItem = {
-                selectedItems.add(it)
-            },
-            onRemoveSelectedItem = {
-                selectedItems.remove(it)
-            },
-            selectionMode = selectionMode,
-            onChangeSelectionMode = {
-                selectionMode = it
-            },
+            selectionState = selectionState,
             onOpenBook = {
                 onOpenBook(it)
             },
@@ -146,8 +147,7 @@ fun BookLibraryMenu(
     }
 
     menuState.updateActions actions@{
-        if(!selectionMode) {
-
+        if(!selectionState.selectionMode) {
             IconButton(
                 onClick = {
                     showSheet = true
@@ -206,21 +206,17 @@ fun BookLibraryMenu(
 
         IconButton(
             onClick = {
-                val allBooksIds = books.map { it.id }
-
-                if(selectedItems.containsAll(allBooksIds)) {
-                    selectedItems.clear()
-                    selectionMode = false
+                if(selectionState.selectedItems.containsAll(items)) {
+                    selectionState.selectedItems.clear()
+                    selectionState.selectionMode = false
                     return@IconButton
                 }
 
-                selectedItems.clear()
-                selectedItems.addAll(allBooksIds)
+                selectionState.selectedItems.clear()
+                selectionState.selectedItems.addAll(items)
             }
         ) {
-            if(selectedItems.containsAll(books.map{
-                    it.id
-                })) {
+            if(selectionState.selectedItems.containsAll(items)) {
                 Icon(
                     Icons.Default.Deselect,
                     contentDescription = stringResource(R.string.deselect)
@@ -233,27 +229,39 @@ fun BookLibraryMenu(
             }
         }
 
-        DeleteOption(viewModel, selectedItems) {
-            selectedItems.clear()
-            selectionMode = false
-        }
+        DeleteOption(viewModel, selectionState)
 
-        if(selectedItems.count() == 1) {
-            IconButton(
-                onClick = {
-                    onEditBook(selectedItems[0])
+        if(selectionState.selectedItems.count() == 1) {
+            val item = selectionState.selectedItems.first()
+
+            when(item.type) {
+                BookFolderItemType.Book -> {
+                    val bookFlow by viewModel.getBookByItemId(item.id).collectAsState(null)
+                    val book = bookFlow ?: return@actions
+
+                    IconButton(
+                        onClick = {
+                            onEditBook(book.id)
+                        }
+                    ) {
+                        Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.edit))
+                    }
+
+                    IconButton(
+                        onClick = {
+                            onBookDetails(book.id)
+                        }
+                    ) {
+                        Icon(Icons.Default.Info, contentDescription = stringResource(R.string.info))
+                    }
                 }
-            ) {
-                Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.edit))
+
+                BookFolderItemType.Folder -> {
+                    TODO()
+                }
             }
 
-            IconButton(
-                onClick = {
-                    onBookDetails(selectedItems[0])
-                }
-            ) {
-                Icon(Icons.Default.Info, contentDescription = stringResource(R.string.info))
-            }
+
         }
     }
 }

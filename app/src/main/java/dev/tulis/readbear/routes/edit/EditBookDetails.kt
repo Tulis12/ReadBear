@@ -131,7 +131,7 @@ fun EditBookDetails(
 
     var cover by remember {
         mutableStateOf(
-        context.filesDir
+        viewModel.booksDir
                 .resolve(book.path)
                 .resolve(book.cover)
         )
@@ -190,14 +190,14 @@ fun EditBookDetails(
                     IconButton(onClick = {
                         if(changedCover) {
                             val coverFilename = "cover_${UUID.randomUUID()}.${cover.extension}"
-                            val oldCover = context.filesDir
+                            val oldCover = viewModel.booksDir
                                 .resolve(book.path)
                                 .resolve(book.cover)
 
                             book.cover = coverFilename
 
                             scope.launch(Dispatchers.IO) {
-                                val targetCover = context.filesDir
+                                val targetCover = viewModel.booksDir
                                     .resolve(book.path)
                                     .resolve(coverFilename)
 
@@ -404,12 +404,12 @@ fun EditBookDetails(
                                 value = data.keywords ?: "",
                                 onValueChange = {
                                     changed = true
-                                    data.keywords
+                                    data.keywords = it
                                 },
                                 label = {
-                                    stringResource(R.string.keywords)
+                                    Text(stringResource(R.string.keywords))
                                 },
-                                singleLine = true
+                                maxLines = 2
                             )
                         }
 
@@ -426,25 +426,26 @@ fun EditBookDetails(
 open class EditBookDetails {}
 
 class ComicBookDetails(
-    comic: Comic,
+    val comic: Comic,
     series: String?,
     seriesStatus: String?,
     manga: Boolean?
 ) : EditBookDetails() {
-    var comic by mutableStateOf(comic)
     var series by mutableStateOf(series)
     var seriesStatus by mutableStateOf(seriesStatus)
     var manga by mutableStateOf(manga)
 }
 
 data class EpubBookDetails(
-    var epub: Epub
+    val epub: Epub
 ) : EditBookDetails() // TODO()
 
-data class PdfBookDetails(
-    var pdf: Pdf,
-    var keywords: String?
-) : EditBookDetails()
+class PdfBookDetails(
+    val pdf: Pdf,
+    keywords: String?
+) : EditBookDetails() {
+    var keywords: String? by mutableStateOf(keywords)
+}
 
 
 @Composable

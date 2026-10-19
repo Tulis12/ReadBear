@@ -24,6 +24,8 @@ import dev.tulis.readbear.AppViewModel
 import dev.tulis.readbear.R
 import dev.tulis.readbear.db.entities.books.Book
 import dev.tulis.readbear.db.entities.books.BookType
+import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderItem
+import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderItemType
 import dev.tulis.readbear.routes.menu.LibraryViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -39,10 +41,20 @@ fun importBook(
 ) {
     onChangeImporting(true)
 
+    val booksDir = context.filesDir.resolve("books")
+
     val bookUuid = UUID.randomUUID()
-    val bookDir = context.filesDir.resolve(bookUuid.toString())
+    val bookDir = booksDir.resolve(bookUuid.toString())
 
     bookDir.mkdirs()
+
+    val createBookFolderItem: suspend () -> Long = {
+        val index = viewModel.getMaxPositionIndex() ?: -1
+
+        viewModel.addBookFolderItem(
+            BookFolderItem(parentId = null, positionIndex = index + 1, type = BookFolderItemType.Book)
+        )
+    }
 
     viewModel.copyFileToAppStorage(
         context = context,
@@ -56,7 +68,8 @@ fun importBook(
                     Book(
                         title = originalName.substringBeforeLast("."),
                         path = bookUuid.toString(),
-                        type = BookType.Comic
+                        type = BookType.Comic,
+                        folderItemId = createBookFolderItem()
                     )
                 )
 
@@ -72,7 +85,8 @@ fun importBook(
                     Book(
                         title = originalName.substringBeforeLast("."),
                         path = bookUuid.toString(),
-                        type = BookType.Pdf
+                        type = BookType.Pdf,
+                        folderItemId = createBookFolderItem()
                     )
                 )
 
@@ -88,7 +102,8 @@ fun importBook(
                     Book(
                         title = originalName.substringBeforeLast("."),
                         path = bookUuid.toString(),
-                        type = BookType.Epub
+                        type = BookType.Epub,
+                        folderItemId = createBookFolderItem()
                     )
                 )
 
@@ -140,17 +155,17 @@ fun ImportOption(
         )
     }
 
+
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
     ) { uri ->
         uri?.let {
-            importBook(
-                uri = it,
-                context = context,
-                viewModel = viewModel,
-                scope = scope,
-                onChangeImporting = onChangeImporting,
-                onThrow = onThrow
+            importBook(    uri,
+                context,
+                viewModel,
+                scope,
+                onChangeImporting,
+            onThrow
             )
         }
     }

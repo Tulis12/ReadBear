@@ -116,7 +116,7 @@ fun EpubReader(
     }
 
     val book = suspendBook ?: return
-    val filesDir = LocalContext.current.filesDir
+    val booksDir = LocalContext.current.filesDir.resolve("books")
     var finished by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
@@ -178,7 +178,7 @@ fun EpubReader(
         }
 
         LaunchedEffect(Unit) {
-            readerState.load(FileInputStream(filesDir.resolve(book.path).resolve("book.epub")))
+            readerState.load(FileInputStream(booksDir.resolve(book.path).resolve("book.epub")))
         }
 
         EpubPageReader(

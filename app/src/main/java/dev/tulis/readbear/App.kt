@@ -138,9 +138,9 @@ fun RenderEpubCover(
     viewModel: AppViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
-    val filesDir = context.filesDir
+    val booksDir = context.filesDir.resolve("books")
 
-    val bookDir = filesDir.resolve(book.path)
+    val bookDir = booksDir.resolve(book.path)
 
     val cover = "cover_${UUID.randomUUID()}.jpeg"
     val coverFile = bookDir.resolve(cover)
