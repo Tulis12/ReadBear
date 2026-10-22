@@ -142,9 +142,9 @@ fun snippetScreenshooter(
                             value = name ?: "",
                             onValueChange = { name = it },
                             label = { Text(stringResource(R.string.name)) },
-                            isError = nameError,
+                            isError = nameError && name.isNullOrBlank(),
                             supportingText = {
-                                if(nameError) {
+                                if(nameError && name.isNullOrBlank()) {
                                     Text(stringResource(R.string.name_not_empty))
                                 } else {
                                     Text("")
@@ -197,6 +197,8 @@ fun snippetScreenshooter(
 
                             viewModel.createSnippet(snippet)
 
+                            name = null
+                            description = null
                         }
                     ) {
                         Text(stringResource(R.string.save))
