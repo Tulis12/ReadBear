@@ -19,13 +19,14 @@ import dev.tulis.readbear.R
 import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderItem
 import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderItemType
 import dev.tulis.readbear.routes.menu.LibraryViewModel
+import dev.tulis.readbear.routes.menu.library.ReorderState
 import dev.tulis.readbear.routes.menu.library.SelectionState
 
 @Composable
 fun Actions(
     appViewModel: AppViewModel,
     viewModel: LibraryViewModel = hiltViewModel(),
-    reorderState: Boolean,
+    reorderState: ReorderState,
     selectionState: SelectionState,
     items: List<BookFolderItem>,
     currentPageId: Long?,
@@ -45,7 +46,7 @@ fun Actions(
 
         IconButton(
             onClick = {
-                callbacks.onChangeReorderState(!reorderState)
+                reorderState.enabled = !reorderState.enabled
             }
         ) {
             Icon(
@@ -154,7 +155,6 @@ data class ActionsCallbacks(
     val onChangeImporting: (Boolean) -> Unit,
     val onEditBook: (Long) -> Unit,
     val onBookDetails: (Long) -> Unit,
-    val onChangeReorderState: (Boolean) -> Unit,
 
     val onCreateFolder: () -> Unit,
     val onEditFolder: (Long) -> Unit,

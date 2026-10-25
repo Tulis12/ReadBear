@@ -49,6 +49,7 @@ fun BookLibraryMenu(
     viewModel: LibraryViewModel = hiltViewModel(),
     appViewModel: AppViewModel,
     menuState: MenuState,
+    reorderState: ReorderState,
     callbacks: BookLibraryMenuCallbacks,
     padding: PaddingValues
 ) {
@@ -70,7 +71,6 @@ fun BookLibraryMenu(
     var currentParentId: Long? by remember { mutableStateOf(null) }
 
     val selectionState = rememberSelectionState()
-    var reorderState by remember { mutableStateOf(false) }
     var importing by remember { mutableStateOf(false) }
 
     val snackbarHostState = remember { SnackbarHostState() }
@@ -103,10 +103,10 @@ fun BookLibraryMenu(
             selectionState = selectionState,
             menuState = menuState,
             currentParentId = currentParentId,
-            reorderState = reorderState,
             onChangeCurrentParentId = {
                 currentParentId = it
             },
+            reorderState = reorderState,
             onOpenBook = {
                 callbacks.onOpenBook(it)
             },
@@ -211,9 +211,6 @@ fun BookLibraryMenu(
             currentPageId = currentParentId,
             reorderState = reorderState,
             callbacks = ActionsCallbacks(
-                onChangeReorderState = {
-                    reorderState = it
-                },
                 onThrow = { throwable ->
                     scope.launch {
                         val message = when (throwable) {

@@ -70,7 +70,7 @@ fun BookLibrary(
     viewModel: LibraryViewModel = hiltViewModel(),
     settings: Settings.SettingsState,
     padding: PaddingValues,
-    reorderState: Boolean,
+    reorderState: ReorderState,
     selectionState: SelectionState,
     menuState: MenuState,
     currentParentId: Long?,
@@ -294,7 +294,7 @@ fun BookLibrary(
                             val scope = rememberCoroutineScope()
 
                             AnimatedVisibility(
-                                reorderState,
+                                reorderState.enabled,
                                 enter = fadeIn(),
                                 exit = fadeOut(),
                                 modifier = Modifier.align(Alignment.TopEnd)
