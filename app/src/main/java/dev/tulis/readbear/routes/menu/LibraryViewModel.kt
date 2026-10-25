@@ -25,8 +25,11 @@ import dev.tulis.readbear.db.entities.epubs.Epub
 import dev.tulis.readbear.db.entities.epubs.EpubDao
 import dev.tulis.readbear.db.entities.epubs.bookmarks.EpubBookmark
 import dev.tulis.readbear.db.entities.epubs.bookmarks.EpubBookmarkDao
+import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolder
+import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderDao
 import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderItem
 import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderItemDao
+import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderItemType
 import dev.tulis.readbear.db.entities.pdfs.Pdf
 import dev.tulis.readbear.db.entities.pdfs.PdfDao
 import dev.tulis.readbear.db.entities.pdfs.bookmarks.PdfBookmark
@@ -59,6 +62,7 @@ class LibraryViewModel @Inject constructor (
     private val epubDao: EpubDao,
     private val epubBookmarkDao: EpubBookmarkDao,
     private val bookFolderItemDao: BookFolderItemDao,
+    private val bookFolderDao: BookFolderDao,
     val booksDir: File
 ) : ViewModel() {
 
@@ -77,8 +81,8 @@ class LibraryViewModel @Inject constructor (
         )
 
 
-    fun getItems(): Flow<List<BookFolderItem>> {
-        return bookFolderItemDao.getAll()
+    fun getItemsWithParentId(parentId: Long?): Flow<List<BookFolderItem>> {
+        return bookFolderItemDao.getAllWithParentId(parentId)
     }
 
     fun getBookById(bookId: Long): Flow<Book?> {
@@ -117,12 +121,6 @@ class LibraryViewModel @Inject constructor (
 
     suspend fun updateBookCover(id: Long, cover: String): Int {
         return bookRepository.updateCover(id, cover)
-    }
-
-    fun removeBook(book: Book) {
-        viewModelScope.launch {
-            bookRepository.deleteBook(book)
-        }
     }
 
     suspend fun createComicBookmark(comicId: Long) {
@@ -410,7 +408,12 @@ class LibraryViewModel @Inject constructor (
 
     fun removeItems(selectedItems: List<BookFolderItem>) {
         viewModelScope.launch {
-            selectedItems.forEach {
+            selectedItems.toList().forEach {
+                if(it.type == BookFolderItemType.Book) {
+                    val book = bookRepository.getBookByItemIdSuspend(it.id)
+                    booksDir.resolve(book.path).deleteRecursively()
+                }
+
                 bookFolderItemDao.delete(it)
             }
         }
@@ -434,8 +437,11 @@ class LibraryViewModel @Inject constructor (
         }
     }
 
-    suspend fun addBookFolderItem(bookFolderItem: BookFolderItem): Long {
-        return bookFolderItemDao.insert(bookFolderItem)
+    suspend fun addBookFolderItem(bookFolderItemType: BookFolderItemType, parentId: Long? = null): Long {
+        val index = getMaxPositionIndex() ?: -1
+        val item = BookFolderItem(parentId = parentId, positionIndex = index + 1, type = bookFolderItemType)
+
+        return bookFolderItemDao.insert(item)
     }
 
     suspend fun getMaxPositionIndex(): Long? {
@@ -444,6 +450,40 @@ class LibraryViewModel @Inject constructor (
 
     fun getBookByItemId(itemId: Long): Flow<Book?> {
         return bookRepository.getBookByItemId(itemId)
+    }
+
+    fun getFolderByItemId(itemId: Long): Flow<BookFolder?> {
+        return bookFolderDao.getFolderByItemId(itemId)
+    }
+
+    suspend fun getFolderByItemIdSuspend(itemId: Long): BookFolder? {
+        return bookFolderDao.getFolderByItemIdSuspend(itemId)
+    }
+
+    fun createFolder(bookFolder: BookFolder) {
+        viewModelScope.launch {
+            bookFolderDao.insert(bookFolder)
+        }
+    }
+
+    suspend fun createBookFolderItem(bookFolderItem: BookFolderItem): Long {
+        return bookFolderItemDao.insert(bookFolderItem)
+    }
+
+    fun getFolderById(currentParentId: Long): Flow<BookFolder?> {
+        return bookFolderDao.get(currentParentId)
+    }
+
+    fun savePositions(items: List<BookFolderItem>) {
+        viewModelScope.launch {
+            bookFolderItemDao.bulkUpdate(items)
+        }
+    }
+
+    fun updateItem(bookFolderItem: BookFolderItem) {
+        viewModelScope.launch {
+            bookFolderItemDao.update(bookFolderItem)
+        }
     }
 }
 

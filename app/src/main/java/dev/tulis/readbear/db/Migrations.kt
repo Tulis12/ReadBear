@@ -173,5 +173,9 @@ val MIGRATION_3_4 = object : Migration(3, 4) {
 
         db.execSQL("DROP TABLE Book")
         db.execSQL("AlTER TABLE _Book RENAME TO Book")
+
+        db.execSQL("""
+            CREATE INDEX `index_Book_folderItemId` ON `Book` (`folderItemId`);
+        """.trimIndent())
     }
 }

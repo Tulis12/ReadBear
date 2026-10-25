@@ -24,7 +24,6 @@ import dev.tulis.readbear.AppViewModel
 import dev.tulis.readbear.R
 import dev.tulis.readbear.db.entities.books.Book
 import dev.tulis.readbear.db.entities.books.BookType
-import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderItem
 import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderItemType
 import dev.tulis.readbear.routes.menu.LibraryViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -37,7 +36,8 @@ fun importBook(
     viewModel: LibraryViewModel,
     scope: CoroutineScope,
     onChangeImporting: (Boolean) -> Unit,
-    onThrow: (Throwable?) -> Unit
+    onThrow: (Throwable?) -> Unit,
+    itemParentId: Long? = null,
 ) {
     onChangeImporting(true)
 
@@ -48,20 +48,11 @@ fun importBook(
 
     bookDir.mkdirs()
 
-    val createBookFolderItem: suspend () -> Long = {
-        val index = viewModel.getMaxPositionIndex() ?: -1
-
-        viewModel.addBookFolderItem(
-            BookFolderItem(parentId = null, positionIndex = index + 1, type = BookFolderItemType.Book)
-        )
-    }
-
     viewModel.copyFileToAppStorage(
         context = context,
         bookDir = bookDir,
         uri = uri,
-        onFinishCbz = {
-                originalName ->
+        onFinishCbz = { originalName ->
 
             scope.launch {
                 val bookId = viewModel.addBook(
@@ -69,7 +60,7 @@ fun importBook(
                         title = originalName.substringBeforeLast("."),
                         path = bookUuid.toString(),
                         type = BookType.Comic,
-                        folderItemId = createBookFolderItem()
+                        folderItemId = viewModel.addBookFolderItem(BookFolderItemType.Book, itemParentId)
                     )
                 )
 
@@ -77,8 +68,7 @@ fun importBook(
                 onChangeImporting(false)
             }
         },
-        onFinishPdf = {
-                originalName ->
+        onFinishPdf = { originalName ->
 
             scope.launch {
                 val bookId = viewModel.addBook(
@@ -86,7 +76,7 @@ fun importBook(
                         title = originalName.substringBeforeLast("."),
                         path = bookUuid.toString(),
                         type = BookType.Pdf,
-                        folderItemId = createBookFolderItem()
+                        folderItemId = viewModel.addBookFolderItem(BookFolderItemType.Book, itemParentId)
                     )
                 )
 
@@ -94,8 +84,7 @@ fun importBook(
                 onChangeImporting(false)
             }
         },
-        onFinishEpub = {
-                originalName ->
+        onFinishEpub = { originalName ->
 
             scope.launch {
                 val bookId = viewModel.addBook(
@@ -103,7 +92,7 @@ fun importBook(
                         title = originalName.substringBeforeLast("."),
                         path = bookUuid.toString(),
                         type = BookType.Epub,
-                        folderItemId = createBookFolderItem()
+                        folderItemId = viewModel.addBookFolderItem(BookFolderItemType.Book, itemParentId)
                     )
                 )
 
@@ -111,8 +100,7 @@ fun importBook(
                 onChangeImporting(false)
             }
         },
-        onThrow = {
-                throwable ->
+        onThrow = { throwable ->
 
             onChangeImporting(false)
             onThrow(throwable)
@@ -124,8 +112,10 @@ fun importBook(
 fun ImportOption(
     appViewModel: AppViewModel,
     viewModel: LibraryViewModel,
+    currentParentId: Long?,
     onChangeImporting: (Boolean) -> Unit,
-    onThrow: (Throwable?) -> Unit
+    onThrow: (Throwable?) -> Unit,
+    onCreateFolder: () -> Unit
 ) {
     val context = LocalContext.current
     var expanded by remember { mutableStateOf(false) }
@@ -139,7 +129,8 @@ fun ImportOption(
                 viewModel = viewModel,
                 scope = scope,
                 onChangeImporting = onChangeImporting,
-                onThrow = onThrow
+                onThrow = onThrow,
+                itemParentId = currentParentId
             )
         }
     }
@@ -160,12 +151,14 @@ fun ImportOption(
         contract = ActivityResultContracts.OpenDocument()
     ) { uri ->
         uri?.let {
-            importBook(    uri,
+            importBook(
+                uri,
                 context,
                 viewModel,
                 scope,
                 onChangeImporting,
-            onThrow
+                onThrow,
+                currentParentId
             )
         }
     }
@@ -177,7 +170,7 @@ fun ImportOption(
         DropdownMenuItem(
             text = {
                 Text(stringResource(R.string.add_local_resource))
-           },
+            },
             onClick = {
                 expanded = false
                 launcher.launch(
@@ -189,6 +182,16 @@ fun ImportOption(
                         "*/*"
                     )
                 )
+            }
+        )
+
+        DropdownMenuItem(
+            text = {
+                Text(stringResource(R.string.add_folder))
+            },
+            onClick = {
+                expanded = false
+                onCreateFolder()
             }
         )
     }

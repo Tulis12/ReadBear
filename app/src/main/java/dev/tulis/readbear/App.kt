@@ -84,11 +84,21 @@ fun App(
                 onBookDetails = {
                     navController.navigate(Route.BookDetails(it))
                 },
+
+                onEditFolder = {
+                    navController.navigate(Route.EditFolderDetails(it))
+                },
+                onFolderDetails = {
+                    navController.navigate(Route.FolderDetails(it))
+                },
+
                 onReady = {
                     onReady()
                 }
             )
         }
+
+
 
         composable<Route.ComicReader> { entry ->
             val args = entry.toRoute<Route.ComicReader>()
@@ -117,6 +127,8 @@ fun App(
             )
         }
 
+
+
         composable<Route.BookDetails> { entry ->
             val args = entry.toRoute<Route.BookDetails>()
 
@@ -129,6 +141,21 @@ fun App(
             EditBookDetails(bookId = args.bookId, onPopBack = ::goBack)
         }
 
+
+
+        composable<Route.FolderDetails> { entry ->
+            val args = entry.toRoute<Route.FolderDetails>()
+
+            TODO()
+//            BookDetails(bookId = args.bookId, returnToMenu = ::goBack)
+        }
+
+        composable<Route.EditFolderDetails> { entry ->
+            val args = entry.toRoute<Route.EditFolderDetails>()
+
+            TODO()
+//            EditBookDetails(bookId = args.bookId, onPopBack = ::goBack)
+        }
     }
 }
 

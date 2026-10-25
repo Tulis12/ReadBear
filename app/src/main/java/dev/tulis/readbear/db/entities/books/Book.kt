@@ -2,6 +2,7 @@ package dev.tulis.readbear.db.entities.books
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderItem
 import kotlin.time.Clock
@@ -15,7 +16,8 @@ import kotlin.time.Instant
             childColumns = ["folderItemId"],
             onDelete = ForeignKey.CASCADE
         )
-    ]
+    ],
+    indices = [Index("folderItemId")]
 )
 data class Book(
     @PrimaryKey(autoGenerate = true)

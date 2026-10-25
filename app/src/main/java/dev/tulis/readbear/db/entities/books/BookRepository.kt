@@ -1,13 +1,11 @@
 package dev.tulis.readbear.db.entities.books
 
-import android.util.Log
 import jakarta.inject.Inject
 import kotlinx.coroutines.flow.Flow
 import java.io.File
 
 class BookRepository @Inject constructor(
-    private val dao: BookDao,
-    private val filesDir: File
+    private val dao: BookDao
 ) {
 
     val books = dao.getAllFlow()
@@ -41,21 +39,14 @@ class BookRepository @Inject constructor(
     }
 
     fun synchronizeDeletedPaths() {
-        filesDir
-    }
-
-    suspend fun deleteBook(book: Book) {
-        val target = File(filesDir, book.path)
-
-        if(!target.deleteRecursively()) {
-            Log.d("Deleting", "ERROR! Could not delete recursively!")
-        }
-
-
-        dao.delete(book)
+//        filesDir TODO()
     }
 
     fun getBookByItemId(itemId: Long): Flow<Book?> {
         return dao.getByItemId(itemId)
+    }
+
+    suspend fun getBookByItemIdSuspend(itemId: Long): Book {
+        return dao.getByItemIdSuspend(itemId)
     }
 }

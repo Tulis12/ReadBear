@@ -31,7 +31,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -48,11 +47,11 @@ import dev.tulis.readbear.db.fileMigrations.FileMigration
 import dev.tulis.readbear.db.fileMigrations.rememberFileMigrationState
 import dev.tulis.readbear.settings.tabs.ReadBearTheme
 import dev.tulis.readbear.ui.theme.ReadBearMaterialTheme
-import dev.tulis.readbear.ui.theme.customThemes.roseWood.RoseWoodTheme
 import dev.tulis.readbear.ui.theme.customThemes.catppuccin.Catppuccin
 import dev.tulis.readbear.ui.theme.customThemes.forest.ForestTheme
-import dev.tulis.readbear.ui.theme.customThemes.river.RiverTheme
 import dev.tulis.readbear.ui.theme.customThemes.pink.PinkTheme
+import dev.tulis.readbear.ui.theme.customThemes.river.RiverTheme
+import dev.tulis.readbear.ui.theme.customThemes.roseWood.RoseWoodTheme
 import dev.tulis.readbear.ui.theme.customThemes.sunflower.SunflowerTheme
 import dev.tulis.readbear.ui.theme.customThemes.teal.TealTheme
 import dev.tulis.readbear.ui.theme.darkScheme
@@ -115,7 +114,6 @@ class MainActivity : AppCompatActivity() {
 
         setContent {
             val context = LocalContext.current
-            val scope = rememberCoroutineScope()
             val settings = Settings.getSettings(context).collectAsState(null).value ?: return@setContent
 
             val readBearTheme = themes.firstOrNull {
@@ -130,7 +128,7 @@ class MainActivity : AppCompatActivity() {
                     val migrationState = rememberFileMigrationState()
                     val unsafeMigrations = remember { mutableStateListOf<FileMigration>() }
                     val allowMigrateUnsafely = remember { mutableStateListOf<FileMigration>() }
-                    var safeMigration: Boolean by remember { mutableStateOf(false) }
+                    var safeMigration: Boolean by remember { mutableStateOf(true) }
                     var startedMigration: Boolean by remember { mutableStateOf(false) }
 
                     LaunchedEffect(Unit) {
@@ -184,7 +182,7 @@ class MainActivity : AppCompatActivity() {
                             )
 
                             Text(
-                                text = "Migracja ${migrationState.stageCurrent} z ${migrationState.stageMax}",
+                                text = stringResource(R.string.migration_x_from_y, migrationState.stageCurrent, migrationState.stageMax ?: migrationState.stageCurrent),
                                 style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
@@ -284,14 +282,14 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    override fun onNewIntent(intent: android.content.Intent) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
         handleIncomingIntent(intent)
     }
 
-    private fun handleIncomingIntent(intent: android.content.Intent?) {
-        if (intent?.action != android.content.Intent.ACTION_VIEW) return
+    private fun handleIncomingIntent(intent: Intent?) {
+        if (intent?.action != Intent.ACTION_VIEW) return
 
         val uri = intent.data ?: return
         viewModel.requestImport(uri)

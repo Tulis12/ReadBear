@@ -19,13 +19,19 @@ interface BookFolderDao {
     suspend fun update(bookFolder: BookFolder): Int
 
     @Query("SELECT * FROM BookFolder WHERE id = :id")
-    suspend fun get(id: Long): BookFolder
+    fun get(id: Long): Flow<BookFolder?>
 
     @Query("SELECT * FROM BookFolder WHERE id = :id")
     fun getFlow(id: Long): Flow<BookFolder?>
 
     @Query("DELETE FROM BookFolder WHERE id = :id")
     suspend fun deleteById(id: Long)
+
+    @Query("SELECT * FROM BookFolder WHERE itemId IS :itemId")
+    fun getFolderByItemId(itemId: Long): Flow<BookFolder?>
+
+    @Query("SELECT * FROM BookFolder WHERE itemId IS :itemId")
+    suspend fun getFolderByItemIdSuspend(itemId: Long): BookFolder?
 
 //    @Transaction
 //    @Query("SELECT * FROM bookFolder")

@@ -50,6 +50,10 @@ interface BookDao {
 
     @Query("SELECT * FROM Book WHERE folderItemId = :itemId")
     fun getByItemId(itemId: Long): Flow<Book?>
+
+    @Query("SELECT * FROM Book WHERE folderItemId = :itemId")
+    suspend fun getByItemIdSuspend(itemId: Long): Book
+
 //
 //    @Transaction
 //    @Query("SELECT * FROM Book WHERE id = :bookId")
