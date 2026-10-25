@@ -77,14 +77,14 @@ fun PdfReader(
     val flowBook: Book? by viewModel.getBookFlow(pdfWithBookmark.pdf.bookId).collectAsStateWithLifecycle(null)
 
     val book = flowBook ?: return
-    val filesDir = LocalContext.current.filesDir
+    val booksDir = LocalContext.current.filesDir.resolve("books")
     var finished by remember { mutableStateOf(false) }
 
 
     val reader = rememberPdfReaderState()
 
     LaunchedEffect(Unit) {
-        reader.open(filesDir.resolve(book.path).resolve("book.pdf").readBytes())
+        reader.open(booksDir.resolve(book.path).resolve("book.pdf").readBytes())
         book.lastReadAt = Clock.System.now()
         viewModel.updateBook(book)
     }

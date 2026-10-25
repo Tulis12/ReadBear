@@ -25,18 +25,19 @@ import dev.tulis.readbear.db.entities.epubs.Epub
 import dev.tulis.readbear.db.entities.epubs.EpubDao
 import dev.tulis.readbear.db.entities.epubs.bookmarks.EpubBookmark
 import dev.tulis.readbear.db.entities.epubs.bookmarks.EpubBookmarkDao
+import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolder
+import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderDao
+import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderItem
+import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderItemDao
+import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderItemType
 import dev.tulis.readbear.db.entities.pdfs.Pdf
 import dev.tulis.readbear.db.entities.pdfs.PdfDao
 import dev.tulis.readbear.db.entities.pdfs.bookmarks.PdfBookmark
 import dev.tulis.readbear.db.entities.pdfs.bookmarks.PdfBookmarkDao
 import dev.tulis.readbear.renderEpubCover
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -60,7 +61,9 @@ class LibraryViewModel @Inject constructor (
     private val pdfBookmarkDao: PdfBookmarkDao,
     private val epubDao: EpubDao,
     private val epubBookmarkDao: EpubBookmarkDao,
-    private val filesDir: File
+    private val bookFolderItemDao: BookFolderItemDao,
+    private val bookFolderDao: BookFolderDao,
+    val booksDir: File
 ) : ViewModel() {
 
     val imageExtensions = arrayOf(
@@ -77,6 +80,10 @@ class LibraryViewModel @Inject constructor (
             null
         )
 
+
+    fun getItemsWithParentId(parentId: Long?): Flow<List<BookFolderItem>> {
+        return bookFolderItemDao.getAllWithParentId(parentId)
+    }
 
     fun getBookById(bookId: Long): Flow<Book?> {
         return bookRepository.getBookFlow(bookId)
@@ -116,12 +123,6 @@ class LibraryViewModel @Inject constructor (
         return bookRepository.updateCover(id, cover)
     }
 
-    fun removeBook(book: Book) {
-        viewModelScope.launch {
-            bookRepository.deleteBook(book)
-        }
-    }
-
     suspend fun createComicBookmark(comicId: Long) {
         val bookmark = ComicBookmark(comicId = comicId)
         comicBookmarkDao.insert(bookmark)
@@ -140,7 +141,7 @@ class LibraryViewModel @Inject constructor (
     suspend fun createEpubIndex(
         book: Book
     ) = withContext(Dispatchers.IO) {
-        val bookDir = filesDir.resolve(book.path)
+        val bookDir = booksDir.resolve(book.path)
 
         val epub = Epub(bookId = book.id)
         epub.id = epubDao.insert(epub)
@@ -177,7 +178,7 @@ class LibraryViewModel @Inject constructor (
     suspend fun createPdfIndex(
         book: Book
     ) = withContext(Dispatchers.IO) {
-        val bookDir = filesDir.resolve(book.path)
+        val bookDir = booksDir.resolve(book.path)
 
         val pdf = Pdf(bookId = book.id)
         pdf.id = pdfDao.insert(pdf)
@@ -250,7 +251,7 @@ class LibraryViewModel @Inject constructor (
         book: Book
     ) = withContext(Dispatchers.IO) {
         val files = mutableListOf<String>()
-        val bookDir = filesDir.resolve(book.path)
+        val bookDir = booksDir.resolve(book.path)
 
         ZipFile(
             bookDir.resolve("book.cbz")
@@ -405,11 +406,15 @@ class LibraryViewModel @Inject constructor (
         }
     }
 
-    fun removeBooks(selectedBooks: List<Long>) {
+    fun removeItems(selectedItems: List<BookFolderItem>) {
         viewModelScope.launch {
-            selectedBooks.forEach {
-                val book = bookRepository.getBook(it)
-                bookRepository.deleteBook(book)
+            selectedItems.toList().forEach {
+                if(it.type == BookFolderItemType.Book) {
+                    val book = bookRepository.getBookByItemIdSuspend(it.id)
+                    booksDir.resolve(book.path).deleteRecursively()
+                }
+
+                bookFolderItemDao.delete(it)
             }
         }
     }
@@ -429,6 +434,55 @@ class LibraryViewModel @Inject constructor (
     fun updateEpub(epub: Epub) {
         viewModelScope.launch {
             epubDao.update(epub)
+        }
+    }
+
+    suspend fun addBookFolderItem(bookFolderItemType: BookFolderItemType, parentId: Long? = null): Long {
+        val index = getMaxPositionIndex() ?: -1
+        val item = BookFolderItem(parentId = parentId, positionIndex = index + 1, type = bookFolderItemType)
+
+        return bookFolderItemDao.insert(item)
+    }
+
+    suspend fun getMaxPositionIndex(): Long? {
+        return bookFolderItemDao.getMaxPositionIndex()
+    }
+
+    fun getBookByItemId(itemId: Long): Flow<Book?> {
+        return bookRepository.getBookByItemId(itemId)
+    }
+
+    fun getFolderByItemId(itemId: Long): Flow<BookFolder?> {
+        return bookFolderDao.getFolderByItemId(itemId)
+    }
+
+    suspend fun getFolderByItemIdSuspend(itemId: Long): BookFolder? {
+        return bookFolderDao.getFolderByItemIdSuspend(itemId)
+    }
+
+    fun createFolder(bookFolder: BookFolder) {
+        viewModelScope.launch {
+            bookFolderDao.insert(bookFolder)
+        }
+    }
+
+    suspend fun createBookFolderItem(bookFolderItem: BookFolderItem): Long {
+        return bookFolderItemDao.insert(bookFolderItem)
+    }
+
+    fun getFolderById(currentParentId: Long): Flow<BookFolder?> {
+        return bookFolderDao.get(currentParentId)
+    }
+
+    fun savePositions(items: List<BookFolderItem>) {
+        viewModelScope.launch {
+            bookFolderItemDao.bulkUpdate(items)
+        }
+    }
+
+    fun updateItem(bookFolderItem: BookFolderItem) {
+        viewModelScope.launch {
+            bookFolderItemDao.update(bookFolderItem)
         }
     }
 }

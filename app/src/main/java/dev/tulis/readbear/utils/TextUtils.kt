@@ -1,8 +1,14 @@
 package dev.tulis.readbear.utils
 
 import androidx.compose.foundation.basicMarquee
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -18,7 +24,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.dp
 import dev.tulis.readbear.db.Settings
 import dev.tulis.readbear.settings.TooLongTextOption
 import java.text.Normalizer
@@ -89,8 +97,6 @@ fun shortTitle(title: String): String {
     return title.substringBefore(":").substringBefore("(").trim()
 }
 
-fun String.nbsp() = replace(' ', '\u00A0')
-
 fun cutText(text: String, max: Int): String  {
     return if (text.length <= max) {
         text
@@ -105,4 +111,28 @@ fun normalizeName(name: String): String {
         .replace("\\p{M}+".toRegex(), "")
         .replace("[^a-zA-Z0-9]".toRegex(), "_")
         .lowercase(Locale.ROOT)
+}
+
+@Composable
+fun InfoRow(
+    label: String,
+    value: String,
+    minimumGap: Dp = 20.dp
+) {
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Text(
+            text = label,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+
+        Spacer(Modifier.width(minimumGap))
+
+        LongText(
+            text = value,
+            fontWeight = FontWeight.Medium
+        )
+    }
 }

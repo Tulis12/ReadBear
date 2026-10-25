@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
 
@@ -11,7 +12,10 @@ import kotlinx.coroutines.flow.Flow
 interface BookDao {
 
     @Query("SELECT * FROM Book")
-    fun getAll(): Flow<List<Book>>
+    fun getAllFlow(): Flow<List<Book>>
+
+    @Query("SELECT * FROM Book")
+    suspend fun getAll(): List<Book>
 
     @Insert
     suspend fun insert(book: Book): Long
@@ -23,7 +27,17 @@ interface BookDao {
     suspend fun update(book: Book)
 
     @Delete
-    suspend fun delete(book: Book)
+    suspend fun deleteBook(book: Book)
+
+    @Query("DELETE FROM BookFolderItem WHERE id = :id")
+    suspend fun deleteFolderItem(id: Long)
+
+    @Deprecated("Delete the bookFolderItem instead.")
+    @Transaction
+    suspend fun delete(book: Book) {
+        deleteBook(book)
+        deleteFolderItem(book.folderItemId)
+    }
 
     @Query("SELECT * FROM Book WHERE id = :id")
     suspend fun get(id: Long): Book
@@ -33,6 +47,13 @@ interface BookDao {
 
     @Query("DELETE FROM Book WHERE id = :id")
     suspend fun deleteById(id: Long)
+
+    @Query("SELECT * FROM Book WHERE folderItemId = :itemId")
+    fun getByItemId(itemId: Long): Flow<Book?>
+
+    @Query("SELECT * FROM Book WHERE folderItemId = :itemId")
+    suspend fun getByItemIdSuspend(itemId: Long): Book
+
 //
 //    @Transaction
 //    @Query("SELECT * FROM Book WHERE id = :bookId")

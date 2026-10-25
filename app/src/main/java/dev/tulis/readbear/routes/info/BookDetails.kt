@@ -70,7 +70,7 @@ fun BookDetails(
 
     var cover by remember {
         mutableStateOf(
-            context.filesDir
+            viewModel.booksDir
                 .resolve(book.path)
                 .resolve(book.cover)
         )

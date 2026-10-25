@@ -13,6 +13,8 @@ import dev.tulis.readbear.db.entities.comics.bookmarks.ComicBookmarkDao
 import dev.tulis.readbear.db.entities.comics.pages.ComicPageDao
 import dev.tulis.readbear.db.entities.epubs.EpubDao
 import dev.tulis.readbear.db.entities.epubs.bookmarks.EpubBookmarkDao
+import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderDao
+import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderItemDao
 import dev.tulis.readbear.db.entities.pdfs.PdfDao
 import dev.tulis.readbear.db.entities.pdfs.bookmarks.PdfBookmarkDao
 import dev.tulis.readbear.db.entities.snippets.SnippetDao
@@ -35,15 +37,26 @@ object DatabaseModule {
         )
             .addMigrations(MIGRATION_1_2)
             .addMigrations(MIGRATION_2_3)
+            .addMigrations(MIGRATION_3_4)
             .build()
     }
 
+//    @Provides
+//    @Singleton
+//    fun provideFilesDir(
+//        @ApplicationContext context: Context
+//    ): File {
+//        return context.filesDir
+//    }
+
     @Provides
     @Singleton
-    fun provideFilesDir(
+    fun provideBooksDir(
         @ApplicationContext context: Context
     ): File {
-        return context.filesDir
+        val dir = context.filesDir.resolve("books")
+        dir.mkdirs()
+        return dir
     }
 
     @Provides
@@ -107,5 +120,19 @@ object DatabaseModule {
         database: AppDatabase
     ): SnippetDao {
         return database.snippetDao()
+    }
+
+    @Provides
+    fun provideBookFolderDao(
+        database: AppDatabase
+    ) : BookFolderDao {
+        return database.bookFolderDao()
+    }
+    
+    @Provides
+    fun provideBookFolderItemDao(
+        database: AppDatabase
+    ) : BookFolderItemDao {
+        return database.bookFolderItemDao()
     }
 }

@@ -26,12 +26,6 @@ sealed interface Route {
     ) : Route
 
     @Serializable
-    data class SnippetDetails(
-        val snippetId: Long
-    ) : Route
-
-
-    @Serializable
     data class BookDetails(
         val bookId: Long
     ) : Route
@@ -39,5 +33,16 @@ sealed interface Route {
     @Serializable
     data class EditBookDetails(
         val bookId: Long
+    ) : Route
+
+
+    @Serializable
+    data class FolderDetails(
+        val folderId: Long
+    ) : Route
+
+    @Serializable
+    data class EditFolderDetails(
+        val folderId: Long
     ) : Route
 }

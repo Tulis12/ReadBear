@@ -38,6 +38,8 @@ import androidx.compose.ui.unit.dp
 import dev.tulis.readbear.AppViewModel
 import dev.tulis.readbear.R
 import dev.tulis.readbear.routes.menu.library.BookLibraryMenu
+import dev.tulis.readbear.routes.menu.library.BookLibraryMenuCallbacks
+import dev.tulis.readbear.routes.menu.library.rememberReorderState
 import dev.tulis.readbear.routes.menu.snippets.SnippetsLibrary
 import kotlinx.coroutines.launch
 
@@ -47,6 +49,10 @@ fun Menu(
     onOpenBook: (Long) -> Unit,
     onEditBook: (Long) -> Unit,
     onBookDetails: (Long) -> Unit,
+
+    onEditFolder: (Long) -> Unit,
+    onFolderDetails: (Long) -> Unit,
+
     onReady: () -> Unit,
     appViewModel: AppViewModel
 ) {
@@ -55,6 +61,7 @@ fun Menu(
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
+    val reorderState = rememberReorderState()
     val menuState = rememberMenuState(stringResource(R.string.base_app_name))
     var route by remember { mutableStateOf(MenuRoute.BOOK_LIBRARY) }
 
@@ -103,6 +110,7 @@ fun Menu(
 
     ModalNavigationDrawer(
         drawerState = drawerState,
+        gesturesEnabled = !reorderState.enabled,
         drawerContent = {
             ModalDrawerSheet(
                 modifier = Modifier.fillMaxWidth(0.7f)
@@ -189,13 +197,20 @@ fun Menu(
                         BookLibraryMenu(
                             appViewModel = appViewModel,
                             menuState = menuState,
-                            onOpenBook = onOpenBook,
-                            onEditBook = onEditBook,
-                            onBookDetails = onBookDetails,
+                            reorderState = reorderState,
+                            callbacks = BookLibraryMenuCallbacks(
+                                onBookDetails = onBookDetails,
+                                onOpenBook = onOpenBook,
+                                onEditBook = onEditBook,
+
+                                onFolderDetails = onFolderDetails,
+                                onEditFolder = onEditFolder,
+
+                                onReady = {
+                                    onReady()
+                                }
+                            ),
                             padding = padding,
-                            onReady = {
-                                onReady()
-                            }
                         )
                     }
 

@@ -11,6 +11,7 @@ import dev.tulis.readbear.db.entities.epubs.EpubDao
 import dev.tulis.readbear.db.entities.pdfs.Pdf
 import dev.tulis.readbear.db.entities.pdfs.PdfDao
 import kotlinx.coroutines.flow.Flow
+import java.io.File
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,8 +19,11 @@ class BookDetailsViewModel @Inject constructor (
     private val bookDao: BookDao,
     private val epubDao: EpubDao,
     private val pdfDao: PdfDao,
-    private val comicDao: ComicDao
+    private val comicDao: ComicDao,
+    val booksDir: File
 ) : ViewModel() {
+
+
     fun getBookById(bookId: Long): Flow<Book?> {
         return bookDao.getBookFlow(bookId)
     }

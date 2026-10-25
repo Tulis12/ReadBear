@@ -53,8 +53,8 @@ android {
         applicationId = "dev.tulis.readbear"
         minSdk = 24
         targetSdk = 37
-        versionCode = 22
-        versionName = "v0.8.1"
+        versionCode = 23
+        versionName = "v0.8.2-beta"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -144,4 +144,7 @@ dependencies {
     implementation("net.engawapg.lib:zoomable:2.13.0")
 
     implementation("androidx.core:core-splashscreen:1.2.0")
+
+//    implementation("sh.calvin.reorderable:reorderable:3.1.0")
+    implementation("io.github.tulis12:reorderable:3.2.1-tulis.1")
 }
