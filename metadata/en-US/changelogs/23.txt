@@ -1,0 +1,5 @@
+* Folders
+* Moving books between folders
+* Reordering items in library and in folders
+* Fix a lot of bugs in the UI
+* Improve gestures
