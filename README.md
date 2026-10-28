@@ -27,6 +27,20 @@
 - toggle features that you like, or that annoy you
 - tailor features of the app to your liking
 
+> [!NOTE]
+> **Help test ReadBear!**  
+> We're looking for testers to apply for Google Play store!
+> [Sign up for testing](https://forms.gle/juML2qQRUskNn1Ra9)
+
+### Features
+
+- many reading formats
+- bookmarks and auto-saving reading progress
+- counting all your reading hours
+- capture snippets: screenshot fragments of the art
+- toggle features that you like, or that annoy you
+- tailor features of the app to your liking
+
 ### Supported formats
 
 | Format | Support | Info                              |
