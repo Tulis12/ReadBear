@@ -4,15 +4,41 @@
 
 # ReadBear
 
+### A cute and chill CBZ, PDF, EPUB reader that's ridiculously configurable&nbsp;-&nbsp;for free!
+
 <p>
-    <a href="https://translate.tulis.dev/engage/readbear/"><img src="https://translate.tulis.dev/widget/readbear/svg-badge.svg" alt="Translation"></a>
+    <a href="https://f-droid.org/packages/dev.tulis.readbear">
+        <img src="https://f-droid.org/badge/get-it-on.png" alt="Download from F-Droid" height="80">
+    </a>
+    <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/Tulis12/ReadBear">
+        <img src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png" alt="Download from Obtainium" height="80">
+    </a>
 </p>
 
-<a href="https://f-droid.org/packages/dev.tulis.readbear">
-    <img src="https://f-droid.org/badge/get-it-on.png" alt="Download from F-Droid" height="80">
-</a>
+### Supported formats
 
-### A cute and chill CBZ, PDF, EPUB reader that's ridiculously configurable&nbsp;-&nbsp;for free!
+| Format | Support | Info                              |
+| ------ | ------- | --------------------------------- |
+| EPUB   | ✅➕    | Customization options are coming! |
+| CBZ    | ⚠️      | Metadata is not yet supported     |
+| PDF    | ⚠️      | Metadata is not yet supported     |
+| CBR    | ⌛      | In near future                    |
+| MOBI   | ⌛      | In farther than near future       |
+
+✅ - all reading features are supported
+✅➕ - all reading features are supported, along with additional ones  
+⚠️ - reading is supported, but not all format features are (for example metadata)  
+⌛ - format is on the roadmap
+
+### Contributing
+
+Want to help with the app? Here are some ways to contribute:
+
+- [create new languages](https://github.com/Tulis12/ReadBear/issues) in translation (select "New language" template)
+- update and review translations [![translated percent badge](https://translate.tulis.dev/widget/readbear/svg-badge.svg)](https://translate.tulis.dev/engage/readbear/)
+- create feature submissions
+- submit issues if found (pretty please)
+- create prs with bug fixes
 
 ## How to verify app signature, and verify that the app is genuine?
 
@@ -22,3 +48,7 @@ Use for example [AppVerifier](https://github.com/soupslurpr/AppVerifier) and che
 dev.tulis.readbear
 BA:29:5F:BF:D8:57:41:ED:AC:5C:37:72:43:0B:BA:B1:91:81:91:E8:99:90:D8:6C:87:17:B4:39:95:93:37:12
 ```
+
+## License
+
+ReadBear is released under MIT.
