@@ -6,22 +6,29 @@
 
 ### A cute and chill CBZ, PDF, EPUB reader that's ridiculously configurable&nbsp;-&nbsp;for free!
 
-<p>
-    <a href="https://f-droid.org/packages/dev.tulis.readbear">
-        <img src="https://f-droid.org/badge/get-it-on.png" alt="Download from F-Droid" height="80">
-    </a>
-    <a href="https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/Tulis12/ReadBear">
-        <img src="https://raw.githubusercontent.com/ImranR98/Obtainium/main/assets/graphics/badge_obtainium.png" alt="Download from Obtainium" height="80">
-    </a>
-</p>
+[<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/packages/dev.tulis.readbear) [<img src="https://github.com/user-attachments/assets/713d71c5-3dec-4ec4-a3f2-8d28d025a9c6" alt="Get it on Obtainium" height="80">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/Tulis12/ReadBear)
+
+> [!NOTE]
+> **Help test ReadBear!**  
+> We're looking for testers to apply for Google Play store!
+> [Sign up for testing](https://forms.gle/juML2qQRUskNn1Ra9)
+
+### Features
+
+- many reading formats
+- bookmarks and auto-saving reading progress
+- counting all your reading hours
+- capture snippets: screenshot fragments of the art
+- toggle features that you like, or that annoy you
+- tailor features of the app to your liking
 
 ### Supported formats
 
 | Format | Support | Info                              |
 | ------ | ------- | --------------------------------- |
-| EPUB   | ✅➕    | Customization options are coming! |
-| CBZ    | ⚠️      | Metadata is not yet supported     |
-| PDF    | ⚠️      | Metadata is not yet supported     |
+| EPUB   | ✅      | Customization options are coming! |
+| CBZ    | ✅      | Metadata is not yet supported     |
+| PDF    | ✅      | Metadata is not yet supported     |
 | CBR    | ⌛      | In near future                    |
 | MOBI   | ⌛      | In farther than near future       |
 
