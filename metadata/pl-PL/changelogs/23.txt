@@ -1,0 +1,5 @@
+* Foldery
+* Przesuwanie książek między foldery
+* Zmiana kolejności przedmiotów w głównej bibliotece i folderach
+* Naprawa wielu błędów w UI
+* Poprawa sterowania gestami

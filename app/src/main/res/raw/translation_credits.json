@@ -4,7 +4,7 @@
       {
         "username": "Tulis",
         "date_joined": "2026-08-24T18:53:57.472239+00:00",
-        "change_count": 131
+        "change_count": 272
       }
     ]
   },
@@ -13,12 +13,12 @@
       {
         "username": "Tulis",
         "date_joined": "2026-08-24T18:53:57.472239+00:00",
-        "change_count": 155
+        "change_count": 161
       },
       {
         "username": "Dochi",
         "date_joined": "2026-09-06T19:44:38.365883+00:00",
-        "change_count": 118
+        "change_count": 140
       }
     ]
   },
@@ -27,12 +27,26 @@
       {
         "username": "Dochi",
         "date_joined": "2026-09-06T19:44:38.365883+00:00",
-        "change_count": 83
+        "change_count": 106
       },
       {
         "username": "Tulis",
         "date_joined": "2026-08-24T18:53:57.472239+00:00",
         "change_count": 4
+      }
+    ]
+  },
+  {
+    "Spanish": [
+      {
+        "username": "JulianchoV.",
+        "date_joined": "2026-11-01T21:48:22.224487+00:00",
+        "change_count": 156
+      },
+      {
+        "username": "Tulis",
+        "date_joined": "2026-08-24T18:53:57.472239+00:00",
+        "change_count": 135
       }
     ]
   }
