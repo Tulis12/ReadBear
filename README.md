@@ -13,6 +13,10 @@
 > We're looking for testers to apply for Google Play store!
 > [Sign up for testing](https://forms.gle/juML2qQRUskNn1Ra9)
 
+### Instalation
+
+You can get the app from [F-Droid](https://f-droid.org/packages/dev.tulis.readbear), [Obtainium](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/Tulis12/ReadBear) or directly from [Github Releases](https://github.com/Tulis12/ReadBear/releases/latest). When downloading `.apk` files please verify [their app signature](#verify-app-signature).
+
 ### Features
 
 - many reading formats
