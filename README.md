@@ -15,7 +15,17 @@
 
 ### Instalation
 
-You can get the app from [F-Droid](https://f-droid.org/packages/dev.tulis.readbear), [Obtainium](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/Tulis12/ReadBear) or directly from [Github Releases](https://github.com/Tulis12/ReadBear/releases/latest). When downloading `.apk` files please verify [their app signature](#verify-app-signature).
+You can get the app from [F-Droid](https://f-droid.org/packages/dev.tulis.readbear), [Obtainium](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/Tulis12/ReadBear) or directly from [Github Releases](https://github.com/Tulis12/ReadBear/releases/latest).
+For help with app instalation on [F-Droid](https://f-droid.org/) please refer to their help, as well for [Obtainium](https://wiki.obtainium.imranr.dev/ui_overview/).
+
+Guide for manual downloads:
+
+1. Download the `.apk` file from releases
+2. After downloading `.apk` files please verify [their app signature](#how-to-verify-app-signature-and-verify-that-the-app-is-genuine).
+3. Open the `.apk` file
+4. You may see a message that your browser may not install apps, open settings from the popup to allow it
+5. Click install (and accept the Google Play Services scanning) - the app scans as safe
+6. You may now open the app and start your reading!
 
 ### Features
 
@@ -36,7 +46,7 @@ You can get the app from [F-Droid](https://f-droid.org/packages/dev.tulis.readbe
 | CBR    | ⌛      | In near future                    |
 | MOBI   | ⌛      | In farther than near future       |
 
-✅ - all reading features are supported
+✅ - all reading features are supported  
 ✅➕ - all reading features are supported, along with additional ones  
 ⚠️ - reading is supported, but not all format features are (for example metadata)  
 ⌛ - format is on the roadmap
