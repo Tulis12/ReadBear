@@ -50,6 +50,7 @@ import dev.tulis.readbear.R
 import dev.tulis.readbear.db.Settings
 import dev.tulis.readbear.db.entities.books.Book
 import dev.tulis.readbear.utils.LongText
+import dev.tulis.readbear.utils.NavigationBars
 import java.io.FileInputStream
 import kotlin.time.Clock
 
@@ -68,7 +69,6 @@ fun EpubReader(
         .getEpubWithBookmark(epubId)
         .collectAsStateWithLifecycle(null)
 
-    val view = LocalView.current
     var uiVisible by remember { mutableStateOf(false) }
 
     var lastReadingTime by remember {
@@ -85,27 +85,7 @@ fun EpubReader(
         lastReadingTime = currentTime
     }
 
-    var showSheet by remember { mutableStateOf(false) }
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val scope = rememberCoroutineScope()
-
-    DisposableEffect(uiVisible) {
-        val window = (view.context as Activity).window
-        val controller = WindowCompat.getInsetsController(window, view)
-
-        controller.systemBarsBehavior =
-            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-
-        if(!uiVisible) {
-            controller.hide(WindowInsetsCompat.Type.navigationBars())
-        } else {
-            controller.show(WindowInsetsCompat.Type.navigationBars())
-        }
-
-        onDispose {
-            controller.show(WindowInsetsCompat.Type.navigationBars())
-        }
-    }
+    NavigationBars(uiVisible)
 
     val epubWithBookmark = flowComicWithBookmark ?: return
     var suspendBook: Book? by remember { mutableStateOf(null) }

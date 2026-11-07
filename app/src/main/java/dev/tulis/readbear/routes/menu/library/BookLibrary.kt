@@ -138,13 +138,6 @@ fun BookLibrary(
             }
 
             val items = remember { dbItems.toMutableStateList() }
-            var animate by remember { mutableStateOf(false) }
-
-            LaunchedEffect(currentParentId) {
-                animate = false
-                delay(50.milliseconds)
-                animate = true
-            }
 
             LaunchedEffect(dbItems) {
                 items.clear()
@@ -239,7 +232,7 @@ fun BookLibrary(
                         enabled = item.type != BookFolderItemType.Folder,
                         animateItemModifier = Modifier
                             .then(
-                                if(animate) Modifier.animateItem() else Modifier
+                                if(reorderState.enabled) Modifier.animateItem() else Modifier
                             )
                     ) { _ ->
                         Box {

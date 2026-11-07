@@ -1,5 +1,8 @@
 package dev.tulis.readbear.routes.reader.comic
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -44,15 +47,19 @@ class WebtoonReaderViewModel @Inject constructor (
         }
     }
 
-    suspend fun getBook(bookId: Long): Book {
-        return bookRepository.getBook(bookId)
+    fun getBook(bookId: Long): Flow<Book> {
+        return bookRepository.getBookFlow(bookId)
     }
 
     fun getComicWithBookmark(comicId: Long): Flow<ComicWithBookmark> {
         return comicDao.getComicWithBookmark(comicId)
     }
 
-    suspend fun getPanels(comicId: Long): List<ComicPage> {
+
+    var panels by mutableStateOf<List<ComicPage>>(emptyList())
+        private set
+
+    suspend fun getPanels(comicId: Long) {
         val comicWithPages = comicDao.getComicWithPages(comicId)
         val book = bookRepository.getBook(comicWithPages.comic.bookId)
 
@@ -65,6 +72,6 @@ class WebtoonReaderViewModel @Inject constructor (
             )
         }
 
-        return comicWithPages.panels
+        panels = comicWithPages.panels
     }
 }

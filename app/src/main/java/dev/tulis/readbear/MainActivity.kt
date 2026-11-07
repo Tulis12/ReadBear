@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -99,7 +100,7 @@ val themes = arrayOf(
 class MainActivity : AppCompatActivity() {
     private val viewModel: AppViewModel by viewModels()
     private val migrations: FileMigrations by viewModels()
-    var isReady = false
+    var isReady by mutableStateOf(true) // TODO: need to rewrite this (it requires proper abstraction)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -272,12 +273,15 @@ class MainActivity : AppCompatActivity() {
                     return@ReadBearMaterialTheme
                 }
 
-                App(
-                    viewModel = viewModel,
-                    onReady = {
-                        isReady = true
-                    }
-                )
+                Box {
+                    App(
+                        viewModel = viewModel,
+                        onReady = {
+                            isReady = true
+                        }
+                    )
+                }
+
             }
         }
     }
@@ -298,4 +302,3 @@ class MainActivity : AppCompatActivity() {
         println("requested import")
     }
 }
-

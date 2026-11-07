@@ -45,6 +45,7 @@ import dev.tulis.readbear.settings.PdfSettingsContext
 import dev.tulis.readbear.utils.LongText
 import dev.tulis.readbear.routes.menu.snippets.utils.snippetScreenshooter
 import dev.tulis.readbear.utils.NavigationBars
+import dev.tulis.readbear.utils.extensions.zoomableWithTap
 import kotlinx.coroutines.android.awaitFrame
 import kotlinx.coroutines.launch
 import net.engawapg.lib.zoomable.rememberZoomState
@@ -120,9 +121,9 @@ fun PdfReader(
             progress = currentPage
         ) {
             Box(
-                modifier = Modifier.zoomable(zoomState = rememberZoomState(), onTap = {
+                modifier = Modifier.zoomableWithTap(zoomState = rememberZoomState()) {
                     topBarVisible = !topBarVisible
-                })
+                }
             ) {
                 if (readingLayout == PdfReadingLayout.PAGED || readingLayout == PdfReadingLayout.SPREAD) {
                     PagerReader(settings, reader, pdfState)
