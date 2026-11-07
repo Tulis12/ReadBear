@@ -1,0 +1,6 @@
+* Logotipo y fondo de la aplicación
+* Opciones de lectura: PDF, CBZ
+* Diseños configurables para PDF y división de archivos PDF
+* Página de información, progreso de lectura y tiempo de lectura
+* Vista de biblioteca configurable
+* Créditos de traducción y enlace a Weblate

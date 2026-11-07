@@ -1,0 +1,6 @@
+* Función de fragmentos, ahora con una interfaz atractiva
+* Mejores opciones de selección, ahora es posible usar cuadros en los bordes
+* Optimizaciones de código
+* La pantalla de inicio ahora espera a que la aplicación cargue
+* Fechas (fecha de creación, fecha de última lectura)
+* Ajuste de la redondez de la imagen de la aplicación
