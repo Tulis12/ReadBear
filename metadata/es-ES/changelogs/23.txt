@@ -1,0 +1,5 @@
+* Carpetas
+* Mover libros entre carpetas
+* Reordenar elementos en la biblioteca y en las carpetas
+* Corrección de numerosos errores en la Interfaz de usuario
+* Mejora de los gestos
