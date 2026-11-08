@@ -1,0 +1,16 @@
+app_package_name('dev.tulis.readbear')
+
+app_apk_path('app/build/outputs/apk/debug/app-debug.apk')
+tests_apk_path('app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk')
+
+skip_open_summary(true)
+use_timestamp_suffix(false)
+
+locales([
+  'en-US',
+  'pl-PL'
+])
+
+clear_previous_screenshots(true)
+
+use_tests_in_packages(['dev.tulis.readbear'])

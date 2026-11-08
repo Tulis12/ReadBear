@@ -12,6 +12,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import dev.tulis.readbear.AppViewModel
@@ -34,6 +36,7 @@ fun Actions(
 ) {
     if(!selectionState.selectionMode) {
         IconButton(
+            modifier = Modifier.testTag("settings_button"),
             onClick = {
                 callbacks.onShowSheet()
             }

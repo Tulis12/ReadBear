@@ -1,5 +1,5 @@
 <p align="center">
-<img src="metadata/en-US/images/readbear_logo.png" width="300">
+<img src="fastlane/metadata/android/en-US/images/readbear_logo.png" width="300">
 </p>
 
 # ReadBear
@@ -39,12 +39,12 @@ Guide for manual downloads:
 ### Supported formats
 
 | Format | Support | Info                              |
-| ------ | ------- | --------------------------------- |
-| EPUB   | ✅      | Customization options are coming! |
-| CBZ    | ✅      | Metadata is not yet supported     |
-| PDF    | ✅      | Metadata is not yet supported     |
-| CBR    | ⌛      | In near future                    |
-| MOBI   | ⌛      | In farther than near future       |
+|--------|---------|-----------------------------------|
+| EPUB   | ✅       | Customization options are coming! |
+| CBZ    | ✅       | Metadata is not yet supported     |
+| PDF    | ✅       | Metadata is not yet supported     |
+| CBR    | ⌛       | In near future                    |
+| MOBI   | ⌛       | In farther than near future       |
 
 ✅ - all reading features are supported  
 ✅➕ - all reading features are supported, along with additional ones  

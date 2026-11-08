@@ -147,4 +147,8 @@ dependencies {
 
 //    implementation("sh.calvin.reorderable:reorderable:3.1.0")
     implementation("io.github.tulis12:reorderable:3.2.1-tulis.1")
+
+
+    androidTestImplementation("tools.fastlane:screengrab:2.1.1")
+    androidTestImplementation("androidx.test:rules:1.6.1")
 }

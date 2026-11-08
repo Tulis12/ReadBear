@@ -24,3 +24,7 @@ release.jks.base64
 .kotlin
 _sync_
 .env
+.secrets
+google_play_key.json
+
+google-upload-release.jks

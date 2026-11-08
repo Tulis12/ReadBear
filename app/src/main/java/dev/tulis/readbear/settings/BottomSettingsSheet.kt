@@ -19,6 +19,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.edit
@@ -120,6 +121,7 @@ fun BottomSettingsSheet(
             ) {
                 tabs.forEachIndexed { index, title ->
                     Tab(
+                        modifier = Modifier.testTag("settings_tab_$index"),
                         selected = selectedTab == index,
                         onClick = {
                             selectedTab = index

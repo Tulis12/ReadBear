@@ -1,0 +1,42 @@
+default_platform(:android)
+
+platform :android do
+  lane :sync_metadata do
+    track = ENV.fetch("PLAY_TRACK", "alpha")
+    key = ENV.fetch("JSON_KEY", "google_play_key.json")
+
+    version_codes = google_play_track_version_codes(
+      package_name: "dev.tulis.readbear",
+      track: track,
+      json_key: key
+    )
+
+    latest_version = version_codes.max
+
+    UI.user_error!("No releases found on #{track}") unless latest_version
+
+    supply(
+      package_name: "dev.tulis.readbear",
+      json_key: key,
+      metadata_path: "fastlane/play_generated/android",
+      version_code: latest_version,
+      track: track,
+      skip_upload_apk: true,
+      skip_upload_aab: true
+    )
+  end
+
+lane :screenshots do
+  build_android_app(
+    task: 'assemble',
+    build_type: 'Debug'
+  )
+
+  build_android_app(
+    task: 'assemble',
+    build_type: 'AndroidTest'
+  )
+
+  screengrab
+end
+end

@@ -33,6 +33,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import dev.tulis.readbear.AppViewModel
@@ -77,11 +78,13 @@ fun Menu(
         imageVector: ImageVector,
         name: String,
         targetRoute: MenuRoute,
-        disabled: Boolean = false
+        disabled: Boolean = false,
+        modifier: Modifier = Modifier,
     ) {
         val disabledMessage = stringResource(R.string.this_is_currently_disabled)
 
         NavigationDrawerItem(
+            modifier = modifier,
             label = {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(15.dp)
@@ -129,6 +132,7 @@ fun Menu(
                         Icons.Default.PhotoSizeSelectLarge,
                         name = stringResource(R.string.snippets),
                         targetRoute = MenuRoute.SNIPPETS,
+                        modifier = Modifier.testTag("menu_snippets"),
                     )
                 }
             }
@@ -143,9 +147,12 @@ fun Menu(
                             label = "navigation"
                         ) { navigation ->
                             navigation?.invoke() ?: run {
-                                IconButton(onClick = {
-                                    scope.launch { drawerState.open() }
-                                }) {
+                                IconButton(
+                                    modifier = Modifier.testTag("menu_burger"),
+                                    onClick = {
+                                        scope.launch { drawerState.open() }
+                                    }
+                                ) {
                                     Icon(Icons.Default.Menu, stringResource(R.string.menu))
                                 }
                             }
