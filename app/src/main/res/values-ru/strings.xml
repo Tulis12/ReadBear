@@ -16,7 +16,7 @@
     <string name="confirm">Подтвердить</string>
     <plurals name="are_you_sure_you_want_to_delete_x_elements">
         <item quantity="one">Вы уверенны в том, что хотите удалить %d книгу?</item>
-        <item quantity="few">Вы уверенны в том, что хотите удалить %d книги?</item>
+        <item quantity="few">Вы уверенны в том, что хотите удалить эти %d книги?</item>
         <item quantity="many">Вы уверенны в том, что хотите удалить %d книг?</item>
         <item quantity="other">Вы уверенны в том, что хотите удалить %d книг?</item>
     </plurals>
@@ -68,10 +68,29 @@
     <string name="read_docs">Прочти доксы</string>
     <string name="split_pages_tooltip">Если в отсканнированым PDF на одной виртуальной странице будут одновременно две страницы со скана, автоматически разрежь их, для нормального прочтения. Насильно включает режим переворачивания.</string>
     <string name="this_pdf_settings">Настойки для этого файла PDF:</string>
-    <string name="appearance">Вид:</string>
+    <string name="appearance">Вид</string>
     <string name="show_more">Показать больше!</string>
     <string name="chapter_x">Раздел: %1$d</string>
     <string name="previous_chapter">Предыдущий раздел</string>
     <string name="next_chapter">Следующий раздел</string>
     <string name="theme">Режим темы:</string>
+    <string name="dark">Тёмный</string>
+    <string name="select">Выбрать</string>
+    <string name="choose">Выбрать</string>
+    <string name="nothing_here">Здесь ещё ничего нет…</string>
+    <string name="bookmarks">Закладки</string>
+    <string name="read_more">Читать дальше</string>
+    <string name="visit_github">Навести этот проект на ГитХаб</string>
+    <string name="this_is_currently_disabled">Это пока что заблокировано!</string>
+    <string name="select_this_theme">Выбрать этот мотив</string>
+    <string name="already_chosen">Уже выбрано</string>
+    <string name="allow_reversing_progress">Позволить на обращение прогресса вспять</string>
+    <string name="menu">Меню</string>
+    <string name="text_quote">Текстовая цитата</string>
+    <string name="allow_reversing_progress_tooltip">Если включено, то прогресс чтения и закладки могут перемещаться назад, при просмотре старых страниц. Если выключено, то они будут перемещаться только вперёд.</string>
+    <string name="quotes">Цитаты</string>
+    <string name="photo_snippet">Фото сниппет</string>
+    <string name="light">Светлый</string>
+    <string name="system">Системный</string>
+    <string name="library">Библиотека</string>
 </resources>
