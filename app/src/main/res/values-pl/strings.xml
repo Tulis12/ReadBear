@@ -3,9 +3,9 @@
     <string name="app_name">ReadBear — czytnik CBZ, EPUB i PDF</string>
     <string name="settings">Ustawienia</string>
     <string name="error_no_space_left">Brak miejsca na urządzeniu!</string>
-    <string name="error_copy_failed">Nie można było skopiować pliku! Przepraszam za kłopot :(</string>
+    <string name="error_copy_failed">Nie można skopiować pliku! Przepraszam :c</string>
     <string name="deselect">Odznacz</string>
-    <string name="select_all">Zaznacz wszystkie</string>
+    <string name="select_all">Zaznacz wszystko</string>
     <string name="importing">Importowanie…</string>
     <string name="edit">Edytuj</string>
     <string name="when_you_read_the_book_already">Po przeczytaniu książki pokaż:</string>
@@ -47,10 +47,10 @@
     <string name="current_language">Obecny język</string>
     <string name="thanks_for_using">Dziękuję, że korzystasz z tej aplikacji &lt;3</string>
     <plurals name="are_you_sure_you_want_to_delete_x_elements">
-        <item quantity="one">Czy na pewno chcesz usunąć tę książkę?</item>
-        <item quantity="few">Czy na pewno chcesz usunąć %d książki?</item>
-        <item quantity="many">Czy na pewno chcesz usunąć %d książek?</item>
-        <item quantity="other">Czy na pewno chcesz usunąć %d książek?</item>
+        <item quantity="one">Czy na pewno chcesz usunąć ten element?</item>
+        <item quantity="few">Czy na pewno chcesz usunąć te %d elementy?</item>
+        <item quantity="many">Czy na pewno chcesz usunąć %d elementów?</item>
+        <item quantity="other">Czy na pewno chcesz usunąć %d elementów?</item>
     </plurals>
     <string name="pdf">PDF</string>
     <string name="scrollable">Przewijalne</string>
@@ -63,12 +63,12 @@
     <string name="side_by_side">Strona przy stronie</string>
     <string name="flipping">Przerzucanie</string>
     <string name="panels">Panele</string>
-    <string name="read_docs">Czytaj dokumentacje</string>
+    <string name="read_docs">Czytaj dokumentację</string>
     <string name="example_tooltip">Powinno tu być wyjaśnienie, ale to tylko przykład. Możesz pokazać jak wygląda motyw!</string>
     <string name="sample_button">Przykładowy przycisk</string>
     <string name="sample_checkbox">Przykładowe pole do odznaczenia</string>
     <string name="sample_settings">Przykładowe ustawienia</string>
-    <string name="sample_button_pressed">Nacisnąłeś na przykładowe działanie!</string>
+    <string name="sample_button_pressed">Wywołano przykładową akcję!</string>
     <string name="sample_tooltip">Przykładowa podpowiedź</string>
     <string name="chapter_x">Rozdział: %1$d</string>
     <string name="previous_chapter">Poprzedni rozdział</string>
@@ -118,4 +118,21 @@
     <string name="name_not_empty">Nazwa nie może być pusta</string>
     <string name="created_on">Stworzono</string>
     <string name="last_read_on">Ostatnio czytano</string>
+    <string name="copying">Kopiowanie…</string>
+    <string name="hang_on">Chwilka…</string>
+    <string name="verifying">Weryfikowanie…</string>
+    <string name="success">Sukces</string>
+    <string name="add_folder">Dodaj folder</string>
+    <string name="free_up_space">Zwolnij miejsce na urządzeniu</string>
+    <string name="unsafe_v1_migration">Zwolnij miejsce na urządzeniu, aby bezpiecznie przenieść swoje pliki. W innym przypadku możesz podjąć się niebezpiecznej migracji. Niebezpieczna migracja pomija weryfikację i może prowadzić do utraty danych przy przerwaniu. Potrzebujesz zwolnić jeszcze %.1fGB dla bezpiecznej migracji.</string>
+    <string name="unsafe_migration">Niebezpieczna migracja</string>
+    <string name="folder">Folder</string>
+    <string name="hover_here_to_go_up">Zrzuć tutaj, aby przenieść o folder w górę</string>
+    <string name="reorder">Zmień kolejność</string>
+    <string name="updating">Aktualizuje dane do nowej wersji</string>
+    <string name="moving">Przesuwam…</string>
+    <string name="unsafe_migration_dont_close_the_app">Trwa niebezpieczna migracja, nie zamykaj aplikacji!</string>
+    <string name="migration_x_from_y">Migracja %1$d z %2$d</string>
+    <string name="migrate_unsafely">Podejmij się niebezpiecznej migracji</string>
+    <string name="create_folder">Utwórz folder</string>
 </resources>
