@@ -27,6 +27,15 @@ android {
                 keyPassword = System.getenv("KEY_PASSWORD")
             }
         }
+
+        if (project.hasProperty("signReleasePlay")) {
+            create("release") {
+                storeFile = file("../google-upload-release.jks")
+                storePassword = System.getenv("KEYSTORE_PASSWORD")
+                keyAlias = System.getenv("KEY_ALIAS")
+                keyPassword = System.getenv("KEY_PASSWORD")
+            }
+        }
     }
 
     buildTypes {
@@ -38,7 +47,7 @@ android {
             isMinifyEnabled = true
             isShrinkResources = true
 
-            if (project.hasProperty("signRelease")) {
+            if (project.hasProperty("signRelease") || project.hasProperty("signReleasePlay")) {
                 signingConfig = signingConfigs.getByName("release")
             }
         }

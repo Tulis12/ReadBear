@@ -24,6 +24,7 @@ release.jks.base64
 .kotlin
 _sync_
 .env
+.env.play
 .secrets
 google_play_key.json
 
