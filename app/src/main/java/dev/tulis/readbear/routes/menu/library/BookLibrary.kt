@@ -3,8 +3,6 @@ package dev.tulis.readbear.routes.menu.library
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -54,6 +52,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import dev.tulis.readbear.AppViewModel
 import dev.tulis.readbear.R
 import dev.tulis.readbear.db.Settings
 import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderItemType
@@ -67,6 +66,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
 fun BookLibrary(
+    appViewModel: AppViewModel,
     viewModel: LibraryViewModel = hiltViewModel(),
     settings: Settings.SettingsState,
     padding: PaddingValues,
@@ -75,14 +75,13 @@ fun BookLibrary(
     menuState: MenuState,
     currentParentId: Long?,
     onChangeCurrentParentId: (Long?) -> Unit,
-    onOpenBook: (Long) -> Unit,
-    onReady: () -> Unit
+    onOpenBook: (Long) -> Unit
 ) {
     val historyTree = remember { mutableListOf<Long>() }
     val currentFolder by viewModel.getFolderById(currentParentId ?: -1).collectAsState(null)
 
     LaunchedEffect(Unit) {
-        onReady()
+        appViewModel.isReady = true
     }
 
     val goBackFolder = {
@@ -242,6 +241,7 @@ fun BookLibrary(
                                     val book = bookFlow ?: return@ReorderableItem
 
                                     BookCover(
+                                        appViewModel = appViewModel,
                                         item = item,
                                         book = book,
                                         selectionState = selectionState,
@@ -270,6 +270,7 @@ fun BookLibrary(
                                     )
 
                                     FolderCover(
+                                        appViewModel = appViewModel,
                                         item = item,
                                         folder = folder,
                                         selectionState = selectionState,

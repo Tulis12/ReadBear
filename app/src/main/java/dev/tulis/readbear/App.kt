@@ -19,7 +19,7 @@ import dev.tulis.readbear.routes.info.BookDetails
 import dev.tulis.readbear.routes.menu.Menu
 import dev.tulis.readbear.routes.reader.comic.WebtoonReader
 import dev.tulis.readbear.routes.reader.epub.EpubReader
-import dev.tulis.readbear.routes.reader.epub.createEpubCover
+import dev.tulis.readbear.routes.reader.epub.CreateEpubCover
 import dev.tulis.readbear.routes.reader.pdf.PdfReader
 import kotlinx.coroutines.launch
 import java.io.FileInputStream
@@ -29,8 +29,7 @@ var renderEpubCover: Book? by mutableStateOf(null)
 
 @Composable
 fun App(
-    viewModel: AppViewModel,
-    onReady: () -> Unit
+    viewModel: AppViewModel
 ) {
     val navController = rememberNavController()
     val scope = rememberCoroutineScope()
@@ -90,10 +89,6 @@ fun App(
                 },
                 onFolderDetails = {
                     navController.navigate(Route.FolderDetails(it))
-                },
-
-                onReady = {
-                    onReady()
                 }
             )
         }
@@ -186,7 +181,7 @@ fun RenderEpubCover(
             .bufferedReader()
             .readText()
 
-        createEpubCover(xhtml, bookEpub.resources, coverFile, onFinish = {
+        CreateEpubCover(xhtml, bookEpub.resources, coverFile, onFinish = {
             renderEpubCover = null
             viewModel.updateBookCover(book.id, cover)
         })

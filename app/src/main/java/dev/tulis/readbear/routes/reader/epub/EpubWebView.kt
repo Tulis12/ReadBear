@@ -9,6 +9,7 @@ import nl.siegmann.epublib.domain.Resources
 import java.io.ByteArrayInputStream
 
 open class EpubWebViewClient(
+    private val state: EpubReaderState? = null,
     private val resources: Resources,
     private val initialScroll: Float = 0f,
     private val onChangePage: (String) -> Unit = {},
@@ -16,8 +17,10 @@ open class EpubWebViewClient(
 ) : WebViewClient() {
     var initialized = false
     var scale = 1f
+    var pageFinished = false
 
     override fun onPageStarted(view: WebView, url: String, favicon: Bitmap?) {
+        pageFinished = false
         if(url.contains("https://epub.local/")) onChangePage(url.replace("https://epub.local/", ""))
     }
 
@@ -61,10 +64,23 @@ open class EpubWebViewClient(
     }
 
     override fun onPageFinished(view: WebView, url: String?) {
+        pageFinished = true
+
         if(!initialized) {
-            view.scrollTo(
-                0, (initialScroll * ((view.contentHeight * scale) - view.height)).toInt()
-            )
+            view.postDelayed({
+                view.evaluateJavascript(
+                """
+                    requestAnimationFrame(() => {
+                        window.scrollTo(
+                            0,
+                            (document.documentElement.scrollHeight - window.innerHeight) * $initialScroll
+                        );
+                    })
+                """.trimIndent()
+                ) {
+                    state?.isReady = true
+                }
+            }, 50)
 
             initialized = true
         }

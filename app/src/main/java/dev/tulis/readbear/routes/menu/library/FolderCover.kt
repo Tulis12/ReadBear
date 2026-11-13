@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import dev.tulis.readbear.AppViewModel
 import dev.tulis.readbear.R
 import dev.tulis.readbear.db.Settings
 import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolder
@@ -41,6 +42,7 @@ import dev.tulis.readbear.utils.LongText
 
 @Composable
 fun FolderCover(
+    appViewModel: AppViewModel, // TODO: covers
     item: BookFolderItem,
     folder: BookFolder,
     selectionState: SelectionState,

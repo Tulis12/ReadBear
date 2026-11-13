@@ -20,6 +20,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,6 +34,8 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil3.compose.AsyncImage
+import coil3.compose.AsyncImagePainter
+import dev.tulis.readbear.AppViewModel
 import dev.tulis.readbear.db.Settings
 import dev.tulis.readbear.db.entities.books.Book
 import dev.tulis.readbear.db.entities.folders.bookFolder.BookFolderItem
@@ -40,15 +43,21 @@ import dev.tulis.readbear.settings.AlreadyReadOption
 import dev.tulis.readbear.utils.LongText
 import dev.tulis.readbear.utils.readingProgress
 import dev.tulis.readbear.utils.readingTime
+import kotlin.uuid.Uuid
 
 @Composable
 fun BookCover(
+    appViewModel: AppViewModel,
     item: BookFolderItem,
     book: Book,
     selectionState: SelectionState,
     settings: Settings.SettingsState,
     onOpenBook: (Long) -> Unit,
 ) {
+    LaunchedEffect(Unit) {
+        appViewModel.isReady = true
+    }
+
     val context = LocalContext.current
 
     val scale by animateFloatAsState(
@@ -105,6 +114,8 @@ fun BookCover(
 
         ) {
             Box {
+                val queueUuid = remember { Uuid.random() }
+
                 AsyncImage(
                     model = context.filesDir
                         .resolve("books")
@@ -115,7 +126,21 @@ fun BookCover(
                         .aspectRatio(2f / 3f)
                         .clip(RoundedCornerShape(10.dp))
                         .fillMaxWidth(),
-                    contentScale = ContentScale.Crop
+                    contentScale = ContentScale.Crop,
+                    onState = { state ->
+                        println(state)
+
+                        when(state) {
+                            is AsyncImagePainter.State.Loading -> {
+                                appViewModel.addToQueue(queueUuid)
+                            }
+
+                            else -> {
+                                appViewModel.removeFromQueue(queueUuid)
+                            }
+                        }
+
+                    },
                 )
 
                 if(book.readAlready > 0)

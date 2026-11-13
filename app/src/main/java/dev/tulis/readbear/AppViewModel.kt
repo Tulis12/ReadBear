@@ -1,6 +1,10 @@
 package dev.tulis.readbear
 
 import android.net.Uri
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,6 +20,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.uuid.Uuid
 
 
 @HiltViewModel
@@ -25,6 +30,24 @@ class AppViewModel @Inject constructor(
     private val pdfDao: PdfDao,
     private val epubDao: EpubDao
 ): ViewModel() {
+    var isReady by mutableStateOf(false)
+    val readyQueue = mutableStateListOf<Uuid>()
+
+    fun addToQueue(uuid: Uuid) {
+        println("dodaje")
+
+        if (uuid !in readyQueue) {
+            readyQueue.add(uuid)
+        }
+    }
+
+    fun removeFromQueue(uuid: Uuid) {
+        println("usuwam! zostało ${readyQueue.count()}")
+
+        readyQueue.remove(uuid)
+        if(readyQueue.isEmpty()) isReady = true
+    }
+
     suspend fun getBook(bookId: Long): Book {
         return bookRepository.getBook(bookId)
     }

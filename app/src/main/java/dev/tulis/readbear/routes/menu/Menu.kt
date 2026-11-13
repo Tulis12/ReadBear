@@ -39,7 +39,6 @@ import androidx.compose.ui.unit.dp
 import dev.tulis.readbear.AppViewModel
 import dev.tulis.readbear.R
 import dev.tulis.readbear.routes.menu.library.BookLibraryMenu
-import dev.tulis.readbear.routes.menu.library.BookLibraryMenuCallbacks
 import dev.tulis.readbear.routes.menu.library.rememberReorderState
 import dev.tulis.readbear.routes.menu.snippets.SnippetsLibrary
 import kotlinx.coroutines.launch
@@ -54,7 +53,6 @@ fun Menu(
     onEditFolder: (Long) -> Unit,
     onFolderDetails: (Long) -> Unit,
 
-    onReady: () -> Unit,
     appViewModel: AppViewModel
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
@@ -205,18 +203,14 @@ fun Menu(
                             appViewModel = appViewModel,
                             menuState = menuState,
                             reorderState = reorderState,
-                            callbacks = BookLibraryMenuCallbacks(
-                                onBookDetails = onBookDetails,
-                                onOpenBook = onOpenBook,
-                                onEditBook = onEditBook,
 
-                                onFolderDetails = onFolderDetails,
-                                onEditFolder = onEditFolder,
+                            onBookDetails = onBookDetails,
+                            onOpenBook = onOpenBook,
+                            onEditBook = onEditBook,
 
-                                onReady = {
-                                    onReady()
-                                }
-                            ),
+                            onFolderDetails = onFolderDetails,
+                            onEditFolder = onEditFolder,
+
                             padding = padding,
                         )
                     }

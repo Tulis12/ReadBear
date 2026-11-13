@@ -50,7 +50,14 @@ fun BookLibraryMenu(
     appViewModel: AppViewModel,
     menuState: MenuState,
     reorderState: ReorderState,
-    callbacks: BookLibraryMenuCallbacks,
+
+    onOpenBook: (Long) -> Unit,
+    onEditBook: (Long) -> Unit,
+    onBookDetails: (Long) -> Unit,
+
+    onEditFolder: (Long) -> Unit,
+    onFolderDetails: (Long) -> Unit,
+
     padding: PaddingValues
 ) {
     val context = LocalContext.current
@@ -98,6 +105,7 @@ fun BookLibraryMenu(
         BackgroundPattern(modifier = Modifier.matchParentSize())
 
         BookLibrary(
+            appViewModel = appViewModel,
             settings = settings,
             padding = padding,
             selectionState = selectionState,
@@ -108,9 +116,8 @@ fun BookLibraryMenu(
             },
             reorderState = reorderState,
             onOpenBook = {
-                callbacks.onOpenBook(it)
-            },
-            onReady = callbacks.onReady
+                onOpenBook(it)
+            }
         )
     }
 
@@ -250,22 +257,11 @@ fun BookLibraryMenu(
                 onCreateFolder = {
                     creatingFolder = true
                 },
-                onEditBook = callbacks.onEditBook,
-                onBookDetails = callbacks.onBookDetails,
-                onEditFolder = callbacks.onEditFolder,
-                onFolderDetails = callbacks.onFolderDetails
+                onEditBook = onEditBook,
+                onBookDetails = onBookDetails,
+                onEditFolder = onEditFolder,
+                onFolderDetails = onFolderDetails
             )
         )
     }
 }
-
-data class BookLibraryMenuCallbacks(
-    val onOpenBook: (Long) -> Unit,
-    val onEditBook: (Long) -> Unit,
-    val onBookDetails: (Long) -> Unit,
-
-    val onEditFolder: (Long) -> Unit,
-    val onFolderDetails: (Long) -> Unit,
-
-    val onReady: () -> Unit,
-)

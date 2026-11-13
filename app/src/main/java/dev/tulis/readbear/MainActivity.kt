@@ -8,7 +8,6 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -100,14 +99,13 @@ val themes = arrayOf(
 class MainActivity : AppCompatActivity() {
     private val viewModel: AppViewModel by viewModels()
     private val migrations: FileMigrations by viewModels()
-    var isReady by mutableStateOf(true) // TODO: need to rewrite this (it requires proper abstraction)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
 
         val splashScreen = installSplashScreen()
         splashScreen.setKeepOnScreenCondition {
-            !isReady
+            !viewModel.isReady
         }
 
         super.onCreate(savedInstanceState)
@@ -125,7 +123,7 @@ class MainActivity : AppCompatActivity() {
                 readBearTheme = readBearTheme,
                 themeType = settings.themeType
             ) {
-                if(migrations.hasMigrations()) {
+                if (migrations.hasMigrations()) {
                     val migrationState = rememberFileMigrationState()
                     val unsafeMigrations = remember { mutableStateListOf<FileMigration>() }
                     val allowMigrateUnsafely = remember { mutableStateListOf<FileMigration>() }
@@ -133,9 +131,7 @@ class MainActivity : AppCompatActivity() {
                     var startedMigration: Boolean by remember { mutableStateOf(false) }
 
                     LaunchedEffect(Unit) {
-                        isReady = true
-
-                        if(migrations.isSafeToMigrateAll()) {
+                        if (migrations.isSafeToMigrateAll()) {
                             migrations.migrate(migrationState)
                         } else {
                             val unsafeCheckedMigrations = migrations.getUnsafeMigrations()
@@ -146,7 +142,7 @@ class MainActivity : AppCompatActivity() {
                     }
 
                     LaunchedEffect(allowMigrateUnsafely.count()) {
-                        if(unsafeMigrations.isEmpty() && !allowMigrateUnsafely.isEmpty() && !startedMigration) {
+                        if (unsafeMigrations.isEmpty() && !allowMigrateUnsafely.isEmpty() && !startedMigration) {
                             startedMigration = true
                             migrations.migrateAllUnsafe(migrationState, allowMigrateUnsafely)
                         }
@@ -183,7 +179,11 @@ class MainActivity : AppCompatActivity() {
                             )
 
                             Text(
-                                text = stringResource(R.string.migration_x_from_y, migrationState.stageCurrent, migrationState.stageMax ?: migrationState.stageCurrent),
+                                text = stringResource(
+                                    R.string.migration_x_from_y,
+                                    migrationState.stageCurrent,
+                                    migrationState.stageMax ?: migrationState.stageCurrent
+                                ),
                                 style = MaterialTheme.typography.labelLarge,
                                 color = MaterialTheme.colorScheme.onSurface
                             )
@@ -221,7 +221,7 @@ class MainActivity : AppCompatActivity() {
                                     trackColor = MaterialTheme.colorScheme.surfaceVariant
                                 )
 
-                                if(!safeMigration) {
+                                if (!safeMigration) {
                                     Text(
                                         stringResource(R.string.unsafe_migration_dont_close_the_app),
                                         style = MaterialTheme.typography.labelMedium,
@@ -234,7 +234,7 @@ class MainActivity : AppCompatActivity() {
                         }
                     }
 
-                    if(!unsafeMigrations.isEmpty()) {
+                    if (!unsafeMigrations.isEmpty()) {
                         val unsafeMigration = unsafeMigrations.first()
 
                         AlertDialog(
@@ -273,15 +273,7 @@ class MainActivity : AppCompatActivity() {
                     return@ReadBearMaterialTheme
                 }
 
-                Box {
-                    App(
-                        viewModel = viewModel,
-                        onReady = {
-                            isReady = true
-                        }
-                    )
-                }
-
+                App(viewModel = viewModel)
             }
         }
     }
@@ -297,8 +289,5 @@ class MainActivity : AppCompatActivity() {
 
         val uri = intent.data ?: return
         viewModel.requestImport(uri)
-        println("jest ready?$isReady")
-
-        println("requested import")
     }
 }

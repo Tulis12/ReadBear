@@ -9,6 +9,30 @@ plugins {
 }
 
 android {
+    flavorDimensions += "distributor"
+
+    productFlavors {
+        create("play") {
+            dimension = "distributor"
+            buildConfigField("String", "DISTRIBUTOR", "\"Google Play\"")
+        }
+
+        create("fdroid") {
+            dimension = "distributor"
+            buildConfigField("String", "DISTRIBUTOR", "\"F-Droid\"")
+        }
+
+        create("github") {
+            dimension = "distributor"
+            buildConfigField("String", "DISTRIBUTOR", "\"Github\"")
+        }
+
+        create("dev") {
+            dimension = "distributor"
+            buildConfigField("String", "DISTRIBUTOR", "\"dev build\"")
+        }
+    }
+
     buildFeatures {
         buildConfig = true
     }
@@ -62,8 +86,8 @@ android {
         applicationId = "dev.tulis.readbear"
         minSdk = 24
         targetSdk = 37
-        versionCode = 25
-        versionName = "v0.9.2-alpha"
+        versionCode = 26
+        versionName = "v0.9.4"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -83,6 +107,9 @@ android {
 }
 
 dependencies {
+    androidTestImplementation("tools.fastlane:screengrab:2.1.1")
+    androidTestImplementation("androidx.test:rules:1.6.1")
+
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.appcompat)
@@ -157,7 +184,5 @@ dependencies {
 //    implementation("sh.calvin.reorderable:reorderable:3.1.0")
     implementation("io.github.tulis12:reorderable:3.2.1-tulis.1")
 
-
-    androidTestImplementation("tools.fastlane:screengrab:2.1.1")
-    androidTestImplementation("androidx.test:rules:1.6.1")
+    implementation("me.rmyhal.contentment:contentment:2.1.0")
 }
