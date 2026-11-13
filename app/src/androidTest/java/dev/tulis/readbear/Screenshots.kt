@@ -47,7 +47,7 @@ class Screenshots {
         composeTestRule.waitForIdle()
         Screengrab.screenshot("2")
 
-        composeTestRule.onNodeWithTag("settings_tab_3", useUnmergedTree = true).performClick()
+        composeTestRule.onNodeWithTag("settings_tab_APPEARANCE", useUnmergedTree = true).performClick()
         composeTestRule.waitForIdle()
         Screengrab.screenshot("3")
 

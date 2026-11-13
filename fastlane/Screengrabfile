@@ -1,6 +1,6 @@
 app_package_name('dev.tulis.readbear')
 
-app_apk_path('app/build/outputs/apk/debug/app-debug.apk')
+app_apk_path('app/build/outputs/apk/play/debug/app-play-debug.apk')
 tests_apk_path('app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk')
 
 skip_open_summary(true)
