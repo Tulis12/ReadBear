@@ -36,10 +36,18 @@ import kotlinx.coroutines.launch
 
 val models = Models()
 
+enum class BottomSettingsSheetTab {
+    LIBRARY,
+    PDF,
+    BOOKMARKS,
+    APPEARANCE,
+    ABOUT
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomSettingsSheet(
-    defaultTabOpen: Int = 0,
+    defaultTabOpen: BottomSettingsSheetTab = BottomSettingsSheetTab.LIBRARY,
     sheetState: SheetState,
     additionalContext: AdditionalSettingsContext? = null,
     onHide: () -> Unit
@@ -103,28 +111,28 @@ fun BottomSettingsSheet(
         modifier = Modifier
             .wrapContentHeight()
     ) {
-        var selectedTab by remember { mutableIntStateOf(defaultTabOpen) }
+        var selectedTab by remember { mutableStateOf(defaultTabOpen) }
 
-        val tabs = listOf(
-            stringResource(R.string.library_settings),
-            stringResource(R.string.pdf),
-            stringResource(R.string.bookmarks),
-            stringResource(R.string.appearance),
-            stringResource(R.string.info),
+        val tabs = mapOf(
+            BottomSettingsSheetTab.LIBRARY to stringResource(R.string.library_settings),
+            BottomSettingsSheetTab.PDF to stringResource(R.string.pdf),
+            BottomSettingsSheetTab.BOOKMARKS to stringResource(R.string.bookmarks),
+            BottomSettingsSheetTab.APPEARANCE to stringResource(R.string.appearance),
+            BottomSettingsSheetTab.ABOUT to stringResource(R.string.info),
         )
 
         Column {
             PrimaryScrollableTabRow(
-                selectedTabIndex = selectedTab,
+                selectedTabIndex = tabs.keys.indexOf(selectedTab),
                 edgePadding = 2.dp,
                 minTabWidth = 100.dp
             ) {
-                tabs.forEachIndexed { index, title ->
+                tabs.forEach { (tab, title) ->
                     Tab(
-                        modifier = Modifier.testTag("settings_tab_$index"),
-                        selected = selectedTab == index,
+                        modifier = Modifier.testTag("settings_tab_$tab"),
+                        selected = selectedTab == tab,
                         onClick = {
-                            selectedTab = index
+                            selectedTab = tab
                         },
                         text = {
                             Text(title)
@@ -134,7 +142,7 @@ fun BottomSettingsSheet(
             }
 
             when (selectedTab) {
-                0 -> LibrarySettings(
+                BottomSettingsSheetTab.LIBRARY -> LibrarySettings(
                     columnCount = columnCount,
                     onChangeColumnCount = {
                         columnCount = it
@@ -158,7 +166,7 @@ fun BottomSettingsSheet(
                     models = models
                 )
 
-                1 -> PdfReaderSettings(
+                BottomSettingsSheetTab.PDF -> PdfReaderSettings(
                     pdfReadingLayout = pdfReadingLayout,
                     pdfSettingsContext = additionalContext as? PdfSettingsContext,
                     onChangePdfReadingLayout = {
@@ -167,11 +175,11 @@ fun BottomSettingsSheet(
                     models = models
                 )
 
-                2 -> BookmarkSettings(allowReversingProgress) {
+                BottomSettingsSheetTab.BOOKMARKS -> BookmarkSettings(allowReversingProgress) {
                     allowReversingProgress = it
                 }
 
-                3 -> Appearance(
+                BottomSettingsSheetTab.APPEARANCE -> Appearance(
                     themeMode = themeMode,
                     onChangeThemeMode = {
                         themeMode = it
@@ -182,7 +190,7 @@ fun BottomSettingsSheet(
                     }
                 )
 
-                4 -> AppInfo()
+                BottomSettingsSheetTab.ABOUT -> AppInfo()
             }
         }
     }

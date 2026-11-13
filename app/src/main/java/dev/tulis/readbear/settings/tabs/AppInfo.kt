@@ -139,45 +139,6 @@ fun AppInfo() {
                 minFontSize = 8.sp
             ), maxLines = 1)
 
-//            Row(
-//                modifier = Modifier
-//                    .fillMaxWidth()
-//                    .padding(top = 5.dp),
-//                horizontalArrangement = Arrangement.SpaceEvenly
-//            ) {
-//                IconCard(
-//                    Icons.Default.Code,
-//                    "Github",
-//                    "test"
-//                ) {
-//
-//                }
-//
-//                IconCard(
-//                    Icons.Default.Language,
-//                    "Site",
-//                    "test"
-//                ) {
-//
-//                }
-//
-//                IconCard(
-//                    Icons.Default.BugReport,
-//                    "Issues",
-//                    "test"
-//                ) {
-//
-//                }
-//
-//                IconCard(
-//                    Icons.Default.VolunteerActivism,
-//                    "Credits",
-//                    "test"
-//                ) {
-//
-//                }
-//            }
-
             AboutLinks()
         }
     }
@@ -200,13 +161,13 @@ fun AboutLinks() {
 
         AboutLink(
             Icons.Default.Language,
-            "Website",
+            stringResource(R.string.website),
             AboutLinkAction.Url("https://readbear.tulis.dev/")
         )
 
         AboutLink(
             Icons.Default.BugReport,
-            "Issues",
+            stringResource(R.string.issues),
             AboutLinkAction.Url("https://readbear.tulis.dev/issues")
         )
 

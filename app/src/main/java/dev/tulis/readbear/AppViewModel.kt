@@ -34,16 +34,12 @@ class AppViewModel @Inject constructor(
     val readyQueue = mutableStateListOf<Uuid>()
 
     fun addToQueue(uuid: Uuid) {
-        println("dodaje")
-
         if (uuid !in readyQueue) {
             readyQueue.add(uuid)
         }
     }
 
     fun removeFromQueue(uuid: Uuid) {
-        println("usuwam! zostało ${readyQueue.count()}")
-
         readyQueue.remove(uuid)
         if(readyQueue.isEmpty()) isReady = true
     }

@@ -29,7 +29,7 @@
     <string name="are_you_sure_you_want_to_discard_changes">Are you sure you want to discard changes and leave?</string>
     <string name="import_book">Import</string>
     <string name="add_local_resource">Add from a local resource</string>
-    <string name="info">Info</string>
+    <string name="info">About</string>
     <string name="error_unsupported_format">Unsupported format!</string>
     <string name="progress_enabled">Reading progress</string>
     <string name="time_clock_enabled">Reading time</string>
@@ -135,4 +135,6 @@
     <string name="hover_here_to_go_up">Drop here to move to the parent folder</string>
     <string name="migration_x_from_y">Migration %1$d of %2$d</string>
     <string name="reorder">Reorder</string>
+    <string name="website">Website</string>
+    <string name="issues">Issues</string>
 </resources>

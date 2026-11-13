@@ -44,6 +44,7 @@ import dev.tulis.readbear.settings.PdfReadingLayout
 import dev.tulis.readbear.settings.PdfSettingsContext
 import dev.tulis.readbear.utils.LongText
 import dev.tulis.readbear.routes.menu.snippets.utils.snippetScreenshooter
+import dev.tulis.readbear.settings.BottomSettingsSheetTab
 import dev.tulis.readbear.utils.NavigationBars
 import dev.tulis.readbear.utils.extensions.zoomableWithTap
 import kotlinx.coroutines.android.awaitFrame
@@ -80,7 +81,6 @@ fun PdfReader(
     val book = flowBook ?: return
     val booksDir = LocalContext.current.filesDir.resolve("books")
     var finished by remember { mutableStateOf(false) }
-
 
     val reader = rememberPdfReaderState()
 
@@ -187,7 +187,7 @@ fun PdfReader(
 
         if(showSheet) {
             BottomSettingsSheet(
-                defaultTabOpen = 1,
+                defaultTabOpen = BottomSettingsSheetTab.PDF,
                 sheetState = sheetState,
                 additionalContext = PdfSettingsContext(pdfId = pdfId),
                 onHide = {

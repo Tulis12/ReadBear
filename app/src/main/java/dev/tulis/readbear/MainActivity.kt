@@ -289,5 +289,8 @@ class MainActivity : AppCompatActivity() {
 
         val uri = intent.data ?: return
         viewModel.requestImport(uri)
+
+        intent.action = null
+        intent.data = null
     }
 }
