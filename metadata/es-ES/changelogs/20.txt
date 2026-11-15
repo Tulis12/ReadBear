@@ -1,0 +1,4 @@
+* Trabajando en la función de fragmentos
+* Optimizaciones en el código: mayor velocidad de inicio, el panel de configuración ahora funciona con mayor fluidez
+* Corrección de distintos errores
+* Se añadió un fondo al logo, con bordes ligeramente redondeados

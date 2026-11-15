@@ -1,0 +1,1 @@
+* Opciones configurables relativas a los marcadores: permitir o no volver a ellos

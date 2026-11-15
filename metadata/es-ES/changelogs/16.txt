@@ -1,0 +1,4 @@
+* Temas como: Oso, girasol, palo de rosa ¡y muchos más!
+* Modos de tema: oscuro, claro y del sistema
+* Múltiples errores solucionados en la Interfaz de usuario
+* Créditos para traducciones automáticas
