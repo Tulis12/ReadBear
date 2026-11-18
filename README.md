@@ -6,12 +6,12 @@
 
 ### A cute and chill CBZ, PDF, EPUB reader that's ridiculously configurable&nbsp;-&nbsp;for free!
 
-[<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/packages/dev.tulis.readbear) [<img src="https://github.com/user-attachments/assets/713d71c5-3dec-4ec4-a3f2-8d28d025a9c6" alt="Get it on Obtainium" height="80">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/Tulis12/ReadBear)
+[<img src="assets/get-it-on-play.png" alt="Get it on Google Play" height="80">](https://play.google.com/store/apps/details?id=dev.tulis.readbear) [<img src="https://f-droid.org/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/packages/dev.tulis.readbear) [<img src="https://github.com/user-attachments/assets/713d71c5-3dec-4ec4-a3f2-8d28d025a9c6" alt="Get it on Obtainium" height="80">](https://apps.obtainium.imranr.dev/redirect?r=obtainium://add/https://github.com/Tulis12/ReadBear)
 
 > [!NOTE]
-> **Help test ReadBear!**  
-> We're looking for testers to apply for Google Play store!
-> [Sign up for testing](https://forms.gle/juML2qQRUskNn1Ra9)
+> **The app is now on Google Play!**  
+> Go check out the app on the store here:
+> [Google Play](https://play.google.com/store/apps/details?id=dev.tulis.readbear).
 
 ### Installation
 
